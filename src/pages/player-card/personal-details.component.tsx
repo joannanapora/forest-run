@@ -29,7 +29,7 @@ const PersonalDetails = ({ age, sex, from, city, country, languages }:
     return (
         <div className={classes.personalDetails}>
             <Typography color='primary'>
-                Personal Details:
+                Personal:
     </Typography>
             <Typography color='secondary'>
                 age/sex

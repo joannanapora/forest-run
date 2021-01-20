@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import { SvgIcon } from '@material-ui/core';
+import { SvgIcon, Typography } from '@material-ui/core';
 import PlayerAvatar from '../../menu-drawer/avatar.component';
 import { ReactComponent as Steam } from '../../assets/iconmonstr-steam-2.svg';
 import { ReactComponent as Faceit } from '../../assets/iconfinder_faceit_4691467.svg';
@@ -11,6 +11,8 @@ import DetailsPartTwo from './game-datails.component';
 import DetailsPartThree from './time-details.component';
 import DetailsPartFour from './team-details.component';
 import TeamMatesDetails from './team-mates.component';
+import CardEdit from './card-edit/card-edit.component';
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
             textAlign: 'center',
             color: theme.palette.text.secondary,
             padding: theme.spacing(5),
-            minHeight: '12vw',
+            minHeight: '20vw',
             alignItems: 'center',
             height: '100%',
         },
@@ -64,8 +66,9 @@ const MyPlayerCard = ({ ...props }) => {
 
     return (
         <div className={classes.root}>
-            <Grid container spacing={1}>
-                <Grid item xs={12} sm={4}>
+            <CardEdit />
+            <Grid container spacing={0}>
+                <Grid item xs={12} sm={2}>
                     <Paper className={classes.paperUp}>
                         <PlayerAvatar />
                         <div className={classes.profileLinks}>
@@ -74,29 +77,29 @@ const MyPlayerCard = ({ ...props }) => {
                         </div>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={2}>
                     <Paper className={classes.paperUp}>
                         <DetailsPartOne age={27} city={'LONDON'} country={'UK'} from={'POLAND'} languages={['POLISH, ', 'ENGLISH']} sex={'F'} />
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={2}>
                     <Paper className={classes.paperUp}>
                         <DetailsPartTwo maps={['INFERNO, ', 'DUST II, ', 'CACHE']} guns={['AK-47, ', 'M4A4, ', 'USP-S']} />
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={2}>
                     <Paper className={classes.paperDown}>
                         <DetailsPartThree hours={['16-20']} timeZone={'GMT'} days={['ONCE A WEEK']} />
                     </Paper>
                 </Grid>
-                <Grid item xs={12} sm={4}>
-                    <Paper className={classes.paperDown}>
-                        <DetailsPartFour currentTeam={'LIONS'} lookingFor={false} />
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} sm={4}>
+                <Grid item xs={12} sm={2}>
                     <Paper className={classes.paperDown}>
                         <TeamMatesDetails />
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} sm={2}>
+                    <Paper className={classes.paperDown}>
+                        <DetailsPartFour currentTeam={'LIONS'} lookingFor={false} />
                     </Paper>
                 </Grid>
             </Grid>

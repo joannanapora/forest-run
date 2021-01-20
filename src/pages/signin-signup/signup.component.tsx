@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,7 +28,7 @@ interface State {
 }
 
 
-const SignUp = () => {
+const SignUp = ({ history }: any) => {
     const classes = useStyles();
     const [values, setValues] = React.useState<State>({
         email: '',
@@ -46,6 +47,12 @@ const SignUp = () => {
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
+
+    const submitSignUp = () => {
+        if (history) {
+            if (history) { history.push('/card-edit') };
+        }
+    }
 
     return (
         <div className={classes.form}>
@@ -88,7 +95,7 @@ const SignUp = () => {
                     }
                 />
             </FormControl>
-            <Button className={classes.loginButton} variant="contained" color="primary">
+            <Button className={classes.loginButton} onClick={submitSignUp} variant="contained" color="primary">
                 Register
 </Button>
         </div>
@@ -96,4 +103,4 @@ const SignUp = () => {
 };
 
 
-export default SignUp;
+export default withRouter(SignUp);
