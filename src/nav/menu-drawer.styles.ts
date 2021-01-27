@@ -2,7 +2,7 @@ import { makeStyles, ThemeOptions } from '@material-ui/core';
 
 export const drawerWidth = 240;
 
-export const useStyles = makeStyles((theme) => ({
+export const useMenuDrawerStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         height: '100%',
@@ -23,8 +23,6 @@ export const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
-        fontFamily: 'Goldman',
-
     },
     hide: {
         display: 'none',
@@ -44,9 +42,8 @@ export const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-start',
     },
     content: {
-        overflow: 'auto',
+        overflow: 'hidden',
         flexGrow: 1,
-        padding: theme.spacing(1),
         transition: theme.transitions.create('margin', {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
@@ -61,37 +58,39 @@ export const useStyles = makeStyles((theme) => ({
         marginRight: 0,
     },
     menuList: {
-        height: '8vw',
-        fontSize: '1.5vw'
+        height: '4rem',
     }
 }));
 
 export const light: ThemeOptions = {
     typography: {
-        fontFamily: 'Goldman',
+        fontWeightBold: 1000,
+        fontFamily: 'Amatic SC',
+        fontSize: 20
     },
     palette: {
         type: 'light',
         primary: {
-            main: '#de9b35',
+            main: '#003d00',
         },
         secondary: {
-            main: '#5d79ae'
+            main: '#fff263'
         }
     }
 };
 
 export const dark: ThemeOptions = {
     typography: {
-        fontFamily: 'Goldman'
+        fontFamily: 'Amatic SC',
+        fontSize: 20,
     },
     palette: {
         type: 'dark',
         primary: {
-            main: '#5d79ae'
+            main: '#c49000'
         },
         secondary: {
-            main: '#de9b35'
+            main: '#c49000'
         }
     },
 };

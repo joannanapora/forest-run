@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -21,20 +20,17 @@ const useStyles = makeStyles((theme: Theme) =>
     }));
 
 interface State {
-    email: string;
+    username: string;
     password: string;
     showPassword: boolean;
-    confirmPassword: string;
 }
 
-
-const SignUp = ({ history }: any) => {
+const SignIn = () => {
     const classes = useStyles();
     const [values, setValues] = React.useState<State>({
-        email: '',
+        username: '',
         password: '',
         showPassword: false,
-        confirmPassword: '',
     });
 
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,20 +44,27 @@ const SignUp = ({ history }: any) => {
         event.preventDefault();
     };
 
-    const submitSignUp = () => {
-        if (history) {
-            if (history) { history.push('/card-edit') };
+    const handleSubmit = async event => {
+        event.preventDefault();
+
+        if (values.username.length < 3) {
+            alert("Username's too short. (min. 3 chars)");
+            return;
         }
-    }
+        if (values.password.length < 8) {
+            alert("Password's too short. (min. 8 chars)");
+            return;
+        }
+    };
+
+
 
     return (
         <div className={classes.form}>
-            <TextField className={classes.textfield} name='playerUsername' label="Email" variant="filled" />
             <TextField className={classes.textfield} name='playerUsername' label="Username" variant="filled" />
             <FormControl className={classes.textfield} variant="filled">
                 <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
                 <FilledInput
-                    error={false}
                     id="filled-adornment-password"
                     type={values.showPassword ? 'text' : 'password'}
                     value={values.password}
@@ -80,27 +83,12 @@ const SignUp = ({ history }: any) => {
                     }
                 />
             </FormControl>
-            <FormControl className={classes.textfield} variant="filled">
-                <InputLabel htmlFor="filled-adornment-password">Confirm Password</InputLabel>
-                <FilledInput
-                    error={false}
-                    id="filled-adornment-password"
-                    type={'password'}
-                    value={values.confirmPassword}
-                    onChange={handleChange('confirmPassword')}
-                    endAdornment={
-                        <InputAdornment position="end">
-
-                        </InputAdornment>
-                    }
-                />
-            </FormControl>
-            <Button className={classes.loginButton} onClick={submitSignUp} variant="contained" color="primary">
-                Register
+            <Button onClick={handleSubmit} className={classes.loginButton} variant="contained" color="primary">
+                Submit
 </Button>
         </div>
     );
 };
 
 
-export default withRouter(SignUp);
+export default SignIn;

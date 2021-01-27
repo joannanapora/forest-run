@@ -1,7 +1,11 @@
-import styled from 'styled-components';
-import Timeline from '@material-ui/lab/Timeline';
+import { makeStyles } from '@material-ui/core/styles';
 
-export const TimeLine = styled(Timeline)`
-  height: 100%;
-  justify-content: center;
-`;
+
+export const useTimeLinesStyles = makeStyles((theme) => ({
+  paper: {
+    padding: '6px 16px',
+  },
+  secondaryTail: {
+    backgroundColor: theme.palette.secondary.main,
+  },
+}));

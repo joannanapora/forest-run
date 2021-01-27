@@ -7,7 +7,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -18,42 +17,61 @@ import { ThemeProvider } from '@material-ui/core'
 import Brightness3Icon from '@material-ui/icons/Brightness3';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { createMuiTheme } from '@material-ui/core/styles';
-import { useStyles, light, dark } from './menu-drawer.styles';
-import PlayerAvatar from './avatar.component';
-import SportsEsportsIcon from '@material-ui/icons/SportsEsports';
-import MyPlayerCard from '../pages/player-card/my-player-card.component';
+import { useMenuDrawerStyles, light, dark } from './menu-drawer.styles';
+import PlayerAvatar from './avatar/avatar.component';
 import { Switch, Route, withRouter, Link } from "react-router-dom";
-import SignInUp from '../pages/signin-signup/signin-signup.component';
+import SignInUp from '../pages/login/sign-in-up';
+import TimeLines from '../pages/landing/timelines.component';
+import CardEdit from '../pages/events/create event/create-event.component';
+import { DirectionsRun, Nature } from '@material-ui/icons';
+import UpcomingEvent from '../pages/events/event-card/event.component';
+import EventList from '../pages/events/event-list/event-list.component';
+import NoticeBoard from '../pages/notice-board/notice-board.component';
+import Donate from '../pages/donate/donate.component';
+import CreatePost from '../pages/notice-board/create-post/create-post.component';
 
 const MenuDrawer = () => {
-    const classes = useStyles();
+    const classes = useMenuDrawerStyles();
     const [open, setOpen] = React.useState(false);
     const [theme, setTheme] = React.useState(true);
     const icon = !theme ? <Brightness7Icon /> : <Brightness3Icon />
     const appliedTheme = createMuiTheme(theme ? light : dark);
     const mode = useTheme();
 
+
     const MenuTabs = [
         {
-            name: "Player Card",
+            name: "Upcoming Events",
             id: 0,
-            url: "/player-card",
+            url: "/upcoming-events",
         },
         {
-            name: "Players/Teams",
+            name: "Create Event",
             id: 1,
-            url: "/player-card",
+            url: "/create-event",
         },
         {
-            name: "Chat",
+            name: "Notice Board",
             id: 2,
-            url: "/chat",
+            url: "/notice-board",
+        },
+        // {
+        //     name: "Messages",
+        //     id: 3,
+        //     url: "/messages"
+        // },
+        {
+            name: "Donate",
+            id: 4,
+            url: "/donate"
         },
         {
             name: "Sign Up",
-            id: 3,
+            id: 5,
             url: "/sign-up"
-        }];
+        },
+
+    ];
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -68,14 +86,14 @@ const MenuDrawer = () => {
             <div className={classes.root}>
                 <CssBaseline />
                 <AppBar
-                    position="fixed"
                     className={clsx(classes.appBar, {
                         [classes.appBarShift]: open,
                     })}
                 >
                     <Toolbar>
                         <Typography variant="h5" noWrap className={classes.title}>
-                            CS:GO {<i className="material-icons md-48"><SportsEsportsIcon /></i>} Teams
+                            {<i className="material-icons md-48">< Nature /></i>}{<i className="material-icons md-48">< DirectionsRun /></i>}
+                            Forest
                         </Typography>
                         <IconButton
                             edge="end"
@@ -101,12 +119,15 @@ const MenuDrawer = () => {
                         [classes.contentShift]: open,
                     })}
                 >
-                    <div className={classes.drawerHeader} />
                     <Switch>
-                        <Route exact path='/' component={MyPlayerCard} />
-                        <Route exact path='/player-card' component={MyPlayerCard} />
-                        <Route exact path='/sign-up' component={SignInUp} />
-                        <Route exact path='/chat' component={MyPlayerCard} />
+                        <Route exact path='/' component={TimeLines} />
+                        <Route path='/notice-board/create-post' component={CreatePost} />
+                        <Route path='/create-event' component={CardEdit} />
+                        <Route path='/upcoming-events' component={EventList} />
+                        <Route path='/sign-up' component={SignInUp} />
+                        <Route path='/messages' component={UpcomingEvent} />
+                        <Route path='/notice-board' component={NoticeBoard} />
+                        <Route path='/donate' component={Donate} />
                     </Switch>
                 </main>
                 <Drawer
@@ -127,11 +148,10 @@ const MenuDrawer = () => {
                     <List>
                         <PlayerAvatar />
                     </List>
-
                     <List>
                         {MenuTabs.map((element) => (
-                            <Link to={element.url}>
-                                <ListItem className={classes.menuList} button key={element.id}>
+                            <Link key={element.id} to={element.url}>
+                                <ListItem className={classes.menuList} button >
                                     <ListItemIcon>{element.name}</ListItemIcon>
                                 </ListItem>
                             </Link>
