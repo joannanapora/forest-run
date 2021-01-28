@@ -18,17 +18,17 @@ import Brightness3Icon from '@material-ui/icons/Brightness3';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { useMenuDrawerStyles, light, dark } from './menu-drawer.styles';
-import PlayerAvatar from './avatar/avatar.component';
+import PlayerAvatar from '../avatar/avatar.component';
 import { Switch, Route, withRouter, Link } from "react-router-dom";
-import SignInUp from '../pages/login/sign-in-up';
-import TimeLines from '../pages/landing/timelines.component';
-import CardEdit from '../pages/events/create event/create-event.component';
+import SignInUp from '../../pages/login/sign-in-sign-up/sign-in-up.component';
+import TimeLines from '../../pages/landing/timelines/timelines.component';
+import CardEdit from '../../pages/events/new-event/create-event/create-event.component';
 import { DirectionsRun, Nature } from '@material-ui/icons';
-import UpcomingEvent from '../pages/events/event-card/event.component';
-import EventList from '../pages/events/event-list/event-list.component';
-import NoticeBoard from '../pages/notice-board/notice-board.component';
-import Donate from '../pages/donate/donate.component';
-import CreatePost from '../pages/notice-board/create-post/create-post.component';
+import UpcomingEvent from '../../pages/events/event-card/event.component';
+import EventList from '../../pages/events/event-list/event-list.component';
+import NoticeBoard from '../../pages/notice-board/articles/notice-board.component';
+import Donate from '../../pages/donate/donate.component';
+import CreatePost from '../../pages/notice-board/create-post/create-post.component';
 
 const MenuDrawer = () => {
     const classes = useMenuDrawerStyles();

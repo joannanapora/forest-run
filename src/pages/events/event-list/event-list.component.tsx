@@ -2,6 +2,13 @@ import React from 'react';
 import UpcomingEvent from '../event-card/event.component';
 import { useEventListStyles } from './event-list.styles';
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
+import Switch from '@material-ui/core/Switch';
+import Paper from '@material-ui/core/Paper';
+import Fade from '@material-ui/core/Fade';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { Button } from '@material-ui/core';
+
+import SortIcon from '@material-ui/icons/Sort';
 
 const events = [
     {
@@ -82,12 +89,62 @@ const events = [
 const EventList = () => {
 
     const [spacing, setSpacing] = React.useState<GridSpacing>(2);
+    const [checked, setChecked] = React.useState(false);
 
+    const handleChange = () => {
+        setChecked((prev) => !prev);
+    };
 
+    const handleSort = () => {
+
+    }
     const classes = useEventListStyles();
 
     return (
         <Grid container className={classes.root} spacing={1}>
+            <div className={checked ? classes.rootfiltersOn : classes.rootfiltersOff}>
+                <FormControlLabel
+                    control={<Switch color="primary"
+                        checked={checked} onChange={handleChange} />}
+                    label="filters"
+                />
+                <div className={classes.container}>
+                    <Fade in={checked}>
+                        <Paper elevation={4} className={classes.paper}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                className={classes.button}
+                                startIcon={<SortIcon />}
+                                onClick={handleSort}
+                            >
+                                Date
+      </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                className={classes.button}
+                                startIcon={<SortIcon />}
+                                onClick={handleSort}
+                            >
+                                Distance
+      </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                className={classes.button}
+                                startIcon={<SortIcon />}
+                                onClick={handleSort}
+                            >
+                                Popular
+      </Button>
+                        </Paper>
+                    </Fade>
+                </div>
+            </div>
             <Grid item xs={12}>
                 <Grid container justify="space-evenly" spacing={spacing}>
                     {

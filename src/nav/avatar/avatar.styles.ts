@@ -1,4 +1,3 @@
-import { grey } from '@material-ui/core/colors';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 
@@ -17,7 +16,20 @@ export const useAvatarStyles = makeStyles((theme: Theme) =>
         profileButtons: {
             display: 'flex',
             justifyContent: 'space-evenly'
-        }
+        },
+        textField: {
+            width: '25ch',
+        },
+        alert: {
+            width: '100%',
+            '& > * + *': {
+                marginTop: theme.spacing(2),
+            },
+        },
+        alertContainer: {
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+        },
     }
     ),
 );

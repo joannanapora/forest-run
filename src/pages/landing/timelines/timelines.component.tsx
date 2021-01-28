@@ -21,7 +21,7 @@ const TimeLines = () => {
     const classes = useTimeLinesStyles();
 
     return (
-        <Timeline align="alternate">
+        <Timeline className={classes.root} align="alternate">
             <TimelineItem>
                 <TimelineOppositeContent>
                 </TimelineOppositeContent>
@@ -63,7 +63,7 @@ const TimeLines = () => {
                     <TimelineDot color="primary" variant="outlined">
                         <DirectionsRun />
                     </TimelineDot>
-                    <TimelineConnector className={classes.secondaryTail} />
+                    <TimelineConnector />
                 </TimelineSeparator>
                 <TimelineContent>
                     <Paper elevation={3} className={classes.paper}>

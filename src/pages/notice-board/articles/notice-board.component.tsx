@@ -11,7 +11,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { DeleteForever, PostAdd, Search } from '@material-ui/icons';
 import { useNoticeBoardStyles } from './notice-board.styles';
 import Modal from '@material-ui/core/Modal';
-import SearchPost from './search-post/search-post.component';
+import SearchPost from '../search-post/search-post.component';
 import { withRouter } from 'react-router-dom';
 
 enum QuickActions {

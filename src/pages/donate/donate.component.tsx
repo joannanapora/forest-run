@@ -1,35 +1,20 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Stripe from '../../stripe/stripe.component';
 import { FormControl, Input, InputAdornment, InputLabel } from '@material-ui/core';
+import { useDonateStyles } from './donate.styles';
+import { Alert } from '@material-ui/lab';
 
-const useStyles = makeStyles({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '2rem',
-        maxWidth: '350px',
-    },
-    actions: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '2rem',
-    },
-    container: {
-        display: 'flex',
-        justifyContent: 'center',
-        height: '100%'
-    }
-});
 
 export default function ImgMediaCard() {
-    const classes = useStyles();
+    const classes = useDonateStyles();
     const [amount, setAmount]: [string, any] = React.useState('');
+    const [donated, showDonated]: [boolean, any] = useState(false);
+
+    useEffect(() => {
+    }, [donated, amount])
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value === '0' || event.target.value === '-') {
@@ -39,6 +24,18 @@ export default function ImgMediaCard() {
             setAmount(event.target.value);
         }
     };
+
+    const offAlert = () => {
+        setTimeout(() => {
+            showDonated(false);
+        }, 10000);
+    }
+
+    const handleToken = () => {
+        showDonated(true);
+        setAmount('');
+        offAlert();
+    }
 
     return (
         <div className={classes.container}>
@@ -66,7 +63,12 @@ export default function ImgMediaCard() {
                             startAdornment={<InputAdornment position="start">£</InputAdornment>}
                         />
                     </FormControl>
-                    <Stripe donation={amount}></Stripe>
+                    <Stripe handleToken={handleToken} donation={amount}></Stripe>
+                    {
+                        donated ? (
+                            <div className={classes.alertContainer} ><Alert severity="success">Thank you for donation!</Alert></div>
+                        ) : null
+                    }
                 </div>
             </Card>
         </div>

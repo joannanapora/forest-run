@@ -13,5 +13,27 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
         control: {
             padding: theme.spacing(2),
         },
+        rootfiltersOn: {
+            height: 140,
+            paddingLeft: theme.spacing(2),
+        },
+        rootfiltersOff: {
+            height: 50,
+            paddingLeft: theme.spacing(2),
+        },
+        container: {
+            display: 'flex',
+        },
+        paper: {
+            margin: theme.spacing(1),
+            width: 300,
+        },
+        svg: {
+            width: '100%',
+            height: 100,
+        },
+        button: {
+            margin: theme.spacing(1),
+        },
     }),
 );

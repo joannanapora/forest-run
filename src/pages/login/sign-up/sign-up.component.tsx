@@ -1,25 +1,11 @@
-import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
 import { Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { withRouter } from "react-router-dom";
-import { validateEmail } from '../../shared/email-validation';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        textfield: {
-            width: '100%',
-            margin: '1vw 0'
-
-        },
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        loginButton: {
-            margin: '2vw 0'
-        }
-    }));
+import { validateEmail } from '../../../shared/email-validation';
+import { validatePassword } from '../../../shared/password-validation';
+import Alert from '@material-ui/lab/Alert';
+import { useSignUpStyles } from './sign-up.styles';
 
 interface State {
     email: string;
@@ -31,7 +17,7 @@ interface State {
 
 
 const SignUp = ({ history }: any) => {
-    const classes = useStyles();
+    const classes = useSignUpStyles();
     const [values, setValues] = React.useState<State>({
         email: '',
         password: '',
@@ -40,33 +26,50 @@ const SignUp = ({ history }: any) => {
         username: '',
     });
 
+    const [wrongEmail, showWrongEmail]: [boolean, any] = useState(false);
+    const [wrongPassword, showWrongPassword]: [boolean, any] = useState(false);
+    const [dontMatch, showDontMatch]: [boolean, any] = useState(false);
+
+
+    useEffect(() => {
+    }, [wrongEmail, wrongPassword, dontMatch])
+
+
     const handleSubmit = async event => {
         event.preventDefault();
 
         if (!validateEmail(values.email)) {
-            alert("Email is wrong");
+            showWrongEmail(true);
+            offAlert();
             return;
         }
+        if (!validatePassword(values.password)) {
+            showWrongPassword(true);
+            offAlert();
+            return;
+        }
+
         if (values.password !== values.confirmPassword) {
-            alert("Passwords don't match");
-            return;
+            showDontMatch(true);
+            offAlert();
         }
-        if (values.username.length < 3) {
-            alert("Username's too short. (min. 3 chars)");
-            return;
-        }
-        if (values.password.length < 8) {
-            alert("Password's too short. (min. 8 chars)");
-            return;
-        }
+
+        submitSignUp();
 
 
         /// connect to GRAPH QL
 
     }
 
+    const offAlert = () => {
+        setTimeout(() => {
+            showWrongEmail(false);
+            showWrongPassword(false);
+            showDontMatch(false);
+        }, 5000);
+    }
+
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event)
         setValues({ ...values, [prop]: event.target.value });
     };
 
@@ -79,7 +82,7 @@ const SignUp = ({ history }: any) => {
 
     const submitSignUp = () => {
         if (history) {
-            if (history) { history.push('/card-edit') };
+            if (history) { history.push('/upcoming-events') };
         }
     }
 
@@ -120,12 +123,23 @@ const SignUp = ({ history }: any) => {
                     value={values.confirmPassword}
                     onChange={handleChange('confirmPassword')}
                     endAdornment={
-                        <InputAdornment position="end">
-
-                        </InputAdornment>
+                        <InputAdornment position="end" />
                     }
                 />
             </FormControl>
+            {
+                wrongEmail ? (
+                    <div className={classes.alertContainer} ><Alert severity="error">Wrong email</Alert></div>
+                ) : null
+            } {
+                wrongPassword ? (
+                    <div className={classes.alertContainer} ><Alert severity="error">Wrong password</Alert></div>
+                ) : null
+            } {
+                dontMatch ? (
+                    <div className={classes.alertContainer} ><Alert severity="error">Passwords don't match</Alert></div>
+                ) : null
+            }
             <Button className={classes.loginButton} onClick={handleSubmit} variant="contained" color="primary">
                 Register
 </Button>

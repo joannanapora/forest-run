@@ -2,10 +2,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 
 export const useTimeLinesStyles = makeStyles((theme) => ({
-  paper: {
-    padding: '6px 16px',
+  root: {
+    padding: theme.spacing(8)
+
   },
-  secondaryTail: {
-    backgroundColor: theme.palette.secondary.main,
+  paper: {
+    padding: theme.spacing(1)
   },
 }));

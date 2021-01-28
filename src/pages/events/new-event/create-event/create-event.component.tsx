@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import UploudEventImage from './upload/uploud-event-image-step.component';
-import MeetingPoint from './event-meetpoint/event-meetpoint.component';
-import EventDetails from './event-details/event-details.component';
+import UploudEventImage from '../event-image/uploud-event-image-step.component';
+import MeetingPoint from '../event-meetpoint/event-meetpoint.component';
+import EventDetails from '../event-details/event-details.component';
 import { useCardEditStyles } from './create-event.styles';
 import { Paper, StepContent, StepLabel } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+import Modal from '@material-ui/core/Modal';
 
 function getSteps() {
     return ['Upload Event Image', 'Set up event details', 'Meeting place and Event description'];
@@ -38,8 +40,81 @@ function getStepContent(step: number) {
 
 const CardEdit = () => {
     const classes = useCardEditStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep]: [number, any] = useState(0);
+    const [error, setError]: [boolean, any] = useState(false);
+    const [success, setSuccess]: [boolean, any] = useState(false);
+    const [openModal, setOpenModal]: [boolean, any] = useState(false);
+
     const steps = getSteps();
+
+    useEffect(() => {
+    }, [error, success])
+
+    const offAlert = () => {
+        setTimeout(() => {
+            setError(false);
+            setSuccess(false);
+        }, 5000);
+    }
+
+    function rand() {
+        return Math.round(Math.random() * 20) - 10;
+    }
+
+    function getModalStyle() {
+        const top = 50 + rand();
+        const left = 50 + rand();
+
+        return {
+            top: `${top}%`,
+            left: `${left}%`,
+            transform: `translate(-${top}%, -${left}%)`,
+        };
+    }
+
+    const handleNo = () => {
+        setOpenModal(false);
+    }
+
+
+    const handleYes = () => {
+        setOpenModal(false);
+        setActiveStep(0);
+    }
+
+
+    const handleModalClose = () => {
+        setOpenModal(false);
+    };
+
+    const [modalStyle] = React.useState(getModalStyle);
+
+    const bodyConfirmPost = (
+        <div style={modalStyle} className={classes.paper}>
+            <Typography>Are you sure you want to reset?</Typography>
+            <div className={classes.confirmButtons}>
+                <Button
+                    onClick={handleNo}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className={classes.button}
+                >
+                    No
+      </Button>
+                <Button
+                    onClick={handleYes}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    className={classes.button}
+                >
+                    Yes
+      </Button>
+            </div>
+        </div>
+    );
+
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -50,11 +125,12 @@ const CardEdit = () => {
     };
 
     const handleReset = () => {
-        setActiveStep(0);
+        setOpenModal(true);
     };
 
     const handleSubmit = () => {
-
+        setSuccess(true);
+        offAlert();
     }
 
     return (
@@ -100,9 +176,22 @@ const CardEdit = () => {
                             onClick={handleSubmit} className={classes.button}>
                             Submit
             </Button>
+                        {
+                            success ? (
+                                <div className={classes.alertContainer} ><Alert severity="success">New event has been created</Alert></div>
+                            ) : null
+                        }
                     </div>
                 </Paper>
             )}
+            <Modal
+                open={openModal}
+                onClose={handleModalClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                {bodyConfirmPost}
+            </Modal>
         </div>
     );
 }

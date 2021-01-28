@@ -1,23 +1,8 @@
-import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
 import { Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        textfield: {
-            width: '100%',
-            margin: '1vw 0'
-
-        },
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-        loginButton: {
-            margin: '2vw 0'
-        }
-    }));
+import Alert from '@material-ui/lab/Alert';
+import { useSignInStyles } from './sign-in.styles';
 
 interface State {
     username: string;
@@ -26,12 +11,18 @@ interface State {
 }
 
 const SignIn = () => {
-    const classes = useStyles();
+    const classes = useSignInStyles();
     const [values, setValues] = React.useState<State>({
         username: '',
         password: '',
         showPassword: false,
     });
+    const [error, setError]: [boolean, any] = useState(false);
+
+
+    useEffect(() => {
+    }, [error])
+
 
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [prop]: event.target.value });
@@ -48,15 +39,16 @@ const SignIn = () => {
         event.preventDefault();
 
         if (values.username.length < 3) {
-            alert("Username's too short. (min. 3 chars)");
-            return;
-        }
-        if (values.password.length < 8) {
-            alert("Password's too short. (min. 8 chars)");
-            return;
-        }
+            setError(true);
+        } else { }
     };
 
+
+    const offAlert = () => {
+        setTimeout(() => {
+            setError(false);
+        }, 15000);
+    }
 
 
     return (
@@ -83,6 +75,11 @@ const SignIn = () => {
                     }
                 />
             </FormControl>
+            {
+                error ? (
+                    <div className={classes.alertContainer} ><Alert onChange={offAlert} severity="error">Wrong email or password</Alert></div>
+                ) : null
+            }
             <Button onClick={handleSubmit} className={classes.loginButton} variant="contained" color="primary">
                 Submit
 </Button>
