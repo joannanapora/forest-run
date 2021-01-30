@@ -10,8 +10,8 @@ export const useAvatarStyles = makeStyles((theme: Theme) =>
             flexDirection: "column",
         },
         large: {
-            width: theme.spacing(20),
-            height: theme.spacing(20),
+            width: theme.spacing(10),
+            height: theme.spacing(10),
         },
         profileButtons: {
             display: 'flex',

@@ -17,7 +17,7 @@ export const useUploadStyles = makeStyles((theme: Theme) =>
         },
         formControl: {
             margin: theme.spacing(1),
-            minWidth: 200,
+            minWidth: 150,
             maxWidth: 300,
         },
     }));

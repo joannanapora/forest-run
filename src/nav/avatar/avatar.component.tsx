@@ -5,7 +5,7 @@ import { Button, IconButton, TextField, } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import { Alert } from '@material-ui/lab';
 
-const UserAvatar = () => {
+const Username = () => {
     const classes = useAvatarStyles();
     const [usernameButton, isUsernameClicked]: [boolean, any] = useState(false);
     const [username, setUsername]: [string, any] = useState('cesarzowa');
@@ -79,4 +79,4 @@ const UserAvatar = () => {
     );
 };
 
-export default UserAvatar;
+export default Username;

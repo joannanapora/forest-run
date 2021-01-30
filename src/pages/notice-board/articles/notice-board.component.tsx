@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import Card from '@material-ui/core/Card';
@@ -6,7 +6,6 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { DeleteForever, PostAdd, Search } from '@material-ui/icons';
 import { useNoticeBoardStyles } from './notice-board.styles';
@@ -55,27 +54,12 @@ const actions = [
     { icon: <DeleteForever />, name: QuickActions.DELETE_POST },
     { icon: <Search />, name: QuickActions.SEARCH_POST },
 ];
-function rand() {
-    return Math.round(Math.random() * 20) - 10;
-}
 
-function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
-
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
 
 const NoticeBoard = ({ history }) => {
     const classes = useNoticeBoardStyles();
-    const [modalStyle] = React.useState(getModalStyle);
 
-
-    const [openModal, setOpenModal] = React.useState(false);
+    const [openSearchModal, setopenSearchModal] = useState(false);
 
     const [open, setOpen] = React.useState(false);
 
@@ -93,39 +77,52 @@ const NoticeBoard = ({ history }) => {
         }
     }
 
-    const redirectToPost = () => {
+    const redirectToDeletePost = () => {
         if (history) {
-            history.push('/notice-board/post1')
+            history.push('/notice-board/delete-post')
         }
     }
 
 
     const onSearch = (phrase: string) => {
-        setOpenModal(false);
+        setopenSearchModal(false);
     }
 
     const bodySearchPost = (
-        <div style={modalStyle} className={classes.paper}>
+        <div
+            className={classes.paper}>
             <SearchPost onSearch={onSearch} />
         </div>
     );
 
+
     const handleTool = (name) => {
         if (name === QuickActions.SEARCH_POST) {
-            setOpenModal(true);
+            setopenSearchModal(true);
         }
         if (name === QuickActions.CREATE_POST) {
             redirectToCreatePost();
+        }
+        if (name === QuickActions.DELETE_POST) {
+            redirectToDeletePost();
         }
     };
 
 
     const handleModalClose = () => {
-        setOpenModal(false);
+        setopenSearchModal(false);
     };
 
     return (
         <div className={classes.container}>
+            <Modal
+                open={openSearchModal}
+                onClose={handleModalClose}
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+            >
+                {bodySearchPost}
+            </Modal>
             <div className={classes.speedDial}>
                 <SpeedDial
                     ariaLabel="SpeedDial example"
@@ -133,7 +130,7 @@ const NoticeBoard = ({ history }) => {
                     onClose={handleClose}
                     onOpen={handleOpen}
                     open={open}
-                    direction='up'
+                    direction='down'
                 >
                     {actions.map((action) => (
                         <SpeedDialAction
@@ -175,15 +172,6 @@ const NoticeBoard = ({ history }) => {
                     })}
                 </div>
             </div>
-
-            <Modal
-                open={openModal}
-                onClose={handleModalClose}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-            >
-                {bodySearchPost}
-            </Modal>
         </div >
 
     );

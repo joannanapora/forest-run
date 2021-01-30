@@ -4,22 +4,21 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
     createStyles({
         cardRoot: {
-            marginTop: theme.spacing(1),
-            marginRight: theme.spacing(10),
-            marginLeft: theme.spacing(3),
+            margin: theme.spacing(3),
 
         },
         container: {
             height: '100%',
-        },
-        root: {
-            transform: 'translateZ(0px)',
-            flexGrow: 1,
-            display: 'flex'
+            display: 'flex',
+            flexDirection: 'row'
         },
         keywordsList: {
             display: 'flex',
-            justifyContent: 'space-evenly'
+            justifyContent: 'space-evenly',
+
+            [theme.breakpoints.down("sm")]: {
+                flexDirection: 'column'
+            },
         },
         keywords: {
             display: 'flex',
@@ -32,7 +31,16 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
         },
         articles: {
             width: '100%',
-            padding: theme.spacing(2, 4, 5),
+            [theme.breakpoints.down("sm")]: {
+                paddingBottom: theme.spacing(6),
+                margin: 0
+            },
+            [theme.breakpoints.up("md")]: {
+                padding: theme.spacing(4, 2, 5, 3),
+            },
+            [theme.breakpoints.up("lg")]: {
+                padding: theme.spacing(4, 2, 5, 3),
+            },
         },
         paper: {
             backgroundColor: theme.palette.background.paper,
@@ -41,11 +49,10 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(2, 4, 3, 5),
         },
         speedDial: {
-            padding: theme.spacing(2, 4, 3),
-            position: 'fixed',
-            bottom: theme.spacing(22),
-            right: '0',
-            height: '100px'
+            height: '100%',
+            padding: theme.spacing(7),
+            paddingRight: theme.spacing(0),
+            paddingLeft: theme.spacing(3),
         },
         scrollArea: {
             paddingTop: theme.spacing(5),

@@ -10,7 +10,7 @@ export const usePersonalStyles = makeStyles((theme: Theme) =>
         },
         formControl: {
             margin: theme.spacing(1),
-            minWidth: 200,
+            minWidth: 150,
             maxWidth: 300,
         },
         chips: {
@@ -27,7 +27,8 @@ export const usePersonalStyles = makeStyles((theme: Theme) =>
         textField: {
             marginLeft: theme.spacing(1),
             marginRight: theme.spacing(1),
-            width: 200,
+            minWidth: 150,
+            maxWidth: 300,
         },
     }),
 );

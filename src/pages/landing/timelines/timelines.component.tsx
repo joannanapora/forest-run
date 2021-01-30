@@ -36,7 +36,7 @@ const TimeLines = () => {
                         <Typography variant="h6" component="h1">
                             Register
             </Typography>
-                        <Typography>in Forest App</Typography>
+                        <Typography>in Forest app</Typography>
                     </Paper>
                 </TimelineContent>
             </TimelineItem>
@@ -54,7 +54,7 @@ const TimeLines = () => {
                         <Typography variant="h6" component="h1">
                             Find
             </Typography>
-                        <Typography>your running group</Typography>
+                        <Typography>or create running event!</Typography>
                     </Paper>
                 </TimelineContent>
             </TimelineItem>
@@ -68,9 +68,9 @@ const TimeLines = () => {
                 <TimelineContent>
                     <Paper elevation={3} className={classes.paper}>
                         <Typography variant="h6" component="h1">
-                            Run
+                            Take a part,
             </Typography>
-                        <Typography>Forest, Run</Typography>
+                        <Typography>meet people and feel good.</Typography>
                     </Paper>
                 </TimelineContent>
             </TimelineItem>
@@ -83,9 +83,9 @@ const TimeLines = () => {
                 <TimelineContent>
                     <Paper elevation={3} className={classes.paper}>
                         <Typography variant="h6" component="h1">
-                            Eat
-            </Typography>
-                        <Typography>healthy and feel good</Typography>
+                            Remember about
+                        </Typography>
+                        <Typography>post-workout nutrition</Typography>
                     </Paper>
                 </TimelineContent>
             </TimelineItem>

@@ -18,7 +18,7 @@ import Brightness3Icon from '@material-ui/icons/Brightness3';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { useMenuDrawerStyles, light, dark } from './menu-drawer.styles';
-import PlayerAvatar from '../avatar/avatar.component';
+import Username from '../avatar/avatar.component';
 import { Switch, Route, withRouter, Link } from "react-router-dom";
 import SignInUp from '../../pages/login/sign-in-sign-up/sign-in-up.component';
 import TimeLines from '../../pages/landing/timelines/timelines.component';
@@ -29,6 +29,7 @@ import EventList from '../../pages/events/event-list/event-list.component';
 import NoticeBoard from '../../pages/notice-board/articles/notice-board.component';
 import Donate from '../../pages/donate/donate.component';
 import CreatePost from '../../pages/notice-board/create-post/create-post.component';
+import DeletePost from '../../pages/notice-board/delete-post/delete-post.component'
 
 const MenuDrawer = () => {
     const classes = useMenuDrawerStyles();
@@ -93,7 +94,7 @@ const MenuDrawer = () => {
                     <Toolbar>
                         <Typography variant="h5" noWrap className={classes.title}>
                             {<i className="material-icons md-48">< Nature /></i>}{<i className="material-icons md-48">< DirectionsRun /></i>}
-                            Forest
+                            Run Forest, Run
                         </Typography>
                         <IconButton
                             edge="end"
@@ -122,6 +123,7 @@ const MenuDrawer = () => {
                     <Switch>
                         <Route exact path='/' component={TimeLines} />
                         <Route path='/notice-board/create-post' component={CreatePost} />
+                        <Route path='/notice-board/delete-post' component={DeletePost} />
                         <Route path='/create-event' component={CardEdit} />
                         <Route path='/upcoming-events' component={EventList} />
                         <Route path='/sign-up' component={SignInUp} />
@@ -146,7 +148,7 @@ const MenuDrawer = () => {
                     </div>
 
                     <List>
-                        <PlayerAvatar />
+                        <Username />
                     </List>
                     <List>
                         {MenuTabs.map((element) => (

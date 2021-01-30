@@ -12,26 +12,23 @@ import Alert from '@material-ui/lab/Alert';
 import Modal from '@material-ui/core/Modal';
 
 function getSteps() {
-    return ['Upload Event Image', 'Set up event details', 'Meeting place and Event description'];
+    return ['Set up event details', 'Meeting place and Event description', 'Upload Event Image'];
 }
 
 function getStepContent(step: number) {
     switch (step) {
         case 0:
             return (
-                <UploudEventImage />
+                <EventDetails />
             );
         case 1:
             return (
-                <EventDetails />
+                <MeetingPoint />
             );
         case 2:
             return (
-                <MeetingPoint />
-            );
-        case 3:
-            return (
-                <MeetingPoint />
+                <UploudEventImage />
+
             );
         default:
             return 'Unknown step';

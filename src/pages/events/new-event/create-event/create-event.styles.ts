@@ -5,9 +5,20 @@ export const useCardEditStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
-            padding: theme.spacing(5),
+            padding: theme.spacing(3),
             height: '100%',
             marginTop: theme.spacing(2),
+            [theme.breakpoints.down("sm")]: {
+                padding: 0,
+                paddingTop: theme.spacing(2),
+                marginLeft: 0
+            },
+            [theme.breakpoints.up("md")]: {
+                padding: theme.spacing(5, 2, 5, 3),
+            },
+            [theme.breakpoints.up("lg")]: {
+                padding: theme.spacing(4, 2, 5, 3),
+            },
         },
         button: {
             marginTop: theme.spacing(1),

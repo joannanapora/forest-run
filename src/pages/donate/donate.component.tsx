@@ -39,20 +39,19 @@ export default function ImgMediaCard() {
 
     return (
         <div className={classes.container}>
-            <Card className={classes.root}>
-                <div className={classes.actions}>
+            <Card >
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        Run Forest, Run
+          </Typography>
+                    <Typography variant="body2" color="textSecondary" component="p">
+                        The site is dedicated to runners from all over London and the surrounding area. <br />
+                        Main goal is to organize organize people who would like to enjoy the sport together.<br />
+                        It is much safer, more fun and motivating.
 
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            Forest
           </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p">
-                            We are runners from London. We connect people who are looking for others to run together.
-                            It's safer, more fun and motivating.
-          </Typography>
-                    </CardContent>
-                </div>
-                <div className={classes.actions}>
+                </CardContent>
+                <div className={classes.donate}>
                     <FormControl>
                         <InputLabel htmlFor="standard-adornment-amount">Amount</InputLabel>
                         <Input
@@ -62,8 +61,8 @@ export default function ImgMediaCard() {
                             onChange={handleChange}
                             startAdornment={<InputAdornment position="start">£</InputAdornment>}
                         />
+                        <div className={classes.donateButton}><Stripe handleToken={handleToken} donation={amount}></Stripe></div>
                     </FormControl>
-                    <Stripe handleToken={handleToken} donation={amount}></Stripe>
                     {
                         donated ? (
                             <div className={classes.alertContainer} ><Alert severity="success">Thank you for donation!</Alert></div>

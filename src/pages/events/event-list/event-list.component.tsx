@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import UpcomingEvent from '../event-card/event.component';
 import { useEventListStyles } from './event-list.styles';
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
@@ -7,7 +7,6 @@ import Paper from '@material-ui/core/Paper';
 import Fade from '@material-ui/core/Fade';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Button } from '@material-ui/core';
-
 import SortIcon from '@material-ui/icons/Sort';
 
 const events = [
@@ -88,15 +87,16 @@ const events = [
 
 const EventList = () => {
 
-    const [spacing, setSpacing] = React.useState<GridSpacing>(2);
-    const [checked, setChecked] = React.useState(false);
+    const [spacing, setSpacing] = useState<GridSpacing>(2);
+    const [checked, setChecked] = useState(false);
+
+
 
     const handleChange = () => {
         setChecked((prev) => !prev);
     };
 
     const handleSort = () => {
-
     }
     const classes = useEventListStyles();
 

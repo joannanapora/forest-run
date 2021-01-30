@@ -12,5 +12,9 @@ export const useSearchPostStyles = makeStyles((theme: Theme) =>
         button: {
             margin: theme.spacing(2),
         },
+        alertContainer: {
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+        },
     }),
 );

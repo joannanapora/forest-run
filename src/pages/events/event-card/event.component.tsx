@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEventStyles } from './event.styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -7,12 +7,14 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { Star, StarBorder } from '@material-ui/icons';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import Alert from '@material-ui/lab/Alert';
+import PeopleIcon from '@material-ui/icons/People';
 
 interface ICardDetails {
     title: string
@@ -25,12 +27,40 @@ interface ICardDetails {
 
 const UpcomingEvent = ({ title, date, image, description, distance }: ICardDetails) => {
     const classes = useEventStyles();
-    const [expanded, setExpanded]: [boolean, any] = React.useState(false);
-    const [isFavourite, setIsFavourite]: [boolean, any] = React.useState(false);
+    const [expanded, setExpanded]: [boolean, any] = useState(false);
+    const [isFavourite, setIsFavourite]: [boolean, any] = useState(false);
+    const [join, setJoin]: [boolean, any] = useState(false);
+    const [remove, setRemove]: [boolean, any] = useState(false);
+    const [counter, setCounter]: [number, any] = useState(0);
+
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+
+    const handleTakingPart = () => {
+        setIsFavourite(!isFavourite);
+
+        if (isFavourite) {
+            setRemove(true);
+            setJoin(false)
+            offAlert();
+            setCounter(counter - 1)
+        } else {
+            setJoin(true);
+            setRemove(false);
+            offAlert();
+            setCounter(counter + 1)
+        }
+    }
+
+    const offAlert = () => {
+        setTimeout(() => {
+            setJoin(false);
+            setRemove(false);
+        }, 4000);
+    }
+
 
     return (
         <Card className={classes.root}>
@@ -41,25 +71,33 @@ const UpcomingEvent = ({ title, date, image, description, distance }: ICardDetai
           </Typography>
                 }
                 action={
-                    <IconButton onClick={() => setIsFavourite(!isFavourite)} aria-label="settings">
+                    <IconButton onClick={handleTakingPart} aria-label="settings">
                         {isFavourite ?
-                            < Star />
+                            < PeopleAltIcon color='primary' />
                             :
-                            < StarBorder />
+                            < PersonAddIcon color='secondary' />
                         }
                     </IconButton>
                 }
                 title={title}
                 subheader={date}
             />
+            {
+                join ? (
+                    <div className={classes.alertContainer} ><Alert onChange={offAlert} severity="success">You joined the event!</Alert></div>
+                ) : null
+            }
+            {
+                remove ? (
+                    <div className={classes.alertContainer} ><Alert onChange={offAlert} severity="error">You left the event! </Alert></div>
+                ) : null
+            }
             <CardMedia
                 className={classes.media}
                 image={image}
             />
             <CardActions disableSpacing>
-                <IconButton aria-label="share">
-                    <ShareIcon />
-                </IconButton>
+                < PeopleIcon /><Typography className={classes.counter} >{counter}</Typography>
                 <IconButton
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,

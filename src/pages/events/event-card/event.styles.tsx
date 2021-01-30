@@ -24,5 +24,12 @@ export const useEventStyles = makeStyles((theme: Theme) =>
         avatar: {
             fontSize: 25,
         },
+        alertContainer: {
+            marginTop: theme.spacing(1),
+            marginBottom: theme.spacing(1),
+        },
+        counter: {
+            marginLeft: theme.spacing(2),
+        }
     }),
 );

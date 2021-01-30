@@ -10,20 +10,18 @@ const SignInUp = () => {
     const classes = useSignInUpStyles();
 
     return (
-        <div className={classes.root}>
-            <Grid container spacing={1}>
-                <Grid item xs={12} sm={6}>
-                    <Paper className={classes.paper}>
-                        <SignIn />
-                    </Paper>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Paper className={classes.paper}>
-                        <SignUp />
-                    </Paper>
-                </Grid>
+        <Grid className={classes.root} container spacing={1}>
+            <Grid item xs={12} sm={6}>
+                <Paper className={classes.paper}>
+                    <SignIn />
+                </Paper>
             </Grid>
-        </div>
+            <Grid item xs={12} sm={6}>
+                <Paper className={classes.paper}>
+                    <SignUp />
+                </Paper>
+            </Grid>
+        </Grid>
     );
 };
 

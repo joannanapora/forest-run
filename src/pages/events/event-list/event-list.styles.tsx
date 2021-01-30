@@ -8,18 +8,18 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
             marginBottom: '5rem',
             height: '100%',
             overflow: 'auto',
-            padding: theme.spacing(8),
+            padding: theme.spacing(6),
         },
         control: {
             padding: theme.spacing(2),
         },
         rootfiltersOn: {
             height: 140,
-            paddingLeft: theme.spacing(2),
+            marginLeft: 0
         },
         rootfiltersOff: {
             height: 50,
-            paddingLeft: theme.spacing(2),
+            marginLeft: 0
         },
         container: {
             display: 'flex',

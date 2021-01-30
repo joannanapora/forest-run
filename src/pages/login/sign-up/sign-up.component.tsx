@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { withRouter } from "react-router-dom";
@@ -7,7 +7,7 @@ import { validatePassword } from '../../../shared/password-validation';
 import Alert from '@material-ui/lab/Alert';
 import { useSignUpStyles } from './sign-up.styles';
 
-interface State {
+interface DetailsForm {
     email: string;
     password: string;
     confirmPassword: string;
@@ -15,10 +15,18 @@ interface State {
     username: string;
 }
 
+interface ErrorAlerts {
+    wrongEmail: boolean;
+    wrongPassword: boolean;
+    passwordsDontMatch: boolean;
+    usernameTooShort: boolean;
+    usernameTooLong: boolean;
+}
+
 
 const SignUp = ({ history }: any) => {
     const classes = useSignUpStyles();
-    const [values, setValues] = React.useState<State>({
+    const [values, setValues] = React.useState<DetailsForm>({
         email: '',
         password: '',
         confirmPassword: '',
@@ -26,35 +34,49 @@ const SignUp = ({ history }: any) => {
         username: '',
     });
 
-    const [wrongEmail, showWrongEmail]: [boolean, any] = useState(false);
-    const [wrongPassword, showWrongPassword]: [boolean, any] = useState(false);
-    const [dontMatch, showDontMatch]: [boolean, any] = useState(false);
+    const [notifications, setNotification] = React.useState<ErrorAlerts>({
+        wrongEmail: false,
+        wrongPassword: false,
+        passwordsDontMatch: false,
+        usernameTooShort: false,
+        usernameTooLong: false,
+    });
 
 
-    useEffect(() => {
-    }, [wrongEmail, wrongPassword, dontMatch])
 
-
-    const handleSubmit = async event => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
         if (!validateEmail(values.email)) {
-            showWrongEmail(true);
+            setNotification({ ...notifications, wrongEmail: true });
             offAlert();
             return;
         }
+        if (values.username.length < 3) {
+            setNotification({ ...notifications, usernameTooShort: true });
+            offAlert();
+            return;
+        }
+        if (values.username.length > 18) {
+            setNotification({ ...notifications, usernameTooLong: true });
+            offAlert();
+            return;
+        }
+
         if (!validatePassword(values.password)) {
-            showWrongPassword(true);
+            setNotification({ ...notifications, wrongPassword: true });
             offAlert();
             return;
         }
 
         if (values.password !== values.confirmPassword) {
-            showDontMatch(true);
+            setNotification({ ...notifications, passwordsDontMatch: true });
             offAlert();
+            return
+        } else {
+            submitSignUp();
         }
 
-        submitSignUp();
 
 
         /// connect to GRAPH QL
@@ -63,13 +85,15 @@ const SignUp = ({ history }: any) => {
 
     const offAlert = () => {
         setTimeout(() => {
-            showWrongEmail(false);
-            showWrongPassword(false);
-            showDontMatch(false);
+            setNotification({ ...notifications, wrongEmail: false });
+            setNotification({ ...notifications, usernameTooShort: false });
+            setNotification({ ...notifications, usernameTooLong: false });
+            setNotification({ ...notifications, wrongPassword: false });
+            setNotification({ ...notifications, passwordsDontMatch: false });
         }, 5000);
     }
 
-    const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (prop: keyof DetailsForm) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [prop]: event.target.value });
     };
 
@@ -90,9 +114,23 @@ const SignUp = ({ history }: any) => {
         <div className={classes.form}>
             <TextField onChange={handleChange('email')}
                 className={classes.textfield} name='playerUsername' label="Email" variant="filled" />
+            {
+                notifications.wrongEmail ? (
+                   <Alert severity="error">Wrong email</Alert>
+                ) : null
+            }
             <TextField onChange={handleChange('username')}
                 className={classes.textfield} name='playerUsername' label="Username" variant="filled" />
             <FormControl className={classes.textfield} variant="filled">
+                {
+                    notifications.usernameTooShort ? (
+              <Alert severity="error">Username's too short (3-18 char.)</Alert>
+                    ) : null
+                }{
+                    notifications.usernameTooLong ? (
+                        <Alert severity="error">Username's too long (3-18 char.)</Alert>
+                    ) : null
+                }
                 <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
                 <FilledInput
                     error={false}
@@ -113,6 +151,11 @@ const SignUp = ({ history }: any) => {
                         </InputAdornment>
                     }
                 />
+                {
+                    notifications.wrongPassword ? (
+                        <Alert severity="error">Wrong password</Alert>
+                    ) : null
+                }
             </FormControl>
             <FormControl className={classes.textfield} variant="filled">
                 <InputLabel htmlFor="filled-adornment-password">Confirm Password</InputLabel>
@@ -128,16 +171,8 @@ const SignUp = ({ history }: any) => {
                 />
             </FormControl>
             {
-                wrongEmail ? (
-                    <div className={classes.alertContainer} ><Alert severity="error">Wrong email</Alert></div>
-                ) : null
-            } {
-                wrongPassword ? (
-                    <div className={classes.alertContainer} ><Alert severity="error">Wrong password</Alert></div>
-                ) : null
-            } {
-                dontMatch ? (
-                    <div className={classes.alertContainer} ><Alert severity="error">Passwords don't match</Alert></div>
+                notifications.passwordsDontMatch ? (
+                    <Alert severity="error">Passwords don't match</Alert>
                 ) : null
             }
             <Button className={classes.loginButton} onClick={handleSubmit} variant="contained" color="primary">
