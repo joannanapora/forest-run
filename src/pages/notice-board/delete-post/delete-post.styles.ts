@@ -7,7 +7,10 @@ export const useDeletePostStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             height: '100%',
-            padding: theme.spacing(5, 0, 5, 3),
+            padding: theme.spacing(7, 35, 0, 3),
+            [theme.breakpoints.down("sm")]: {
+                padding: theme.spacing(7, 30, 0, 1),
+            },
         },
         button: {
             margin: theme.spacing(2),
@@ -33,12 +36,18 @@ export const useDeletePostStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             justifyContent: 'start',
             margin: theme.spacing(3, 0, 5, 0),
-            maxWidth: theme.spacing(13),
+            maxWidth: theme.spacing(11),
         },
         checkboxes: {
-            padding: theme.spacing(2, 2, 8, 10),
             height: '',
             overflow: 'auto',
+            [theme.breakpoints.down("lg")]: {
+                padding: theme.spacing(2, 0, 3, 1),
+            },
+            [theme.breakpoints.down("sm")]: {
+                padding: theme.spacing(0, 0, 2, 0),
+            },
+
         },
         articlesFormLabel: {
             display: 'flex',
@@ -49,5 +58,9 @@ export const useDeletePostStyles = makeStyles((theme: Theme) =>
         date: {
             marginRight: theme.spacing(4),
             marginLeft: theme.spacing(4),
+            [theme.breakpoints.down("sm")]: {
+                marginRight: theme.spacing(1),
+                marginLeft: theme.spacing(1),
+            }
         }
     }));

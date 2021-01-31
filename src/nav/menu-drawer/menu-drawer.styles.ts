@@ -6,6 +6,7 @@ export const useMenuDrawerStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         height: '100%',
+        textDecoration: 'none'
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -19,17 +20,12 @@ export const useMenuDrawerStyles = makeStyles((theme) => ({
             easing: theme.transitions.easing.easeOut,
             duration: theme.transitions.duration.enteringScreen,
         }),
-        marginRight: drawerWidth,
     },
     title: {
         flexGrow: 1,
     },
     hide: {
         display: 'none',
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
     },
     drawerPaper: {
         width: drawerWidth,
@@ -58,7 +54,14 @@ export const useMenuDrawerStyles = makeStyles((theme) => ({
         marginRight: 0,
     },
     menuList: {
-        height: '4rem',
+        height: theme.spacing(8),
+        minWidth: theme.spacing(30),
+    },
+    paper: {
+        minWidth: 300,
+    },
+    drawer: {
+        minWidth: 400,
     }
 }));
 
@@ -66,7 +69,7 @@ export const light: ThemeOptions = {
     typography: {
         fontWeightBold: 1000,
         fontFamily: 'Amatic SC',
-        fontSize: 20
+        fontSize: 20,
     },
     palette: {
         type: 'light',

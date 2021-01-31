@@ -9,11 +9,9 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
-import { ThemeProvider } from '@material-ui/core'
+import { Button, ThemeProvider } from '@material-ui/core'
 import Brightness3Icon from '@material-ui/icons/Brightness3';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { createMuiTheme } from '@material-ui/core/styles';
@@ -37,8 +35,13 @@ const MenuDrawer = () => {
     const [theme, setTheme] = React.useState(true);
     const icon = !theme ? <Brightness7Icon /> : <Brightness3Icon />
     const appliedTheme = createMuiTheme(theme ? light : dark);
-    const mode = useTheme();
 
+    const [state, setState] = React.useState({
+        top: false,
+        left: false,
+        bottom: false,
+        right: false,
+    });
 
     const MenuTabs = [
         {
@@ -56,11 +59,6 @@ const MenuDrawer = () => {
             id: 2,
             url: "/notice-board",
         },
-        // {
-        //     name: "Messages",
-        //     id: 3,
-        //     url: "/messages"
-        // },
         {
             name: "Donate",
             id: 4,
@@ -74,13 +72,39 @@ const MenuDrawer = () => {
 
     ];
 
-    const handleDrawerOpen = () => {
-        setOpen(true);
+    const toggleDrawer = (anchor: Anchor, open: boolean) => (
+        event: React.KeyboardEvent | React.MouseEvent,
+    ) => {
+        if (
+            event.type === 'keydown' &&
+            ((event as React.KeyboardEvent).key === 'Tab' ||
+                (event as React.KeyboardEvent).key === 'Shift')
+        ) {
+            return;
+        }
+
+        setState({ ...state, [anchor]: open });
     };
 
-    const handleDrawerClose = () => {
-        setOpen(false);
-    };
+    type Anchor = 'top' | 'left' | 'bottom' | 'right';
+
+
+    const list = (anchor: Anchor) => (
+        <List>
+            <List>
+                <Username />
+            </List>
+            <List>
+                {MenuTabs.map((element) => (
+                    <Link style={{ textDecoration: 'none' }} key={element.id} to={element.url}>
+                        <ListItem className={classes.menuList} button >
+                            <ListItemIcon>{element.name}</ListItemIcon>
+                        </ListItem>
+                    </Link>
+                ))}
+            </List>
+        </List>
+    );
 
     return (
         <ThemeProvider theme={appliedTheme}>
@@ -108,7 +132,7 @@ const MenuDrawer = () => {
                             color="inherit"
                             aria-label="open drawer"
                             edge="end"
-                            onClick={handleDrawerOpen}
+                            onClick={toggleDrawer('right', true)}
                             className={clsx(open && classes.hide)}
                         >
                             <MenuIcon />
@@ -132,34 +156,11 @@ const MenuDrawer = () => {
                         <Route path='/donate' component={Donate} />
                     </Switch>
                 </main>
-                <Drawer
-                    className={classes.drawer}
-                    variant="persistent"
-                    anchor="right"
-                    open={open}
-                    classes={{
-                        paper: classes.drawerPaper,
-                    }}
-                >
-                    <div className={classes.drawerHeader}>
-                        <IconButton onClick={handleDrawerClose}>
-                            {mode.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                        </IconButton>
-                    </div>
-
-                    <List>
-                        <Username />
-                    </List>
-                    <List>
-                        {MenuTabs.map((element) => (
-                            <Link key={element.id} to={element.url}>
-                                <ListItem className={classes.menuList} button >
-                                    <ListItemIcon>{element.name}</ListItemIcon>
-                                </ListItem>
-                            </Link>
-                        ))}
-                    </List>
-                </Drawer>
+                <React.Fragment key={'right'}>
+                    <Drawer className={classes.drawer} anchor={'right'} open={state['right']} onClose={toggleDrawer('right', false)}>
+                        {list('right')}
+                    </Drawer>
+                </React.Fragment>
             </div>
         </ThemeProvider>
     );

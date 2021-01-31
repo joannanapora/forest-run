@@ -10,26 +10,20 @@ export const useAvatarStyles = makeStyles((theme: Theme) =>
             flexDirection: "column",
         },
         large: {
-            width: theme.spacing(10),
-            height: theme.spacing(10),
-        },
-        profileButtons: {
-            display: 'flex',
-            justifyContent: 'space-evenly'
+            width: theme.spacing(18),
+            height: theme.spacing(18),
         },
         textField: {
             width: '25ch',
-        },
-        alert: {
-            width: '100%',
-            '& > * + *': {
-                marginTop: theme.spacing(2),
-            },
         },
         alertContainer: {
             marginTop: theme.spacing(2),
             marginBottom: theme.spacing(2),
         },
+        usernameButton: {
+            margin: theme.spacing(2, 0, 2, 0),
+        }
+
     }
     ),
 );

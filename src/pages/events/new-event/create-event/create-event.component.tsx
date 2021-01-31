@@ -175,7 +175,7 @@ const CardEdit = () => {
             </Button>
                         {
                             success ? (
-                                <div className={classes.alertContainer} ><Alert severity="success">New event has been created</Alert></div>
+                                <Alert severity="success">New event has been created</Alert>
                             ) : null
                         }
                     </div>

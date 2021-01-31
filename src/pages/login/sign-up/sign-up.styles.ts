@@ -12,6 +12,6 @@ export const useSignUpStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
         },
         loginButton: {
-            margin: theme.spacing(3)
+            marginTop: theme.spacing(2)
         },
     }));

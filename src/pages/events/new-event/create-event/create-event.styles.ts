@@ -5,19 +5,19 @@ export const useCardEditStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
-            padding: theme.spacing(3),
             height: '100%',
             marginTop: theme.spacing(2),
             [theme.breakpoints.down("sm")]: {
-                padding: 0,
-                paddingTop: theme.spacing(2),
-                marginLeft: 0
+                padding: theme.spacing(4, 30, 5, 0),
+                overflow: 'auto'
             },
             [theme.breakpoints.up("md")]: {
-                padding: theme.spacing(5, 2, 5, 3),
+                padding: theme.spacing(5, 2, 5, 0),
+                overflow: 'auto'
             },
             [theme.breakpoints.up("lg")]: {
-                padding: theme.spacing(4, 2, 5, 3),
+                padding: theme.spacing(5, 2, 5, 0),
+                overflow: 'auto'
             },
         },
         button: {
@@ -46,15 +46,6 @@ export const useCardEditStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             justifyContent: 'center'
         },
-        alert: {
-            width: '100%',
-            '& > * + *': {
-                marginTop: theme.spacing(2),
-            },
-        },
-        alertContainer: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2),
-        },
+
     }),
 );

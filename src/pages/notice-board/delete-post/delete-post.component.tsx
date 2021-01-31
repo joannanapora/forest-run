@@ -133,7 +133,7 @@ const DeletePost = ({ history }) => {
                 onClick={redirectToArticles}
                 variant="contained"
                 color="primary"
-                size="large"
+                size="medium"
                 className={classes.buttonBack}
                 startIcon={< ArrowBackIcon />}
             >
@@ -157,12 +157,11 @@ const DeletePost = ({ history }) => {
                                     label={
                                         <div className={classes.articlesFormLabel}>
                                             <div className={classes.date}>
-                                                Date: {article.date}
+                                                {article.date}
                                             </div>
                                             <div>
-                                                Title: {article.title}
+                                                {article.title}
                                             </div>
-
                                         </div>
                                     }
 

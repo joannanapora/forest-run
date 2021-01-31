@@ -101,12 +101,12 @@ const EventList = () => {
     const classes = useEventListStyles();
 
     return (
-        <Grid container className={classes.root} spacing={1}>
-            <div className={checked ? classes.rootfiltersOn : classes.rootfiltersOff}>
+        <div className={classes.eventListPage}>
+            <div className={classes.rootfilters}>
                 <FormControlLabel
                     control={<Switch color="primary"
                         checked={checked} onChange={handleChange} />}
-                    label="filters"
+                    label={checked ? '' : 'filters'}
                 />
                 <div className={classes.container}>
                     <Fade in={checked}>
@@ -157,7 +157,7 @@ const EventList = () => {
                     }
                 </Grid>
             </Grid>
-        </Grid>
+        </div>
     );
 }
 

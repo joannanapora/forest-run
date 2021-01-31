@@ -12,7 +12,7 @@ export const useSignInStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
         },
         loginButton: {
-            margin: '2vw 0'
+            marginTop: theme.spacing(2),
         },
         alert: {
             width: '100%',

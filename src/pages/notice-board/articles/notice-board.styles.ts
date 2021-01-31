@@ -5,12 +5,20 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
     createStyles({
         cardRoot: {
             margin: theme.spacing(3),
-
         },
         container: {
             height: '100%',
             display: 'flex',
-            flexDirection: 'row'
+            flexDirection: 'column',
+            [theme.breakpoints.down("sm")]: {
+                padding: theme.spacing(3, 30, 3, 0),
+            },
+            [theme.breakpoints.up("md")]: {
+                padding: theme.spacing(3, 30, 3, 0),
+            },
+            [theme.breakpoints.up("lg")]: {
+                padding: theme.spacing(4, 30, 3, 0),
+            },
         },
         keywordsList: {
             display: 'flex',
@@ -30,17 +38,6 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             height: 160,
         },
         articles: {
-            width: '100%',
-            [theme.breakpoints.down("sm")]: {
-                paddingBottom: theme.spacing(6),
-                margin: 0
-            },
-            [theme.breakpoints.up("md")]: {
-                padding: theme.spacing(4, 2, 5, 3),
-            },
-            [theme.breakpoints.up("lg")]: {
-                padding: theme.spacing(4, 2, 5, 3),
-            },
         },
         paper: {
             backgroundColor: theme.palette.background.paper,
@@ -49,13 +46,16 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(2, 4, 3, 5),
         },
         speedDial: {
-            height: '100%',
-            padding: theme.spacing(7),
-            paddingRight: theme.spacing(0),
-            paddingLeft: theme.spacing(3),
+            padding: theme.spacing(6, 0, 2, 2),
+            [theme.breakpoints.down("sm")]: {
+                padding: theme.spacing(6, 0, 0, 2),
+            },
+            [theme.breakpoints.up("md")]: {
+                padding: theme.spacing(6, 0, 0, 2),
+            },
         },
         scrollArea: {
-            paddingTop: theme.spacing(5),
+            paddingTop: theme.spacing(1),
             height: '100%',
             overflow: 'auto'
         }

@@ -130,7 +130,7 @@ const NoticeBoard = ({ history }) => {
                     onClose={handleClose}
                     onOpen={handleOpen}
                     open={open}
-                    direction='down'
+                    direction='right'
                 >
                     {actions.map((action) => (
                         <SpeedDialAction

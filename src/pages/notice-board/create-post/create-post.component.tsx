@@ -193,7 +193,7 @@ const CreatePost = ({ history }) => {
             <Button
                 variant="contained"
                 color="primary"
-                size="large"
+                size="medium"
                 className={classes.buttonBack}
                 startIcon={< ArrowBackIcon />}
                 onClick={redirectToArticles}

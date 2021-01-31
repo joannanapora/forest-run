@@ -8,10 +8,13 @@ export const useDonateStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center',
             marginTop: '5rem',
             [theme.breakpoints.down("sm")]: {
-                padding: theme.spacing(3),
+                padding: theme.spacing(0, 35, 0, 4),
             },
             [theme.breakpoints.up("md")]: {
-                padding: theme.spacing(3),
+                padding: theme.spacing(2, 30, 5, 3),
+            },
+            [theme.breakpoints.up("lg")]: {
+                padding: theme.spacing(4, 30, 4, 0),
             },
         },
         alert: {

@@ -4,7 +4,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 export const useCreatePostStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            padding: theme.spacing(3),
+            padding: theme.spacing(5, 35, 0, 3),
             minWidth: 300,
             display: 'flex',
             flexDirection: 'column',
@@ -34,11 +34,11 @@ export const useCreatePostStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             justifyContent: 'start',
             margin: theme.spacing(0, 0, 5, 0),
-            maxWidth: theme.spacing(13),
+            maxWidth: theme.spacing(11),
         },
         quill: {
             height: '100%',
-            maxHeight: '40vh',
+            maxHeight: '30vh',
             overflow: 'auto'
         },
         postDetails: {
