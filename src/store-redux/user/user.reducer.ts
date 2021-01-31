@@ -2,9 +2,7 @@ import { UserActionTypes } from './user.types';
 
 interface IState {
     currentUser: {
-        email: string;
-        name: string;
-        userId: string;
+        username: string;
     }
 }
 

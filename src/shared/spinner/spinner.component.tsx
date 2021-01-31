@@ -3,8 +3,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useSpinnerStyles } from './spinner.styles';
 
 
+const Spinner = () => {
 
-export default function CircularIndeterminate() {
     const classes = useSpinnerStyles();
 
     return (
@@ -13,3 +13,5 @@ export default function CircularIndeterminate() {
         </div>
     );
 }
+
+export default Spinner;

@@ -6,6 +6,10 @@ import { validateEmail } from '../../../shared/email-validation';
 import { validatePassword } from '../../../shared/password-validation';
 import Alert from '@material-ui/lab/Alert';
 import { useSignUpStyles } from './sign-up.styles';
+import {REGISTER_USER} from '../../../grapQL';
+import {useMutation} from '@apollo/react-hooks';
+
+
 
 interface DetailsForm {
     email: string;
@@ -19,12 +23,15 @@ interface ErrorAlerts {
     wrongEmail: boolean;
     wrongPassword: boolean;
     passwordsDontMatch: boolean;
+    usernameExists: boolean;
+    emailExists: boolean;
     usernameTooShort: boolean;
     usernameTooLong: boolean;
+    userRegistered: boolean;
 }
 
 
-const SignUp = ({ history }: any) => {
+const SignUp = () => {
     const classes = useSignUpStyles();
     const [values, setValues] = React.useState<DetailsForm>({
         email: '',
@@ -38,9 +45,42 @@ const SignUp = ({ history }: any) => {
         wrongEmail: false,
         wrongPassword: false,
         passwordsDontMatch: false,
-        usernameTooShort: false,
-        usernameTooLong: false,
+        usernameTooLong:false,
+        usernameTooShort:false,
+        usernameExists: false,
+        emailExists: false,
+        userRegistered: false,
     });
+
+
+    const [addUser, {loading}] = useMutation(
+        REGISTER_USER, {
+            update(_, result){
+                setNotification({...notifications, userRegistered: true});
+                clearAllInputs();
+            },
+            onError(e) {
+                if ((e.graphQLErrors[0].message as any).statusCode === 409) {
+                    setNotification({...notifications, usernameExists: true});
+                }
+                        },
+            variables: {
+                username: values.username,
+                email: values.email,
+                password: values.password
+            }
+        }
+    );
+
+    const clearAllInputs = () => {
+        setValues({
+            email: '',
+            password: '',
+            confirmPassword: '',
+            showPassword: false,
+            username: '',
+        })
+    }
 
 
 
@@ -49,52 +89,43 @@ const SignUp = ({ history }: any) => {
 
         if (!validateEmail(values.email)) {
             setNotification({ ...notifications, wrongEmail: true });
-            offAlert();
             return;
         }
         if (values.username.length < 3) {
             setNotification({ ...notifications, usernameTooShort: true });
-            offAlert();
             return;
         }
         if (values.username.length > 18) {
             setNotification({ ...notifications, usernameTooLong: true });
-            offAlert();
             return;
         }
 
         if (!validatePassword(values.password)) {
             setNotification({ ...notifications, wrongPassword: true });
-            offAlert();
             return;
         }
 
         if (values.password !== values.confirmPassword) {
             setNotification({ ...notifications, passwordsDontMatch: true });
-            offAlert();
             return
-        } else {
-            submitSignUp();
-        }
-
-
-
-        /// connect to GRAPH QL
+        } 
+            
+        addUser();
 
     }
 
-    const offAlert = () => {
-        setTimeout(() => {
-            setNotification({ ...notifications, wrongEmail: false });
-            setNotification({ ...notifications, usernameTooShort: false });
-            setNotification({ ...notifications, usernameTooLong: false });
-            setNotification({ ...notifications, wrongPassword: false });
-            setNotification({ ...notifications, passwordsDontMatch: false });
-        }, 5000);
-    }
 
     const handleChange = (prop: keyof DetailsForm) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [prop]: event.target.value });
+        setNotification({
+        wrongEmail: false,
+        wrongPassword: false,
+        passwordsDontMatch: false,
+        usernameTooLong:false,
+        usernameTooShort:false,
+        usernameExists: false,
+        emailExists: false,
+        userRegistered: false})
     };
 
     const handleClickShowPassword = () => {
@@ -104,33 +135,35 @@ const SignUp = ({ history }: any) => {
         event.preventDefault();
     };
 
-    const submitSignUp = () => {
-        if (history) {
-            if (history) { history.push('/upcoming-events') };
-        }
-    }
 
     return (
         <div className={classes.form}>
-            <TextField onChange={handleChange('email')}
-                className={classes.textfield} name='playerUsername' label="Email" variant="filled" />
             {
                 notifications.wrongEmail ? (
                    <Alert severity="error">Wrong email</Alert>
                 ) : null
             }
-            <TextField onChange={handleChange('username')}
-                className={classes.textfield} name='playerUsername' label="Username" variant="filled" />
-            <FormControl className={classes.textfield} variant="filled">
-                {
+            <TextField onChange={handleChange('email')}
+                className={classes.textfield} name='email' label="Email"   value={values.email} variant="filled" />
+               {
                     notifications.usernameTooShort ? (
               <Alert severity="error">Username's too short (3-18 char.)</Alert>
                     ) : null
-                }{
+                }
+                {
+                    notifications.usernameExists ? (
+              <Alert severity="error">User with that email/username already exists</Alert>
+                    ) : null
+                    }
+                {
                     notifications.usernameTooLong ? (
                         <Alert severity="error">Username's too long (3-18 char.)</Alert>
                     ) : null
                 }
+            <TextField onChange={handleChange('username')}
+            value={values.username}
+                className={classes.textfield} name='username' label="Username" variant="filled" />
+            <FormControl className={classes.textfield} variant="filled">
                 <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
                 <FilledInput
                     error={false}
@@ -153,7 +186,7 @@ const SignUp = ({ history }: any) => {
                 />
                 {
                     notifications.wrongPassword ? (
-                        <Alert severity="error">Wrong password</Alert>
+                        <Alert severity="error">Password is too weak</Alert>
                     ) : null
                 }
             </FormControl>
@@ -175,6 +208,11 @@ const SignUp = ({ history }: any) => {
                     <Alert severity="error">Passwords don't match</Alert>
                 ) : null
             }
+            {
+                    notifications.userRegistered ? (
+              <Alert severity="success">Account has been created! You can login now.</Alert>
+                    ) : null
+                }
             <Button className={classes.loginButton} onClick={handleSubmit} variant="contained" color="primary">
                 Register
 </Button>

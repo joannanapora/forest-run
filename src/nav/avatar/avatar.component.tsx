@@ -4,16 +4,16 @@ import Avatar from '@material-ui/core/Avatar';
 import { Button, IconButton, TextField, } from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import { Alert } from '@material-ui/lab';
+import {connect} from 'react-redux';
+import { selectCurrentUser } from '../../store-redux/user/user.selectors';
+import { createStructuredSelector } from 'reselect';
 
-const Username = () => {
+const Username = ({user}) => {
     const classes = useAvatarStyles();
     const [usernameButton, isUsernameClicked]: [boolean, any] = useState(false);
-    const [username, setUsername]: [string, any] = useState('cesarzowa');
+    const [username, setUsername]: [string, any] = useState(user.username);
     const [error, setError]: [boolean, any] = useState(false);
     const [success, setSuccess]: [boolean, any] = useState(false);
-
-    useEffect(() => {
-    }, [error, success, username])
 
     const changeUsername = () => {
         isUsernameClicked(true);
@@ -40,6 +40,7 @@ const Username = () => {
         }
     }
 
+    
 
     const offAlert = () => {
         setTimeout(() => {
@@ -79,4 +80,11 @@ const Username = () => {
     );
 };
 
-export default Username;
+const mapStateToProps = createStructuredSelector({
+    user: selectCurrentUser,
+});
+
+export default connect(
+    mapStateToProps,
+    null)
+    (Username);
