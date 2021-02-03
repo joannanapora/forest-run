@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useEventStyles } from './event.styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -9,7 +9,6 @@ import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
@@ -27,18 +26,18 @@ interface ICardDetails {
 
 const UpcomingEvent = ({ title, date, image, description, distance }: ICardDetails) => {
     const classes = useEventStyles();
-    const [expanded, setExpanded]: [boolean, any] = useState(false);
-    const [isFavourite, setIsFavourite]: [boolean, any] = useState(false);
-    const [join, setJoin]: [boolean, any] = useState(false);
-    const [remove, setRemove]: [boolean, any] = useState(false);
-    const [counter, setCounter]: [number, any] = useState(0);
+    const [expanded, setExpanded]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [isFavourite, setIsFavourite]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [join, setJoin]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [remove, setRemove]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [counter, setCounter]: [number, Dispatch<SetStateAction<number>>] = useState(0);
 
 
-    const handleExpandClick = () => {
+    const handleShowDescription = () => {
         setExpanded(!expanded);
     };
 
-    const handleTakingPart = () => {
+    const handleClickToJoin = () => {
         setIsFavourite(!isFavourite);
 
         if (isFavourite) {
@@ -71,7 +70,7 @@ const UpcomingEvent = ({ title, date, image, description, distance }: ICardDetai
           </Typography>
                 }
                 action={
-                    <IconButton onClick={handleTakingPart} aria-label="settings">
+                    <IconButton onClick={handleClickToJoin} aria-label="settings">
                         {isFavourite ?
                             < PeopleAltIcon color='primary' />
                             :
@@ -102,7 +101,7 @@ const UpcomingEvent = ({ title, date, image, description, distance }: ICardDetai
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
                     })}
-                    onClick={handleExpandClick}
+                    onClick={handleShowDescription}
                     aria-expanded={expanded}
                     aria-label="show more"
                 >

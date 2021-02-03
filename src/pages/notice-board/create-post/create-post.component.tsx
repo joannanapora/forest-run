@@ -1,52 +1,56 @@
 
 import { Button, TextField, Typography } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, FunctionComponent } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useCreatePostStyles } from './create-post.styles';
 import PublishIcon from '@material-ui/icons/Publish';
-import Modal from '@material-ui/core/Modal';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Alert from '@material-ui/lab/Alert';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import TagFacesIcon from '@material-ui/icons/TagFaces';
+import { CREATE_POST } from '../../../grapQL/post/post.mutation';
+import { useMutation } from '@apollo/react-hooks';
+import SpinnerButton from '../../../shared/spinner/spinner-button.component';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { StaticContext } from 'react-router';
 
 interface ChipData {
     key: number;
     label: string;
 }
 
-
-
-const CreatePost = ({ history }) => {
+function CreateNewPost({ history }) {
     const [chip, setChip]: [string, any] = useState('');
-    const [openModal, setOpenModal] = useState(false);
 
     const [alert, setAlert] = useState({
         emptyText: false,
         emptyTitle: false,
         tooLessKeywords: false,
+        somethingWentWrong: false,
     });
 
     const [postValues, setPostValues] = useState({
         title: '',
         text: '',
-        keywords: [
-            { key: 0, label: 'Enter 3-10 keywords' },
-        ],
+        keywords: [],
         image: File,
     });
 
+    const [createPost, { loading, error }] = useMutation(
+        CREATE_POST
+    );
+
     useEffect(() => {
-    }, [postValues.keywords])
+    }, [postValues.keywords]);
 
 
     const handleChipDelete = (chipToDelete: ChipData) => () => {
         const newKeywords = postValues.keywords.filter((keyword) => {
-            return keyword.key !== chipToDelete.key
+            return keyword.key !== chipToDelete.key;
         });
-        setPostValues({ ...postValues, keywords: newKeywords })
+        setPostValues({ ...postValues, keywords: newKeywords });
     };
 
     const classes = useCreatePostStyles();
@@ -56,7 +60,13 @@ const CreatePost = ({ history }) => {
     };
 
     const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPostValues({ ...postValues, title: event.target.value })
+        setAlert({
+            ...alert,
+            emptyText: false,
+            emptyTitle: false,
+            tooLessKeywords: false
+        });
+        setPostValues({ ...postValues, title: event.target.value });
     };
 
     const onChipKeydown = (event) => {
@@ -71,9 +81,9 @@ const CreatePost = ({ history }) => {
             const newKeywordsList = [...postValues.keywords, { label: event.target.value, key: nextKey }];
             setPostValues({ ...postValues, keywords: newKeywordsList });
 
-            setChip('')
+            setChip('');
         }
-    }
+    };
 
     const handleChipChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.target.value[event.target.value.length - 1] === ' ' || event.target.value[0] === ',' ?
@@ -82,51 +92,10 @@ const CreatePost = ({ history }) => {
     };
 
 
-    const offAlert = () => {
-        setTimeout(() => {
-            setAlert({
-                ...alert,
-                emptyText: false,
-                emptyTitle: false,
-                tooLessKeywords: false,
-            });
-        }, 8000);
-    }
-
-    function rand() {
-        return Math.round(Math.random() * 20) - 10;
-    }
-
-    function getModalStyle() {
-        const top = 50 + rand();
-        const left = 50 + rand();
-
-        return {
-            top: `${top}%`,
-            left: `${left}%`,
-            transform: `translate(-${top}%, -${left}%)`,
-        };
-    }
-
-    const [modalStyle] = useState(getModalStyle);
-
-    const handleYes = () => {
-        setOpenModal(false);
-        redirectToArticles()
-    }
-
-    const handleNo = () => {
-        setOpenModal(false);
-    }
-
     const redirectToArticles = () => {
         if (history) {
-            history.push('/notice-board/')
+            history.push('/notice-board');
         }
-    }
-
-    const handleModalClose = () => {
-        setOpenModal(false);
     };
 
 
@@ -135,145 +104,148 @@ const CreatePost = ({ history }) => {
             setAlert({
                 ...alert,
                 emptyTitle: true
-            })
-            offAlert();
-            return
+            });
         };
         if (postValues.text.length < 1) {
             setAlert({
                 ...alert,
                 emptyText: true
-            })
-            offAlert();
-            return
+            });
         };
-        if (postValues.keywords.length < 4) {
+        if (postValues.keywords.length < 3) {
             setAlert({
                 ...alert,
                 tooLessKeywords: true
-            })
-            offAlert();
-            return
+            });
         };
+        createPost(
+            {
+                variables: {
+                    title: postValues.title,
+                    text: postValues.text,
+                    keywords: postValues.keywords.map((keyword) => {
+                        return keyword.label;
+                    })
+                }
+            }
+        );
+        redirectToArticles();
+    };
 
-        setOpenModal(true);
+    if (error) {
+        setAlert({ ...alert, somethingWentWrong: true })
     };
 
 
-    const bodyConfirmModal = (
-        <div style={modalStyle} className={classes.paper}>
-            <Typography>Are you sure you want to publish?</Typography>
-            <div className={classes.confirmButtons}>
+    if (loading) {
+        return (
+            <div className={classes.container}>
                 <Button
-                    onClick={handleNo}
+                    disabled
                     variant="contained"
                     color="primary"
-                    size="small"
-                    className={classes.button}
+                    size="medium"
+                    className={classes.buttonBack}
+                    startIcon={<ArrowBackIcon />}
+                    onClick={redirectToArticles}
                 >
-                    No
-      </Button>
-                <Button
-                    onClick={handleYes}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    className={classes.button}
-                >
-                    Yes
-      </Button>
+                    Back
+                </Button>
+                <ReactQuill className={classes.quill} value={postValues.text}
+                    onChange={handleTextChange} />
+                <div className={classes.postDetails}>
+                    <TextField
+                        disabled
+                        className={classes.postTextFields}
+                        value={postValues.title}
+                        id="standard-textarea"
+                        label="Title"
+                        onChange={handleTitle} />
+                    <TextField
+                        disabled
+                        className={classes.postTextFields}
+                        value={chip}
+                        id="keywords"
+                        label="Keywords"
+                        onKeyDown={onChipKeydown}
+                        onChange={handleChipChange} />
+                </div>
+                <Paper component="ul" className={classes.chipRoot}>
+                </Paper>
+                <SpinnerButton startIcon={<PublishIcon />} loading={loading} buttonLabel={'Publish'} onClick={handlePublishButton} />
             </div>
-        </div>
-    );
+        );
+    }
 
+    if (!loading) {
+        return (
+            <div className={classes.container}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    className={classes.buttonBack}
+                    startIcon={<ArrowBackIcon />}
+                    onClick={redirectToArticles}
+                >
+                    ack
+                </Button>
+                {alert.somethingWentWrong ? (
+                    <Alert severity="error">Ooops! Something went wrong, try again later.</Alert>
+                ) : null}
+                {alert.emptyText ? (
+                    <Alert severity="error">Text field is empty</Alert>
+                ) : null}
+                {alert.emptyTitle ? (
+                    <Alert severity="error">Title field is empty</Alert>
+                ) : null}
+                {alert.tooLessKeywords ? (
+                    <Alert severity="error">Too less keywords</Alert>
+                ) : null}
+                <ReactQuill className={classes.quill} value={postValues.text}
+                    onChange={handleTextChange} />
+                <div className={classes.postDetails}>
+                    <TextField
+                        className={classes.postTextFields}
+                        value={postValues.title}
+                        id="standard-textarea"
+                        label="Title"
+                        onChange={handleTitle} />
+                    <TextField
+                        className={classes.postTextFields}
+                        value={chip}
+                        id="keywords"
+                        label="Keywords"
+                        onKeyDown={onChipKeydown}
+                        onChange={handleChipChange} />
+                </div>
+                <Paper component="ul" className={classes.chipRoot}>
+                    {postValues.keywords.map((data) => {
+                        let icon;
 
+                        if (data.label === 'Enter 3-10 keywords') {
+                            icon = <TagFacesIcon />;
+                        }
+
+                        return (
+                            <li key={data.key}>
+                                <Chip
+                                    icon={icon}
+                                    label={data.label}
+                                    onDelete={data.label === 'Enter 3-10 keywords' ? undefined : handleChipDelete(data)}
+                                    className={classes.chip} />
+                            </li>
+                        );
+                    })}
+                </Paper>
+                <SpinnerButton startIcon={<PublishIcon />} loading={loading} buttonLabel={'Publish'} onClick={handlePublishButton} />
+            </div>
+        );
+    };
 
     return (
-        <div className={classes.container} >
-            <Button
-                variant="contained"
-                color="primary"
-                size="medium"
-                className={classes.buttonBack}
-                startIcon={< ArrowBackIcon />}
-                onClick={redirectToArticles}
-            >
-                Back
-      </Button>
-            {
-                alert.emptyText ? (
-                    <Alert onChange={offAlert} severity="error">Text field is empty</Alert>
-                ) : null
-            }
-            {
-                alert.emptyTitle ? (
-                    <Alert onChange={offAlert} severity="error">Title field is empty</Alert>
-                ) : null
-            }
-            {
-                alert.tooLessKeywords ? (
-                    <Alert onChange={offAlert} severity="error">Too less keywords</Alert>
-                ) : null
-            }
-            <ReactQuill className={classes.quill} value={postValues.text}
-                onChange={handleTextChange} />
-            <div className={classes.postDetails}>
-                <TextField
-                    className={classes.postTextFields}
-                    value={postValues.title}
-                    id="standard-textarea"
-                    label="Title"
-                    onChange={handleTitle}
-                />
-                <TextField
-                    className={classes.postTextFields}
-                    value={chip}
-                    id="keywords"
-                    label="Keywords"
-                    onKeyDown={onChipKeydown}
-                    onChange={handleChipChange}
-                />
-            </div>
-            <Paper component="ul" className={classes.chipRoot}>
-                {postValues.keywords.map((data) => {
-                    let icon;
-
-                    if (data.label === 'Enter 3-10 keywords') {
-                        icon = <TagFacesIcon />;
-                    }
-
-                    return (
-                        <li key={data.key}>
-                            <Chip
-                                icon={icon}
-                                label={data.label}
-                                onDelete={data.label === 'Enter 3-10 keywords' ? undefined : handleChipDelete(data)}
-                                className={classes.chip}
-                            />
-                        </li>
-                    );
-                })}
-            </Paper>
-            <Button
-                onClick={handlePublishButton}
-                variant="contained"
-                color="primary"
-                size="small"
-                className={classes.button}
-                startIcon={<PublishIcon />}
-            >
-                Publish
-      </Button>
-            <Modal
-                open={openModal}
-                onClose={handleModalClose}
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-            >
-                {bodyConfirmModal}
-            </Modal>
-        </div>
-    )
+        <></>
+    );
 }
 
-export default CreatePost;
+export default withRouter(CreateNewPost);

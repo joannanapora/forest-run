@@ -5,19 +5,20 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
     createStyles({
         cardRoot: {
             margin: theme.spacing(3),
+            minHeight: 300,
         },
         container: {
             height: '100%',
             display: 'flex',
             flexDirection: 'column',
             [theme.breakpoints.down("sm")]: {
-                padding: theme.spacing(3, 30, 3, 0),
+                padding: theme.spacing(1, 30, 3, 0),
             },
             [theme.breakpoints.up("md")]: {
-                padding: theme.spacing(3, 30, 3, 0),
+                padding: theme.spacing(1, 30, 3, 0),
             },
             [theme.breakpoints.up("lg")]: {
-                padding: theme.spacing(4, 30, 3, 0),
+                padding: theme.spacing(1, 30, 3, 0),
             },
         },
         keywordsList: {
@@ -58,5 +59,5 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             paddingTop: theme.spacing(1),
             height: '100%',
             overflow: 'auto'
-        }
+        },
     }));

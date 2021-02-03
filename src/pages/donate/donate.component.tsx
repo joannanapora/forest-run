@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -8,15 +8,14 @@ import { useDonateStyles } from './donate.styles';
 import { Alert } from '@material-ui/lab';
 
 
-export default function ImgMediaCard() {
+const Donate = () => {
     const classes = useDonateStyles();
-    const [amount, setAmount]: [string, any] = React.useState('');
-    const [donated, showDonated]: [boolean, any] = useState(false);
 
-    useEffect(() => {
-    }, [donated, amount])
+    const [amount, setAmount]: [string, Dispatch<SetStateAction<string>>] = React.useState('');
+    const [donated, showDonated]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+    const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.value === '0' || event.target.value === '-') {
             setAmount('1');
         }
@@ -47,9 +46,13 @@ export default function ImgMediaCard() {
                     <Typography variant="body2" color="textSecondary" component="p">
                         The site is dedicated to runners from all over London and the surrounding area. <br />
                         Main goal is to organize organize people who would like to enjoy the sport together.<br />
+                        <br />
                         It is much safer, more fun and motivating.
 
           </Typography>
+                    <Typography align='center' color='error'> <br />
+                    Please, use fake card details:
+            <br />4242 4242 4242 4242 || exp: 02/22 || cvv: 123</Typography>
                 </CardContent>
                 <div className={classes.donate}>
                     <FormControl>
@@ -58,18 +61,20 @@ export default function ImgMediaCard() {
                             type='number'
                             id="standard-adornment-amount"
                             value={amount}
-                            onChange={handleChange}
+                            onChange={handleAmountChange}
                             startAdornment={<InputAdornment position="start">£</InputAdornment>}
                         />
                         <div className={classes.donateButton}><Stripe handleToken={handleToken} donation={amount}></Stripe></div>
                     </FormControl>
                     {
                         donated ? (
-                            <div className={classes.alertContainer} ><Alert severity="success">Thank you for donation!</Alert></div>
+                            <Alert severity="success">Thank you for donation!</Alert>
                         ) : null
                     }
                 </div>
             </Card>
         </div>
     );
-}
+};
+
+export default Donate;

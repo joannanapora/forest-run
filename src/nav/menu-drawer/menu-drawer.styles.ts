@@ -1,12 +1,12 @@
-import { makeStyles, ThemeOptions } from '@material-ui/core';
+import { makeStyles, ThemeOptions, Theme } from '@material-ui/core';
 
 export const drawerWidth = 240;
 
-export const useMenuDrawerStyles = makeStyles((theme) => ({
+export const useMenuDrawerStyles = makeStyles((theme: Theme) => ({
     root: {
         display: 'flex',
         height: '100%',
-        textDecoration: 'none'
+        backgroundColor: 'primary',
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -56,13 +56,17 @@ export const useMenuDrawerStyles = makeStyles((theme) => ({
     menuList: {
         height: theme.spacing(8),
         minWidth: theme.spacing(30),
+        '.MuiTouchRipple-root': {
+
+        }
     },
     paper: {
         minWidth: 300,
     },
     drawer: {
         minWidth: 400,
-    }
+    },
+
 }));
 
 export const light: ThemeOptions = {
@@ -78,8 +82,9 @@ export const light: ThemeOptions = {
         },
         secondary: {
             main: '#c8e6c9'
-        }
-    }
+        },
+    },
+    transitions: {}
 };
 
 export const dark: ThemeOptions = {
@@ -90,10 +95,10 @@ export const dark: ThemeOptions = {
     palette: {
         type: 'dark',
         primary: {
-            main: '#c49000'
+            main: '#c49000',
         },
         secondary: {
-            main: '##f0f4c3'
-        }
+            main: '#f0f4c3'
+        },
     },
 };

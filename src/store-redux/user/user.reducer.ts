@@ -1,12 +1,16 @@
 import { UserActionTypes } from './user.types';
 
-interface IState {
-    currentUser: {
-        username: string;
-    }
+export interface IUser {
+    username: string;
 }
 
-const INITIAL_STATE: IState = {
+
+interface IStateUser {
+    currentUser: IUser;
+}
+
+
+const INITIAL_STATE: IStateUser = {
     currentUser: null
 }
 const userReducer = (state = INITIAL_STATE, action) => {

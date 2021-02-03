@@ -1,5 +1,4 @@
-import {gql} from 'apollo-boost';
-import {Mutation, Query} from 'react-apollo';
+import { gql } from 'apollo-boost';
 
 
 export const REGISTER_USER = gql`

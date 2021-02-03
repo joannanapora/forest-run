@@ -17,7 +17,7 @@ const MeetingPoint = () => {
     };
 
     return (
-        <form className={classes.root} noValidate autoComplete="off">
+        <div className={classes.root}>
             <TextField
                 value={values.organizerName}
                 id="standard-textarea"
@@ -46,7 +46,7 @@ const MeetingPoint = () => {
                 multiline
                 onChange={handleChange('eventDescription')}
             />
-        </form>
+        </div>
     );
 }
 

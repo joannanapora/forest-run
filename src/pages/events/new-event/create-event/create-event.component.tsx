@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import Button from '@material-ui/core/Button';
@@ -10,6 +10,7 @@ import { useCardEditStyles } from './create-event.styles';
 import { Paper, StepContent, StepLabel } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Modal from '@material-ui/core/Modal';
+
 
 function getSteps() {
     return ['Set up event details', 'Meeting place and Event description', 'Upload Event Image'];
@@ -35,22 +36,31 @@ function getStepContent(step: number) {
     }
 }
 
+interface Notifications {
+    internalBackendError: boolean;
+    missedInputs: boolean;
+    eventCreated: boolean;
+}
+
 const CardEdit = () => {
     const classes = useCardEditStyles();
-    const [activeStep, setActiveStep]: [number, any] = useState(0);
-    const [error, setError]: [boolean, any] = useState(false);
-    const [success, setSuccess]: [boolean, any] = useState(false);
-    const [openModal, setOpenModal]: [boolean, any] = useState(false);
+    const [activeStep, setActiveStep]: [number, Dispatch<SetStateAction<number>>] = useState(1);
+    const [openModal, setOpenModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [alert, setAlert]: [Notifications, Dispatch<SetStateAction<Notifications>>] = useState({
+        internalBackendError: false,
+        missedInputs: false,
+        eventCreated: false
+    });
 
     const steps = getSteps();
 
-    useEffect(() => {
-    }, [error, success])
-
     const offAlert = () => {
         setTimeout(() => {
-            setError(false);
-            setSuccess(false);
+            setAlert({
+                internalBackendError: false,
+                missedInputs: false,
+                eventCreated: false
+            })
         }, 5000);
     }
 
@@ -69,12 +79,12 @@ const CardEdit = () => {
         };
     }
 
-    const handleNo = () => {
+    const handleModalNo = () => {
         setOpenModal(false);
     }
 
 
-    const handleYes = () => {
+    const handleModalYes = () => {
         setOpenModal(false);
         setActiveStep(0);
     }
@@ -91,7 +101,7 @@ const CardEdit = () => {
             <Typography>Are you sure you want to reset?</Typography>
             <div className={classes.confirmButtons}>
                 <Button
-                    onClick={handleNo}
+                    onClick={handleModalNo}
                     variant="contained"
                     color="primary"
                     size="small"
@@ -100,7 +110,7 @@ const CardEdit = () => {
                     No
       </Button>
                 <Button
-                    onClick={handleYes}
+                    onClick={handleModalYes}
                     variant="contained"
                     color="primary"
                     size="small"
@@ -126,7 +136,7 @@ const CardEdit = () => {
     };
 
     const handleSubmit = () => {
-        setSuccess(true);
+        setAlert({ ...alert, eventCreated: true });
         offAlert();
     }
 
@@ -137,7 +147,7 @@ const CardEdit = () => {
                     <Step key={label}>
                         <StepLabel>{label}</StepLabel>
                         <StepContent>
-                            <Typography>{getStepContent(index)}</Typography>
+                            <div>{getStepContent(index)}</div>
                             <div className={classes.actionsContainer}>
                                 <div>
                                     <Button
@@ -174,8 +184,18 @@ const CardEdit = () => {
                             Submit
             </Button>
                         {
-                            success ? (
+                            alert.eventCreated ? (
                                 <Alert severity="success">New event has been created</Alert>
+                            ) : null
+                        }
+                        {
+                            alert.internalBackendError ? (
+                                <Alert severity="error">Ooops! Something went wrong, try again later.</Alert>
+                            ) : null
+                        }
+                        {
+                            alert.missedInputs ? (
+                                <Alert severity="error">It looks like you missed something in form! </Alert>
                             ) : null
                         }
                     </div>

@@ -1,5 +1,15 @@
-const INITIAL_STATE = {
-    navTabs : [
+
+export interface ITabs {
+    name: string; id: number; url: string;
+}
+
+interface IStateNav {
+    navTabs: ITabs[];
+}
+
+
+const INITIAL_STATE: IStateNav = {
+    navTabs: [
         {
             name: "Upcoming Events",
             id: 0,
@@ -33,6 +43,7 @@ const INITIAL_STATE = {
 
     ]
 };
+
 
 const navReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {

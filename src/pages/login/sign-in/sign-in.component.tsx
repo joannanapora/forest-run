@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 
 import { Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
@@ -6,10 +6,12 @@ import Alert from '@material-ui/lab/Alert';
 
 import { useSignInStyles } from './sign-in.styles';
 import { LOGIN_USER } from '../../../grapQL';
-import {useMutation} from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
-import {connect} from 'react-redux';
-import { setCurrentUser } from '../../../store-redux/user';
+import { connect } from 'react-redux';
+import { setCurrentUser } from '../../../store-redux';
+import SpinnerButton from '../../../shared/spinner/spinner-button.component';
+
 
 interface DetailsForm {
     email: string;
@@ -22,7 +24,7 @@ interface ErrorAlerts {
     internalBackendError: boolean;
 }
 
-const SignIn = ({dispatchSetCurrentUser, history}) => {
+const SignIn = ({ dispatchSetCurrentUser, history }) => {
     const classes = useSignInStyles();
     const [values, setValues] = useState<DetailsForm>({
         email: '',
@@ -30,39 +32,36 @@ const SignIn = ({dispatchSetCurrentUser, history}) => {
         showPassword: false,
     });
 
-      const [errors, setErrors] = useState<ErrorAlerts>({
+    const [errors, setErrors] = useState<ErrorAlerts>({
         wrongEmailPassword: false,
         internalBackendError: false,
     });
 
-    
-    const [loginUser, {loading}] = useMutation(
+    const [loginUser, { loading }] = useMutation(
         LOGIN_USER, {
-            update(_, result){
-                history.push('/upcoming-events');
-                const Token = result.data.login.accessToken;
-                localStorage.setItem('token', Token);
-                dispatchSetCurrentUser({
-                    username: result.data.login.username
-                });
-            },
-            onError(e) {
-                if ((e.graphQLErrors[0].message as any).statusCode === 500) {
-                    setErrors({...errors, internalBackendError: true});
-                }
-                if ((e.graphQLErrors[0].message as any).statusCode === 401) {
-                    setErrors({...errors, wrongEmailPassword: true});
-                }
-                        },
-            variables: {
-                email: values.email,
-                password: values.password
+        update(_, result) {
+            history.push('/upcoming-events');
+            const Token = result.data.login.accessToken;
+            localStorage.setItem('token', Token);
+            dispatchSetCurrentUser({
+                username: result.data.login.username
+            });
+        },
+        onError(e) {
+            if ((e.graphQLErrors[0].message as any).statusCode === 500) {
+                setErrors({ ...errors, internalBackendError: true });
             }
+            if ((e.graphQLErrors[0].message as any).statusCode === 401) {
+                setErrors({ ...errors, wrongEmailPassword: true });
+            }
+        },
+        variables: {
+            email: values.email,
+            password: values.password
         }
+    }
     )
-
-
-    const handleChange = (prop: keyof DetailsForm ) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (prop: keyof DetailsForm) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [prop]: event.target.value });
         setErrors({
             wrongEmailPassword: false,
@@ -77,20 +76,77 @@ const SignIn = ({dispatchSetCurrentUser, history}) => {
         event.preventDefault();
     };
 
-    const handleSubmit = async event => {
-        event.preventDefault();
-        
-    
+    const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
         loginUser();
     };
 
+    const submitOnEnter = (event: React.KeyboardEvent<any>) => {
+        if (event.key === "Enter") {
+            loginUser();
+        }
+    };
 
-    return (
-        <div className={classes.form}>
-            <TextField value={values.email} onChange={handleChange('email')} className={classes.textfield} name='email' label="email" variant="filled" />
+    if (loading) {
+        return (
+            <div className={classes.form}>
+                <TextField value={values.email}
+                    disabled
+                    onKeyDown={submitOnEnter}
+                    onChange={handleChange('email')}
+                    className={classes.textfield}
+                    name='email'
+                    label="email"
+                    variant="filled" />
+                <FormControl className={classes.textfield} variant="filled">
+                    <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
+                    <FilledInput
+                        disabled
+                        onKeyDown={submitOnEnter}
+                        id="filled-adornment-password"
+                        type={values.showPassword ? 'text' : 'password'}
+                        value={values.password}
+                        onChange={handleChange('password')}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={() => handleClickShowPassword}
+                                    onMouseDown={handleMouseDownPassword}
+                                    edge="end"
+                                >
+                                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+                </FormControl>
+                {
+                    errors.internalBackendError ? (
+                        <Alert severity="error">Something went wrong Try again later</Alert>
+                    ) : null
+                }
+                {
+                    errors.wrongEmailPassword ? (
+                        <Alert severity="error">Email or Password is wrong</Alert>
+                    ) : null
+                }
+                <SpinnerButton className={classes.loginButton} loading={loading} buttonLabel={'Submit'} onClick={handleSubmit} />
+            </div>
+        )
+    }
+    if (!loading)
+        return (<div className={classes.form}>
+            <TextField value={values.email}
+                onKeyDown={submitOnEnter}
+                onChange={handleChange('email')}
+                className={classes.textfield}
+                name='email'
+                label="email"
+                variant="filled" />
             <FormControl className={classes.textfield} variant="filled">
                 <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
                 <FilledInput
+                    onKeyDown={submitOnEnter}
                     id="filled-adornment-password"
                     type={values.showPassword ? 'text' : 'password'}
                     value={values.password}
@@ -99,7 +155,7 @@ const SignIn = ({dispatchSetCurrentUser, history}) => {
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="toggle password visibility"
-                                onClick={()=>handleClickShowPassword}
+                                onClick={() => handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                                 edge="end"
                             >
@@ -114,15 +170,17 @@ const SignIn = ({dispatchSetCurrentUser, history}) => {
                     <Alert severity="error">Something went wrong Try again later</Alert>
                 ) : null
             }
-             {
+            {
                 errors.wrongEmailPassword ? (
                     <Alert severity="error">Email or Password is wrong</Alert>
                 ) : null
             }
-            <Button onClick={handleSubmit} className={classes.loginButton} variant="contained" color="primary">
-                Submit
-</Button>
-        </div>
+            <SpinnerButton className={classes.loginButton} loading={loading} buttonLabel={'Submit'} onClick={handleSubmit} />
+
+        </div>);
+
+    return (
+        <></>
     );
 };
 

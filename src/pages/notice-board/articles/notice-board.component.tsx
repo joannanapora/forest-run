@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import Card from '@material-ui/core/Card';
@@ -12,42 +12,22 @@ import { useNoticeBoardStyles } from './notice-board.styles';
 import Modal from '@material-ui/core/Modal';
 import SearchPost from '../search-post/search-post.component';
 import { withRouter } from 'react-router-dom';
+import { GET_POSTS } from '../../../grapQL/post/post.query';
+import { useQuery } from '@apollo/react-hooks';
+import { format } from 'date-fns';
+import Spinner from '../../../shared/spinner/spinner.component';
+import { Alert } from '@material-ui/lab';
+import { createStructuredSelector } from 'reselect';
+import { selectCurrentUser } from '../../../store-redux/user/user.selectors';
+import { connect } from 'react-redux';
+import { IUser } from '../../../store-redux/'
+import { isEmpty } from 'lodash';
 
 enum QuickActions {
     CREATE_POST = 'Create Post',
     DELETE_POST = 'Delete Post',
     SEARCH_POST = 'Search Post'
 }
-
-const articles = [
-    {
-        id: 0,
-        title: 'Vegan Recipies',
-        keywords: [{ name: 'vegan', id: 0 }, { name: 'recipies', id: 1 }, { name: 'health', id: 2 }, { name: 'food', id: 4 }],
-        image: "https://img.delicious.com.au/akWRpqCk/del/2016/04/silvia-collocas-vegan-lentil-and-sweet-potato-chickpea-stew-29566-3.jpg",
-        author: 'Robby Dick',
-        date: '10.10.20',
-        text: "RICHMOND PAR The largest of London’s Royal Parks, Richmond Park is the famous home to the beautiful Isabella Plantation, and herds of protected deer. An acclaimed cyclist favourite, Richmond also has much to offer the running community. With an abundance of dirt paths, this is a great option for those seeking longer runs on a terrain more forgiving than the London pavement. Its vast network of trails means you’re never short for choice, and can get creative with the routes you take. Run through gardens, along lakes, and take in views of the beautiful fauna. Richmond Park is an undulating paradise for runners. A run through the gates of this spot will have you feeling worlds away from busy city life. CONCLUSION No matter where you are in London, you’re never far from some green space. Whether you\'re a new runner still dipping your toes into the sport or a seasoned run of all race distances, why not explore one of these fantastic spots on your next run. From flat fast courses, to undulating hills and steep climbs, there’s something for everyone."
-    },
-    {
-        id: 1,
-        title: '10 Best London Parks for Running',
-        keywords: [{ name: 'shoes', id: 0 }, { name: 'running', id: 1 }, { name: 'best10', id: 2 }],
-        image: "https://cdn.shopify.com/s/files/1/0851/4276/files/greenwich_park_for_running.jpg?v=1592808345",
-        author: "Sara Connor",
-        date: '10.10.20',
-        text: "RICHMOND PAR The largest of London’s Royal Parks, Richmond Park is the famous home to the beautiful Isabella Plantation, and herds of protected deer. An acclaimed cyclist favourite, Richmond also has much to offer the running community. With an abundance of dirt paths, this is a great option for those seeking longer runs on a terrain more forgiving than the London pavement. Its vast network of trails means you’re never short for choice, and can get creative with the routes you take. Run through gardens, along lakes, and take in views of the beautiful fauna. Richmond Park is an undulating paradise for runners. A run through the gates of this spot will have you feeling worlds away from busy city life. CONCLUSION No matter where you are in London, you’re never far from some green space. Whether you\'re a new runner still dipping your toes into the sport or a seasoned run of all race distances, why not explore one of these fantastic spots on your next run. From flat fast courses, to undulating hills and steep climbs, there’s something for everyone."
-    },
-    {
-        id: 2,
-        title: 'Which park is the best for running?',
-        keywords: [{ name: 'park', id: 0 }, { name: 'runners', id: 1 }],
-        image: "https://gorunningtours.com/wp-content/uploads/2015/06/Bangkok_parkrun_6k_750x500.jpg",
-        author: "Thimoty Lloyd",
-        date: '10.10.20',
-        text: "RICHMOND PAR The largest of London’s Royal Parks, Richmond Park is the famous home to the beautiful Isabella Plantation, and herds of protected deer. An acclaimed cyclist favourite, Richmond also has much to offer the running community. With an abundance of dirt paths, this is a great option for those seeking longer runs on a terrain more forgiving than the London pavement. Its vast network of trails means you’re never short for choice, and can get creative with the routes you take. Run through gardens, along lakes, and take in views of the beautiful fauna. Richmond Park is an undulating paradise for runners. A run through the gates of this spot will have you feeling worlds away from busy city life. CONCLUSION No matter where you are in London, you’re never far from some green space. Whether you\'re a new runner still dipping your toes into the sport or a seasoned run of all race distances, why not explore one of these fantastic spots on your next run. From flat fast courses, to undulating hills and steep climbs, there’s something for everyone."
-    },
-]
 
 const actions = [
     { icon: < PostAdd />, name: QuickActions.CREATE_POST },
@@ -56,12 +36,58 @@ const actions = [
 ];
 
 
-const NoticeBoard = ({ history }) => {
+const NoticeBoard = ({ history, user }: { history, user: IUser }) => {
     const classes = useNoticeBoardStyles();
 
     const [openSearchModal, setopenSearchModal] = useState(false);
+    const [errorAlert, setErrorAlert]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [login, setPleaseLogIn]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+
 
     const [open, setOpen] = React.useState(false);
+
+    const getPostsParams = {
+        filters: { me: false }
+    };
+
+    const { loading, error, data } = useQuery(GET_POSTS, {
+        variables: getPostsParams,
+    });
+
+    if (loading) {
+        return (
+            <div className={classes.container}>
+                <div className={classes.speedDial}>
+                    <SpeedDial
+                        ariaLabel="SpeedDial example"
+                        icon={<SettingsIcon />}
+                        open
+                        direction='right'
+                    >
+                    </SpeedDial>
+                </div>
+                <div className={classes.articles}>
+                    <Card className={classes.cardRoot}>
+                        <CardMedia
+                            className={classes.media}
+                            image=''
+                        />
+                        <CardContent>
+                        </CardContent>
+                        <CardActions className={classes.keywordsList}>
+                            <Spinner />
+                        </CardActions>
+                    </Card>
+                </div>
+            </div>
+        )
+    }
+
+    if (error) {
+        setErrorAlert(true);
+    }
+
+    const { posts } = data
 
     const handleClose = () => {
         setOpen(false);
@@ -101,10 +127,15 @@ const NoticeBoard = ({ history }) => {
             setopenSearchModal(true);
         }
         if (name === QuickActions.CREATE_POST) {
-            redirectToCreatePost();
+            if (!isEmpty(user)) {
+                redirectToCreatePost()
+            } else { setPleaseLogIn(true) }
         }
         if (name === QuickActions.DELETE_POST) {
-            redirectToDeletePost();
+            if (!isEmpty(user)) {
+                redirectToDeletePost()
+            } else { setPleaseLogIn(true) }
+
         }
     };
 
@@ -143,38 +174,55 @@ const NoticeBoard = ({ history }) => {
                 </SpeedDial>
             </div>
             <div className={classes.scrollArea}>
+                {login ?
+                    <Alert severity="error">You must be login to Create Post or Delete Post </Alert> : null
+                }
+                {
+                    errorAlert ?
+                        <Alert severity="error">Ooops! Something went wrong, try again later.</Alert> : null
+                }
+
                 <div className={classes.articles}>
-                    {articles.map(article => {
+                    {posts.map(post => {
                         return (
-                            <Card key={article.id} className={classes.cardRoot}>
+                            <Card key={post.id} className={classes.cardRoot}>
                                 <CardMedia
                                     className={classes.media}
-                                    image={article.image}
+                                    image="https://img.delicious.com.au/akWRpqCk/del/2016/04/silvia-collocas-vegan-lentil-and-sweet-potato-chickpea-stew-29566-3.jpg"
                                 />
                                 <CardContent>
                                     <Typography variant="h6">
-                                        {article.title}
+                                        {post.title}
                                     </Typography>
                                     <Typography color="textSecondary" >
-                                        {article.text}
+                                        {post.text}
                                     </Typography>
                                 </CardContent>
                                 <CardActions className={classes.keywordsList}>
-                                    <Typography>Date: {article.date}</Typography>Author: {article.author}<Typography></Typography><Typography className={classes.keywords}>
+                                    <div>Date: {format(new Date(post.dateCreated), 'dd/MM/yyyy')}</div>Author: {post.user.username}<div className={classes.keywords}>
                                         {
-                                            article.keywords.map(k => {
-                                                return (<Typography key={k.id} >#{k.name}</Typography>);
+                                            post.keywords.map((k, i) => {
+                                                return (<div key={i} >#{k}</div>);
                                             })
-                                        }</Typography>
+                                        }</div>
                                 </CardActions>
                             </Card>
                         )
                     })}
                 </div>
+
             </div>
         </div >
 
     );
 }
 
-export default withRouter(NoticeBoard);
+const mapStateToProps = createStructuredSelector({
+    user: selectCurrentUser,
+});
+
+export default withRouter(connect(
+    mapStateToProps,
+    null)
+    (NoticeBoard));
+

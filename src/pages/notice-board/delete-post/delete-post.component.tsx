@@ -9,46 +9,42 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { withRouter } from 'react-router-dom';
+import { GET_POSTS } from '../../../grapQL/post/post.query';
+import { useQuery } from '@apollo/react-hooks';
+import { format } from 'date-fns';
 
-
-const articles = [
-    {
-        id: 'a119fc1c-0ee0-4660-ace0-796f8087227c',
-        title: 'Vegan Recipies',
-        keywords: [{ name: 'vegan', id: 0 }, { name: 'recipies', id: 1 }, { name: 'health', id: 2 }, { name: 'food', id: 4 }],
-        date: '10.10.20',
-    },
-    {
-        id: "e60eb629-61f8-48f4-922a-633526e5965b",
-        title: '10 Best London Parks for Running',
-        keywords: [{ name: 'shoes', id: 0 }, { name: 'running', id: 1 }, { name: 'best10', id: 2 }],
-        date: '10.10.20',
-    },
-    {
-        id: "299067c6-db4c-49bc-aa86-a455bda13bf9",
-        title: 'Which park is the best for running?',
-        keywords: [{ name: 'park', id: 0 }, { name: 'runners', id: 1 }],
-        date: '10.10.20',
-    },
-];
 
 const DeletePost = ({ history }) => {
     const [openModal, setOpenModal] = React.useState(false);
     const classes = useDeletePostStyles();
 
-    const listState = articles.map(a => ({
-        [a.id]: false
+    const getPostParams = {
+        filters: { me: true }
+    };
+
+    const { loading, error, data } = useQuery(GET_POSTS, {
+        variables: getPostParams,
+    });
+
+    const { posts } = data
+
+    const listState = posts.map(post => ({
+        [post.id]: false
     }))
 
-    // [
-    //     {"299067c6-db4c-49bc-aa86-a455bda13bf9": false},
-    //     {"e60eb629-61f8-48f4-922a-633526e5965b": false},
-    // ]
-
-    // {checkedB: false}
+    const [articleState, setArticleStateState] = useState(listState);
+    const [modalStyle] = useState(getModalStyle);
 
 
-    const [articleState, setArticleStateState] = React.useState(listState);
+
+    if (loading) {
+        return (<div>Loading...</div>)
+    }
+    if (error) return (<div>ERRRORRR</div>);
+
+
+
+
 
 
     function rand() {
@@ -88,7 +84,6 @@ const DeletePost = ({ history }) => {
         setOpenModal(false);
     };
 
-    const [modalStyle] = useState(getModalStyle);
 
     const bodyConfirmDelete = (
         <div style={modalStyle} className={classes.paper}>
@@ -142,14 +137,14 @@ const DeletePost = ({ history }) => {
             <div className={classes.checkboxes}>
                 <FormGroup>
                     {
-                        articles.map((article) => {
+                        posts.map((post) => {
                             return (
-                                <FormControlLabel key={article.id}
+                                <FormControlLabel key={post.id}
                                     control={
                                         <Checkbox
-                                            checked={articleState[article.id]}
+                                            checked={articleState[post.id]}
                                             onChange={handleChange}
-                                            name={article.id}
+                                            name={post.title}
                                             color="primary"
                                         />
                                     }
@@ -157,10 +152,10 @@ const DeletePost = ({ history }) => {
                                     label={
                                         <div className={classes.articlesFormLabel}>
                                             <div className={classes.date}>
-                                                {article.date}
+                                                {format(new Date(post.dateCreated), 'dd/MM/yyyy')}
                                             </div>
                                             <div>
-                                                {article.title}
+                                                {post.title}
                                             </div>
                                         </div>
                                     }

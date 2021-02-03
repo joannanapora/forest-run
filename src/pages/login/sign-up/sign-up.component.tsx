@@ -8,7 +8,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useSignUpStyles } from './sign-up.styles';
 import {REGISTER_USER} from '../../../grapQL';
 import {useMutation} from '@apollo/react-hooks';
-
+import SpinnerButton from '../../../shared/spinner/spinner-button.component';
 
 
 interface DetailsForm {
@@ -82,11 +82,7 @@ const SignUp = () => {
         })
     }
 
-
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
+    const validateAndLogin = () => {
         if (!validateEmail(values.email)) {
             setNotification({ ...notifications, wrongEmail: true });
             return;
@@ -109,10 +105,18 @@ const SignUp = () => {
             setNotification({ ...notifications, passwordsDontMatch: true });
             return
         } 
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        validateAndLogin();
             
         addUser();
 
     }
+
+
 
 
     const handleChange = (prop: keyof DetailsForm) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,14 +140,26 @@ const SignUp = () => {
     };
 
 
-    return (
+    const submitOnEnter = (event: React.KeyboardEvent<any>) => {
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            validateAndLogin();
+                
+            addUser();
+        }
+    };
+
+    if (loading) {
+        return (
         <div className={classes.form}>
             {
                 notifications.wrongEmail ? (
                    <Alert severity="error">Wrong email</Alert>
                 ) : null
             }
-            <TextField onChange={handleChange('email')}
+            <TextField disabled onChange={handleChange('email')}
                 className={classes.textfield} name='email' label="Email"   value={values.email} variant="filled" />
                {
                     notifications.usernameTooShort ? (
@@ -160,12 +176,13 @@ const SignUp = () => {
                         <Alert severity="error">Username's too long (3-18 char.)</Alert>
                     ) : null
                 }
-            <TextField onChange={handleChange('username')}
+            <TextField disabled onChange={handleChange('username')}
             value={values.username}
                 className={classes.textfield} name='username' label="Username" variant="filled" />
             <FormControl className={classes.textfield} variant="filled">
                 <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
                 <FilledInput
+                disabled
                     error={false}
                     id="filled-adornment-password"
                     type={values.showPassword ? 'text' : 'password'}
@@ -193,6 +210,7 @@ const SignUp = () => {
             <FormControl className={classes.textfield} variant="filled">
                 <InputLabel htmlFor="filled-adornment-password">Confirm Password</InputLabel>
                 <FilledInput
+                disabled
                     error={false}
                     id="filled-adornment-password"
                     type={'password'}
@@ -213,10 +231,97 @@ const SignUp = () => {
               <Alert severity="success">Account has been created! You can login now.</Alert>
                     ) : null
                 }
-            <Button className={classes.loginButton} onClick={handleSubmit} variant="contained" color="primary">
-                Register
-</Button>
+             <SpinnerButton className={classes.loginButton} disabled={loading} loading={loading} buttonLabel={'Register'} onClick={handleSubmit} />
         </div>
+        )
+    }
+    if (!loading) {
+        return (
+            <div className={classes.form}>
+            {
+                notifications.wrongEmail ? (
+                   <Alert severity="error">Wrong email</Alert>
+                ) : null
+            }
+            <TextField onKeyDown={submitOnEnter} onChange={handleChange('email')}
+                className={classes.textfield} name='email' label="Email"   value={values.email} variant="filled" />
+               {
+                    notifications.usernameTooShort ? (
+              <Alert severity="error">Username's too short (3-18 char.)</Alert>
+                    ) : null
+                }
+                {
+                    notifications.usernameExists ? (
+              <Alert severity="error">User with that email/username already exists</Alert>
+                    ) : null
+                    }
+                {
+                    notifications.usernameTooLong ? (
+                        <Alert severity="error">Username's too long (3-18 char.)</Alert>
+                    ) : null
+                }
+            <TextField onKeyDown={submitOnEnter} onChange={handleChange('username')}
+            value={values.username}
+                className={classes.textfield} name='username' label="Username" variant="filled" />
+            <FormControl className={classes.textfield} variant="filled">
+                <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
+                <FilledInput
+                onKeyDown={submitOnEnter}
+                    error={false}
+                    id="filled-adornment-password"
+                    type={values.showPassword ? 'text' : 'password'}
+                    value={values.password}
+                    onChange={handleChange('password')}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                            >
+                                {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                        </InputAdornment>
+                    }
+                />
+                {
+                    notifications.wrongPassword ? (
+                        <Alert severity="error">Password is too weak</Alert>
+                    ) : null
+                }
+            </FormControl>
+            <FormControl className={classes.textfield} variant="filled">
+                <InputLabel htmlFor="filled-adornment-password">Confirm Password</InputLabel>
+                <FilledInput
+                onKeyDown={submitOnEnter}
+                    error={false}
+                    id="filled-adornment-password"
+                    type={'password'}
+                    value={values.confirmPassword}
+                    onChange={handleChange('confirmPassword')}
+                    endAdornment={
+                        <InputAdornment position="end" />
+                    }
+                />
+            </FormControl>
+            {
+                notifications.passwordsDontMatch ? (
+                    <Alert severity="error">Passwords don't match</Alert>
+                ) : null
+            }
+            {
+                    notifications.userRegistered ? (
+              <Alert severity="success">Account has been created! You can login now.</Alert>
+                    ) : null
+                }
+            <SpinnerButton className={classes.loginButton} loading={loading} buttonLabel={'Register'} onClick={handleSubmit} />
+        </div>
+        )
+    }
+
+    return (
+        <></>
     );
 };
 

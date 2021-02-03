@@ -8,10 +8,8 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "../src/store-redux/store";
 import { ApolloProvider } from "react-apollo";
-import { createHttpLink } from "apollo-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { ApolloClient, gql } from "apollo-boost";
-
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink(
   {
@@ -19,26 +17,32 @@ const httpLink = createHttpLink(
   }
 );
 
-const cache = new InMemoryCache();
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
 
 
-const client = new ApolloClient({
-  link: httpLink,
-  cache
+const client: any = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
 });
 
 
 ReactDOM.render(
-  <ApolloProvider client ={client}>
-  <Provider store={store}>
-    <React.StrictMode>
+  <ApolloProvider client={client}>
+    <Provider store={store}>
       <BrowserRouter>
         <PersistGate persistor={persistor}>
           <App />
         </PersistGate>
       </BrowserRouter>
-    </React.StrictMode>
-  </Provider>
+    </Provider>
   </ApolloProvider>,
   document.getElementById("root")
 );

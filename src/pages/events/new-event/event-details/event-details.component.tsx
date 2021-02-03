@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,10 +6,6 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { usePersonalStyles } from './event-details.styles';
 import { InputAdornment, TextField } from '@material-ui/core';
-
-const ITEM_HEIGHT = 42;
-const ITEM_PADDING_TOP = 8;
-
 
 const DATES = [
     { name: 'one-time event (choose date)', id: 0 },
@@ -30,31 +26,45 @@ const WHERE = [
     { name: 'Quenns Park', id: 2 },
 ];
 
+interface IEventDetails {
+    time: string;
+    place: string;
+    when: string;
+    distance: string;
+    date: string;
+};
 
 const PersonalSelect = () => {
     const classes = usePersonalStyles();
-    const [langudatesList, setLangudatesList] = React.useState<string[]>([]);
-    const [place, setPlace] = React.useState<string>('');
-    const [location, setLocation] = React.useState<string>('');
-    const [date, setdate] = React.useState<string>('');
-    const [distance, setDistance] = React.useState<string>(null);
+    const [eventDetails, setEventDetails]: [IEventDetails, Dispatch<SetStateAction<IEventDetails>>] = useState({
+        time: '',
+        place: '',
+        date: '',
+        distance: '',
+        when: '',
+    });
 
     const handleSingleSelect = (event: React.ChangeEvent<{ value: string, name: string }>) => {
         if (event.target.name === 'date') {
-            setdate(event.target.value);
+            setEventDetails({ ...eventDetails, date: event.target.value });
         }
         if (event.target.name === 'place') {
-            setPlace(event.target.value);
+            setEventDetails({ ...eventDetails, place: event.target.value });
+
         }
-        if (event.target.name === 'location') {
-            setLocation(event.target.value);
+        if (event.target.name === 'time') {
+            setEventDetails({ ...eventDetails, time: event.target.value });
+
+        }
+        if (event.target.name === 'distance') {
+            setEventDetails({ ...eventDetails, distance: event.target.value });
+
+        }
+        if (event.target.name === 'when') {
+            setEventDetails({ ...eventDetails, when: event.target.value });
+
         }
     };
-
-    const handleDistanceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDistance(event.target.value);
-    };
-
 
     return (
         <div className={classes.favselects}>
@@ -62,10 +72,10 @@ const PersonalSelect = () => {
             <FormControl className={classes.formControl}>
                 <InputLabel id="demo-simple-select-label">DATE</InputLabel>
                 <Select
-                    name='date'
+                    name='when'
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={date}
+                    value={eventDetails.when}
                     onChange={handleSingleSelect}
                 >
                     {DATES.map((item) => (
@@ -75,8 +85,10 @@ const PersonalSelect = () => {
                     ))}
                 </Select>
             </FormControl>
-            {date === 'one-time event (choose date)' ?
+            {eventDetails.date === 'one-time event (choose date)' ?
                 <TextField
+                    name='date'
+                    value={eventDetails.date}
                     id="datetime-local"
                     label="Next appointment"
                     type="datetime-local"
@@ -88,7 +100,8 @@ const PersonalSelect = () => {
                 />
                 :
                 <TextField
-                    id="time"
+                    value={eventDetails.time}
+                    name="time"
                     label="Time"
                     type="time"
                     defaultValue="07:30"
@@ -108,7 +121,7 @@ const PersonalSelect = () => {
                     name='place'
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={place}
+                    value={eventDetails.place}
                     onChange={handleSingleSelect}
                 >
                     {WHERE.map((item) => (
@@ -122,8 +135,8 @@ const PersonalSelect = () => {
                 <Input
                     name='distance'
                     id="standard-adornment-weight"
-                    value={distance}
-                    onChange={handleDistanceChange}
+                    value={eventDetails.distance}
+                    onChange={handleSingleSelect}
                     endAdornment={<InputAdornment position="end">Miles</InputAdornment>}
                     aria-describedby="standard-weight-helper-text"
                     inputProps={{

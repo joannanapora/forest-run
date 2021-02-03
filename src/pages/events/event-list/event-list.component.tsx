@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import UpcomingEvent from '../event-card/event.component';
 import { useEventListStyles } from './event-list.styles';
-import Grid, { GridSpacing } from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid';
 import Switch from '@material-ui/core/Switch';
 import Paper from '@material-ui/core/Paper';
 import Fade from '@material-ui/core/Fade';
@@ -84,19 +84,26 @@ const events = [
     },
 ]
 
+interface IAlerts {
+    somethingWentWrong: boolean
+    missedInputs: boolean
+}
+
 
 const EventList = () => {
 
-    const [spacing, setSpacing] = useState<GridSpacing>(2);
-    const [checked, setChecked] = useState(false);
-
-
+    const [checked, setChecked]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [alert, setAlert]: [IAlerts, Dispatch<SetStateAction<IAlerts>>] = useState({
+        somethingWentWrong: false,
+        missedInputs: false,
+    })
 
     const handleChange = () => {
         setChecked((prev) => !prev);
     };
 
     const handleSort = () => {
+
     }
     const classes = useEventListStyles();
 
@@ -146,7 +153,7 @@ const EventList = () => {
                 </div>
             </div>
             <Grid item xs={12}>
-                <Grid container justify="space-evenly" spacing={spacing}>
+                <Grid container justify="space-evenly" spacing={2}>
                     {
                         events.map((event) => {
                             return (<Grid key={event.id} item>

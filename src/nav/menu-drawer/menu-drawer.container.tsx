@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import clsx from "clsx";
-import { useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -11,12 +10,12 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import { Button, ThemeProvider } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { useMenuDrawerStyles, light, dark } from "./menu-drawer.styles";
-import Username from "../avatar/avatar.component";
+import Username from "../user-area/user-area.container";
 import { Switch, Route, withRouter, Link } from "react-router-dom";
 import SignInUp from "../../pages/login/sign-in-sign-up/sign-in-up.component";
 import TimeLines from "../../pages/landing/timelines/timelines.component";
@@ -26,39 +25,37 @@ import UpcomingEvent from "../../pages/events/event-card/event.component";
 import EventList from "../../pages/events/event-list/event-list.component";
 import NoticeBoard from "../../pages/notice-board/articles/notice-board.component";
 import Donate from "../../pages/donate/donate.component";
-import CreatePost from "../../pages/notice-board/create-post/create-post.component";
+import CreateNewPost from "../../pages/notice-board/create-post/create-post.component";
 import DeletePost from "../../pages/notice-board/delete-post/delete-post.component";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "../../store-redux/user/user.selectors";
-import { connect } from "react-redux";
-import { setCurrentUser } from "../../store-redux/user";
+import { connect } from 'react-redux';
+import { setCurrentUser } from "../../store-redux";
 import { selectNavTabs } from "../../store-redux/nav/nav.selectors";
+import { IUser, ITabs } from '../../store-redux/index';
 
-const MenuDrawer = ({ user, dispatchSetCurrentUser, tabs }) => {
+const MenuDrawer = ({ user, tabs, dispatchUser }: { user: IUser, tabs: ITabs, dispatchUser }) => {
+  const open = false;
   const classes = useMenuDrawerStyles();
-  const [open, setOpen] = useState(false);
-  const [theme, setTheme] = useState(true);
+  const [theme, setTheme]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(true);
   const icon = !theme ? <Brightness7Icon /> : <Brightness3Icon />;
   const appliedTheme = createMuiTheme(theme ? light : dark);
 
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
+
+  const [drawer, setDrawer]: [{ right: boolean }, Dispatch<SetStateAction<{ right: boolean }>>] = useState({
     right: false,
   });
 
-  useEffect(() => {}, [user]);
 
-  const handleLinkClick = (name: string) => {
+  const handleLogout = (name: string) => {
     if (name === "Sign Out") {
-      dispatchSetCurrentUser({});
-      localStorage.removeItem("accessToken");
+      dispatchUser({});
+      localStorage.removeItem('token');
     }
   };
 
   const getNavTabsBasedOnstate = (tabs) => {
-    if (user.username) {
+    if (user?.username) {
       return tabs.filter((s) => {
         return s.name !== "Sign In";
       });
@@ -80,7 +77,7 @@ const MenuDrawer = ({ user, dispatchSetCurrentUser, tabs }) => {
       return;
     }
 
-    setState({ ...state, [anchor]: open });
+    setDrawer({ ...drawer, [anchor]: open });
   };
 
   type Anchor = "top" | "left" | "bottom" | "right";
@@ -98,7 +95,7 @@ const MenuDrawer = ({ user, dispatchSetCurrentUser, tabs }) => {
             style={{ textDecoration: "none" }}
             key={element.id}
             to={element.url}
-            onClick={() => handleLinkClick(element.name)}>
+            onClick={() => handleLogout(element.name)}>
             <ListItem className={classes.menuList} button>
               <ListItemIcon>{element.name}</ListItemIcon>
             </ListItem>
@@ -153,7 +150,7 @@ const MenuDrawer = ({ user, dispatchSetCurrentUser, tabs }) => {
           })}>
           <Switch>
             <Route exact path='/' component={TimeLines} />
-            <Route path='/notice-board/create-post' component={CreatePost} />
+            <Route path='/notice-board/create-post' component={CreateNewPost} />
             <Route path='/notice-board/delete-post' component={DeletePost} />
             <Route path='/create-event' component={CardEdit} />
             <Route path='/upcoming-events' component={EventList} />
@@ -167,7 +164,7 @@ const MenuDrawer = ({ user, dispatchSetCurrentUser, tabs }) => {
           <Drawer
             className={classes.drawer}
             anchor={"right"}
-            open={state["right"]}
+            open={drawer["right"]}
             onClose={toggleDrawer("right", false)}>
             {list("right")}
           </Drawer>
@@ -183,7 +180,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchSetCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  dispatchUser: (user) => dispatch(setCurrentUser(user)),
 });
 
 export default withRouter(

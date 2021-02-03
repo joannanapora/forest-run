@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { useTimeLinesStyles } from './timelines.styles';
 import AppleIcon from '@material-ui/icons/Apple';
 import { DirectionsRun, Search } from '@material-ui/icons';
+import AutoCompletePlace from '../../../autocomplete';
 
 const TimeLines = () => {
     const classes = useTimeLinesStyles();
@@ -89,6 +90,7 @@ const TimeLines = () => {
                     </Paper>
                 </TimelineContent>
             </TimelineItem>
+            <AutoCompletePlace />
         </Timeline>
     );
 };
