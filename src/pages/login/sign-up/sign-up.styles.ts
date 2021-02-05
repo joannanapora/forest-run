@@ -5,7 +5,7 @@ export const useSignUpStyles = makeStyles((theme: Theme) =>
     createStyles({
         textfield: {
             width: '100%',
-            margin: '1vw 0'
+            margin: theme.spacing(0.5),
         },
         form: {
             display: 'flex',

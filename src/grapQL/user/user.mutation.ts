@@ -2,12 +2,12 @@ import { gql } from 'apollo-boost';
 
 
 
-export const CHANGE_USERNAME = gql`
+export const UPDATE_USERNAME = gql`
 mutation changeUsername(
     $username: String!
 ) {
-    createPost(
-        createPostInput: {
+    updateUsername(
+        usernameInput: {
             username: $username
         }
     ) {

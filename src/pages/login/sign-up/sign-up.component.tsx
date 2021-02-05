@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { withRouter } from "react-router-dom";
 import { validateEmail } from '../../../shared/email-validation';
@@ -9,6 +9,7 @@ import { useSignUpStyles } from './sign-up.styles';
 import {REGISTER_USER} from '../../../grapQL';
 import {useMutation} from '@apollo/react-hooks';
 import SpinnerButton from '../../../shared/spinner/spinner-button.component';
+import { waitForDomChange } from '@testing-library/react';
 
 
 interface DetailsForm {
@@ -33,7 +34,7 @@ interface ErrorAlerts {
 
 const SignUp = () => {
     const classes = useSignUpStyles();
-    const [values, setValues] = React.useState<DetailsForm>({
+    const [values, setValues]:[DetailsForm, Dispatch<SetStateAction<DetailsForm>>] = useState({
         email: '',
         password: '',
         confirmPassword: '',
@@ -41,7 +42,7 @@ const SignUp = () => {
         username: '',
     });
 
-    const [notifications, setNotification] = React.useState<ErrorAlerts>({
+    const [notifications, setNotification]:[ErrorAlerts, Dispatch<SetStateAction<ErrorAlerts>>] = useState({
         wrongEmail: false,
         wrongPassword: false,
         passwordsDontMatch: false,
@@ -72,7 +73,7 @@ const SignUp = () => {
         }
     );
 
-    const clearAllInputs = () => {
+    const clearAllInputs = (): void => {
         setValues({
             email: '',
             password: '',
@@ -82,32 +83,36 @@ const SignUp = () => {
         })
     }
 
-    const validateAndLogin = () => {
+    const validateAndLogin = ():void => {
+        
+        let newNotification = {
+            ...notifications
+        }
+
         if (!validateEmail(values.email)) {
-            setNotification({ ...notifications, wrongEmail: true });
-            return;
+            newNotification = { ...newNotification,  wrongEmail: true};
         }
         if (values.username.length < 3) {
-            setNotification({ ...notifications, usernameTooShort: true });
-            return;
+            newNotification = { ...newNotification,  usernameTooShort: true };
+            // return;
         }
         if (values.username.length > 18) {
-            setNotification({ ...notifications, usernameTooLong: true });
-            return;
+            newNotification = { ...newNotification,  usernameTooLong: true };
         }
 
         if (!validatePassword(values.password)) {
-            setNotification({ ...notifications, wrongPassword: true });
-            return;
+            newNotification = { ...newNotification,  wrongPassword: true };
         }
 
         if (values.password !== values.confirmPassword) {
-            setNotification({ ...notifications, passwordsDontMatch: true });
-            return
-        } 
+            newNotification = { ...newNotification,  passwordsDontMatch: true };            // return
+        }
+
+        setNotification(newNotification);
+
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>)=> {
         event.preventDefault();
 
         validateAndLogin();
@@ -132,7 +137,7 @@ const SignUp = () => {
         userRegistered: false})
     };
 
-    const handleClickShowPassword = () => {
+    const handleClickShowPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         setValues({ ...values, showPassword: !values.showPassword });
     };
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -154,28 +159,8 @@ const SignUp = () => {
     if (loading) {
         return (
         <div className={classes.form}>
-            {
-                notifications.wrongEmail ? (
-                   <Alert severity="error">Wrong email</Alert>
-                ) : null
-            }
             <TextField disabled onChange={handleChange('email')}
                 className={classes.textfield} name='email' label="Email"   value={values.email} variant="filled" />
-               {
-                    notifications.usernameTooShort ? (
-              <Alert severity="error">Username's too short (3-18 char.)</Alert>
-                    ) : null
-                }
-                {
-                    notifications.usernameExists ? (
-              <Alert severity="error">User with that email/username already exists</Alert>
-                    ) : null
-                    }
-                {
-                    notifications.usernameTooLong ? (
-                        <Alert severity="error">Username's too long (3-18 char.)</Alert>
-                    ) : null
-                }
             <TextField disabled onChange={handleChange('username')}
             value={values.username}
                 className={classes.textfield} name='username' label="Username" variant="filled" />
@@ -201,11 +186,7 @@ const SignUp = () => {
                         </InputAdornment>
                     }
                 />
-                {
-                    notifications.wrongPassword ? (
-                        <Alert severity="error">Password is too weak</Alert>
-                    ) : null
-                }
+               
             </FormControl>
             <FormControl className={classes.textfield} variant="filled">
                 <InputLabel htmlFor="filled-adornment-password">Confirm Password</InputLabel>
@@ -221,16 +202,6 @@ const SignUp = () => {
                     }
                 />
             </FormControl>
-            {
-                notifications.passwordsDontMatch ? (
-                    <Alert severity="error">Passwords don't match</Alert>
-                ) : null
-            }
-            {
-                    notifications.userRegistered ? (
-              <Alert severity="success">Account has been created! You can login now.</Alert>
-                    ) : null
-                }
              <SpinnerButton className={classes.loginButton} disabled={loading} loading={loading} buttonLabel={'Register'} onClick={handleSubmit} />
         </div>
         )

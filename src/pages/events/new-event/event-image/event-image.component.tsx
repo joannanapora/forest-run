@@ -1,26 +1,15 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { Button, FormControl } from '@material-ui/core';
-import { useUploadStyles } from './upload-event-image-step.styles';
+import { useUploadStyles } from './event-image.styles';
 
-const AvatarUploadStep = () => {
+const AvatarUploadStep = ({ imageValue, onImageUpload }) => {
     const classes = useUploadStyles();
-    const [selectedFile, setFile] = React.useState('');
-    const [image, saveImage] = React.useState(false);
-
-    const onImageUpload = ({ target }: any) => {
-        setFile(target.files[0])
-    };
-
-    const handleSubmit = () => {
-        saveImage(true);
-    };
-
 
     return (
         <div className={classes.upload}>
-            { selectedFile ?
+            { imageValue ?
                 <FormControl className={classes.formControl}>
-                    <img className={classes.image} alt='Success!' src={selectedFile} />
+                    <img className={classes.image} alt='Success!' src={imageValue} />
                 </FormControl>
                 :
                 <FormControl className={classes.formControl}>

@@ -30,5 +30,11 @@ export const usePersonalStyles = makeStyles((theme: Theme) =>
             minWidth: 150,
             maxWidth: 300,
         },
+        alert: {
+            marginLeft: theme.spacing(1),
+            marginRight: theme.spacing(1),
+            minWidth: 150,
+            maxWidth: 300,
+        }
     }),
 );

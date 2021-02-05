@@ -4,36 +4,27 @@ export const CREATE_EVENT = gql`
 mutation createEvent(
     $date: String!
     $time: String!
-    $place: String!
-    $distance: Number!
-    $organizerName: String!
-    $organizerPhoneNumber: String!
+    $location: String!
+    $distance: Float!
+    $when: Float!
     $meetingPoint: String!
-    $eventDescription: String!
-    $image
+    $description: String!
 ) {
-    createPost(
-        createPostInput: {
+    createEvent(
+        createEventInput: {
     date: $date
     time: $time
-    place: $place
+    location: $location
     distance: $distance
-    organizerName: $organizerName
-    organizerPhoneNumber: $organizerPhoneNumber
+    when: $when
     meetingPoint: $meetingPoint
-    eventDescription : $eventDescription
-    image: $image
+    description : $description
         }
     ) {
-        date: $date
-    time
-    place
-    distance
-    organizerName
-    organizerPhoneNumber
-    meetingPoint
-    eventDescription
-    image
+        time
+        location
+        distance
+        meetingPoint
     }
 }
 `

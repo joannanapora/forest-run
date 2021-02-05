@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,9 +6,18 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { usePersonalStyles } from './event-details.styles';
 import { InputAdornment, TextField } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+    DatePicker,
+    TimePicker,
+    DateTimePicker,
+    MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+
 
 const DATES = [
-    { name: 'one-time event (choose date)', id: 0 },
+    { name: 'one time event', id: 0 },
     { name: 'everyday', id: 1 },
     { name: 'weekends', id: 2 },
     { name: 'saturdays', id: 3 },
@@ -17,66 +26,27 @@ const DATES = [
     { name: 'three times a week', id: 6 },
     { name: 'four times a week', id: 7 },
     { name: 'five times a week', id: 8 },
-
 ];
 
-const WHERE = [
-    { name: 'Hyde Park', id: 0 },
-    { name: 'Princess Park', id: 1 },
-    { name: 'Quenns Park', id: 2 },
-];
 
-interface IEventDetails {
-    time: string;
-    place: string;
-    when: string;
-    distance: string;
-    date: string;
-};
 
-const PersonalSelect = () => {
+const PersonalSelect = ({ timeValue, dateValue, locationValue, distanceValue, changeTime, changeDate,
+    whenValue, changeWhen, changeDistance, changeLocation, whenRequiredAlert, locationRequiredAlert, distanceRequiredAlert, timeRequiredAlert, dateRequiredAlert }) => {
+
     const classes = usePersonalStyles();
-    const [eventDetails, setEventDetails]: [IEventDetails, Dispatch<SetStateAction<IEventDetails>>] = useState({
-        time: '',
-        place: '',
-        date: '',
-        distance: '',
-        when: '',
-    });
 
-    const handleSingleSelect = (event: React.ChangeEvent<{ value: string, name: string }>) => {
-        if (event.target.name === 'date') {
-            setEventDetails({ ...eventDetails, date: event.target.value });
-        }
-        if (event.target.name === 'place') {
-            setEventDetails({ ...eventDetails, place: event.target.value });
 
-        }
-        if (event.target.name === 'time') {
-            setEventDetails({ ...eventDetails, time: event.target.value });
-
-        }
-        if (event.target.name === 'distance') {
-            setEventDetails({ ...eventDetails, distance: event.target.value });
-
-        }
-        if (event.target.name === 'when') {
-            setEventDetails({ ...eventDetails, when: event.target.value });
-
-        }
-    };
+    useEffect(() => { }, [dateRequiredAlert, timeRequiredAlert, distanceRequiredAlert, locationRequiredAlert])
 
     return (
         <div className={classes.favselects}>
-
             <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-label">DATE</InputLabel>
+                <InputLabel id="demo-simple-select-label">WHEN</InputLabel>
                 <Select
-                    name='when'
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={eventDetails.when}
-                    onChange={handleSingleSelect}
+                    value={whenValue}
+                    onChange={changeWhen}
                 >
                     {DATES.map((item) => (
                         <MenuItem key={item.id} value={item.name}>
@@ -85,58 +55,52 @@ const PersonalSelect = () => {
                     ))}
                 </Select>
             </FormControl>
-            {eventDetails.date === 'one-time event (choose date)' ?
-                <TextField
-                    name='date'
-                    value={eventDetails.date}
-                    id="datetime-local"
-                    label="Next appointment"
-                    type="datetime-local"
-                    defaultValue="2021-01-01T10:30"
-                    className={classes.textField}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-                :
-                <TextField
-                    value={eventDetails.time}
-                    name="time"
-                    label="Time"
-                    type="time"
-                    defaultValue="07:30"
-                    className={classes.textField}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    inputProps={{
-                        step: 300
-                    }}
-                />
-
+            {
+                whenRequiredAlert ? (
+                    <div className={classes.alert}><Alert severity="error">Field above is required </Alert></div>
+                ) : null
             }
-            <FormControl className={classes.formControl}>
-                <InputLabel id="demo-simple-select-label">PLACE</InputLabel>
-                <Select
-                    name='place'
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={eventDetails.place}
-                    onChange={handleSingleSelect}
-                >
-                    {WHERE.map((item) => (
-                        <MenuItem key={item.id} value={item.name}>
-                            {item.name}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+            {
+                whenValue === 'one time event' ?
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <DatePicker className={classes.textField} value={dateValue} onChange={changeDate} />
+                    </MuiPickersUtilsProvider>
+                    :
+                    null
+            }
+            {
+                dateRequiredAlert ? (
+                    <div className={classes.alert}><Alert severity="error">Field above is required </Alert></div>
+                ) : null
+            }
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+                <TimePicker className={classes.textField} value={timeValue} onChange={changeTime} />
+
+            </MuiPickersUtilsProvider>
+            {
+                timeRequiredAlert ? (
+                    <div className={classes.alert}><Alert severity="error">Field above is required </Alert></div>
+                ) : null
+            }
+            <TextField
+                className={classes.textField}
+                value={locationValue}
+                id="standard-textarea"
+                label="Location"
+                onChange={changeLocation}
+            />
+            {
+                locationRequiredAlert ? (
+                    <div className={classes.alert}><Alert severity="error">Field above is required </Alert></div>
+                ) : null
+            }
             <FormControl className={classes.formControl}>
                 <Input
                     name='distance'
                     id="standard-adornment-weight"
-                    value={eventDetails.distance}
-                    onChange={handleSingleSelect}
+                    value={distanceValue}
+                    onChange={changeDistance}
                     endAdornment={<InputAdornment position="end">Miles</InputAdornment>}
                     aria-describedby="standard-weight-helper-text"
                     inputProps={{
@@ -144,6 +108,11 @@ const PersonalSelect = () => {
                     }}
                 />
             </FormControl>
+            {
+                distanceRequiredAlert ? (
+                    <div className={classes.alert}><Alert severity="error">Field above is required </Alert></div>
+                ) : null
+            }
         </div>
     );
 };

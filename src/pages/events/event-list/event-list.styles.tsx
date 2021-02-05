@@ -9,12 +9,14 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
         },
         rootfilters: {
             display: 'flex',
-            padding: theme.spacing(1, 0, 2, 2),
+            padding: theme.spacing(0, 0, 2, 2),
         },
         container: {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            height: '100%',
+            overflow: 'auto',
         },
         paper: {
         },
@@ -23,11 +25,19 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
         button: {
         },
         eventListPage: {
-            padding: theme.spacing(8, 28, 5, 0),
             height: '100%',
             overflow: 'auto',
+            [theme.breakpoints.down("xs")]: {
+                padding: theme.spacing(8, 28, 2, 0),
+            },
             [theme.breakpoints.down("sm")]: {
-                padding: theme.spacing(8, 28, 5, 0),
+                padding: theme.spacing(8, 28, 2, 0),
+            },
+            [theme.breakpoints.down("md")]: {
+                padding: theme.spacing(8, 28, 7, 0),
+            },
+            [theme.breakpoints.down("lg")]: {
+                padding: theme.spacing(8, 28, 7, 0),
             },
         }
     }),

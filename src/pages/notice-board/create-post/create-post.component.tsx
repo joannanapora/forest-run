@@ -1,6 +1,6 @@
 
-import { Button, TextField, Typography } from '@material-ui/core';
-import React, { useState, useEffect, FunctionComponent } from 'react';
+import { Button, TextField } from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useCreatePostStyles } from './create-post.styles';
@@ -13,8 +13,8 @@ import TagFacesIcon from '@material-ui/icons/TagFaces';
 import { CREATE_POST } from '../../../grapQL/post/post.mutation';
 import { useMutation } from '@apollo/react-hooks';
 import SpinnerButton from '../../../shared/spinner/spinner-button.component';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { StaticContext } from 'react-router';
+import { withRouter } from 'react-router-dom';
+
 
 interface ChipData {
     key: number;

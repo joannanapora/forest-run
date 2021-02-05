@@ -1,50 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { useMeetingPointDetails } from './event-meetpoint.styles';
 
 
-const MeetingPoint = () => {
+const MeetingPoint = ({ changeOrganizerName, changeOrganizerPhoneNumber, changeMeetingPoint, changeEventDescription, organizerNameValue, organizerPhoneNumberValue, meetingPointValue, eventDescriptionValue }) => {
     const classes = useMeetingPointDetails();
-    const [values, setValues] = useState({
-        organizerName: '',
-        organizerPhone: '',
-        meetingPoint: '',
-        eventDescription: '',
-    });
-
-    const handleChange = (prop) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
 
     return (
         <div className={classes.root}>
             <TextField
-                value={values.organizerName}
+                value={organizerNameValue}
                 id="standard-textarea"
                 label="organizer's name"
-                onChange={handleChange('organizerName')}
+                onChange={changeOrganizerName}
             />
             <TextField
-                value={values.organizerPhone}
+                value={organizerPhoneNumberValue}
                 id="standard-textarea"
                 label="organizer's phone nr"
-                onChange={handleChange('organizerPhone')}
+                onChange={changeOrganizerPhoneNumber}
             />
             <TextField
                 className={classes.multilineInput}
-                value={values.meetingPoint}
+                value={meetingPointValue}
                 id="standard-textarea"
                 label="Meeting Point"
                 multiline
-                onChange={handleChange('meetingPoint')}
+                onChange={changeMeetingPoint}
             />
             <TextField
                 className={classes.multilineInput}
-                value={values.eventDescription}
+                value={eventDescriptionValue}
                 id="standard-textarea"
                 label="Event Description"
                 multiline
-                onChange={handleChange('eventDescription')}
+                onChange={changeEventDescription}
             />
         </div>
     );

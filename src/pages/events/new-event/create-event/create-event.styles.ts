@@ -8,15 +8,15 @@ export const useCardEditStyles = makeStyles((theme: Theme) =>
             height: '100%',
             marginTop: theme.spacing(2),
             [theme.breakpoints.down("sm")]: {
-                padding: theme.spacing(4, 30, 5, 0),
+                padding: theme.spacing(3, 30, 5, 6),
                 overflow: 'auto'
             },
             [theme.breakpoints.up("md")]: {
-                padding: theme.spacing(5, 2, 5, 0),
+                padding: theme.spacing(4, 2, 5, 6),
                 overflow: 'auto'
             },
             [theme.breakpoints.up("lg")]: {
-                padding: theme.spacing(5, 2, 5, 0),
+                padding: theme.spacing(4, 2, 5, 7),
                 overflow: 'auto'
             },
         },

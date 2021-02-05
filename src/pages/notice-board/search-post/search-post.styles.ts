@@ -4,17 +4,13 @@ import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 export const useSearchPostStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            padding: theme.spacing(3),
+            marginBottom: theme.spacing(2), marginLeft: theme.spacing(2)
         },
         button: {
-            margin: theme.spacing(2),
+            marginLeft: theme.spacing(3)
         },
-        alertContainer: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2),
+        textfield: {
+            minWidth: theme.spacing(25)
         },
     }),
 );

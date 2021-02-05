@@ -98,7 +98,7 @@ const EventList = () => {
         missedInputs: false,
     })
 
-    const handleChange = () => {
+    const handleChange = (prev: React.ChangeEvent<HTMLInputElement>) => {
         setChecked((prev) => !prev);
     };
 

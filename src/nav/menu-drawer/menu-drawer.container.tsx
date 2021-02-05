@@ -19,7 +19,7 @@ import Username from "../user-area/user-area.container";
 import { Switch, Route, withRouter, Link } from "react-router-dom";
 import SignInUp from "../../pages/login/sign-in-sign-up/sign-in-up.component";
 import TimeLines from "../../pages/landing/timelines/timelines.component";
-import CardEdit from "../../pages/events/new-event/create-event/create-event.component";
+import CardEdit from "../../pages/events/new-event/create-event/create-event.container";
 import { DirectionsRun, Nature } from "@material-ui/icons";
 import UpcomingEvent from "../../pages/events/event-card/event.component";
 import EventList from "../../pages/events/event-list/event-list.component";

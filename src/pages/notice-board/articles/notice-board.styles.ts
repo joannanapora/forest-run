@@ -60,4 +60,7 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             height: '100%',
             overflow: 'auto'
         },
+        noResults: {
+            marginLeft: theme.spacing(7),
+        }
     }));

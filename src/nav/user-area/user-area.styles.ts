@@ -1,7 +1,7 @@
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 
-export const useAvatarStyles = makeStyles((theme: Theme) =>
+export const useUserAreaStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',

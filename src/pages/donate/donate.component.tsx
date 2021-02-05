@@ -11,7 +11,7 @@ import { Alert } from '@material-ui/lab';
 const Donate = () => {
     const classes = useDonateStyles();
 
-    const [amount, setAmount]: [string, Dispatch<SetStateAction<string>>] = React.useState('');
+    const [amount, setAmount]: [string, Dispatch<SetStateAction<string>>] = useState('');
     const [donated, showDonated]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
 
 
