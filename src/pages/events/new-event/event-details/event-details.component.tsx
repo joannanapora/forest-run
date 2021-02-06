@@ -97,15 +97,11 @@ const PersonalSelect = ({ timeValue, dateValue, locationValue, distanceValue, ch
             }
             <FormControl className={classes.formControl}>
                 <Input
+                    type='number'
                     name='distance'
-                    id="standard-adornment-weight"
                     value={distanceValue}
                     onChange={changeDistance}
                     endAdornment={<InputAdornment position="end">Miles</InputAdornment>}
-                    aria-describedby="standard-weight-helper-text"
-                    inputProps={{
-                        'aria-label': 'miles',
-                    }}
                 />
             </FormControl>
             {

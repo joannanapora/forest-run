@@ -5,10 +5,12 @@ mutation createEvent(
     $date: String!
     $time: String!
     $location: String!
-    $distance: Float!
-    $when: Float!
+    $distance: Int!
+    $when: Int!
     $meetingPoint: String!
     $description: String!
+    $organizerName: String!
+    $organizerPhoneNumber: String!
 ) {
     createEvent(
         createEventInput: {
@@ -19,12 +21,46 @@ mutation createEvent(
     when: $when
     meetingPoint: $meetingPoint
     description : $description
+    organizerName: $organizerName
+    organizerPhoneNumber:  $organizerPhoneNumber
         }
     ) {
         time
         location
         distance
         meetingPoint
+        organizerName
+        organizerPhoneNumber
+        
     }
 }
 `
+
+
+export const ASSIGN_TO_EVENT = gql`
+mutation assignToEvent(
+    $eventId: String!
+) {
+    assignToEvent(
+        eventId: $eventId
+    ) {
+        participateCounter,
+        id
+    }
+}
+`
+
+
+export const UNASSIGN_TO_EVENT = gql`
+mutation unassignToEvent(
+    $eventId: String!
+) {
+    unassignToEvent(
+        eventId: $eventId
+    ) {
+        participateCounter,
+        id
+    }
+}
+`
+

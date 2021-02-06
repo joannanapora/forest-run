@@ -1,16 +1,21 @@
 import { gql } from 'apollo-boost';
 
 export const GET_EVENTS = gql` 
-  query {
-    posts(filters: $filters) {
-        title,
-        dateCreated,
-        id,
-        text,
-        keywords,
-        user {
-          username
-        }
+  query($filters: GetEventsArgs!) {
+    events(filters: $filters) {
+      id,
+      date,
+      time,
+      location,
+      distance,
+      meetingPoint,
+      when,
+      participateCounter,
+      organizerName,
+      isAssign,
+      user {
+        username
+      }
     }
   }
 `

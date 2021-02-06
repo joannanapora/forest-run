@@ -12,7 +12,7 @@ import Alert from '@material-ui/lab/Alert';
 import Modal from '@material-ui/core/Modal';
 import { CREATE_EVENT } from '../../../../grapQL';
 import { useMutation } from '@apollo/react-hooks';
-import { mapOptionsToWhen, When } from '../../../../models/when.enum';
+import { mapOptionsToWhen } from '../../../../models/when.enum';
 import SpinnerButton from '../../../../shared/spinner/spinner-button.component';
 
 
@@ -260,15 +260,14 @@ const CreateEvent = () => {
             {
                 variables: {
                     when: mapOptionsToWhen(allDetails.when),
-                    date: "2021-03-03T21:40:50.119Z",
-                    time: '11:11',
+                    date: "2022-12-19T15:28:46.493Z",
+                    time: '12:15',
                     location: allDetails.location,
                     distance: Number(allDetails.distance),
-                    organiserName: allDetails.organizerName,
-                    organiserPhoneNumber: allDetails.organizerPhoneNumber,
+                    organizerName: allDetails.organizerName,
+                    organizerPhoneNumber: allDetails.organizerPhoneNumber,
                     meetingPoint: allDetails.meetingPoint,
                     description: allDetails.eventDescription
-
                 }
             }
         );

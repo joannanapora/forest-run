@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect, useCallback } from 'react';
 import UpcomingEvent from '../event-card/event.component';
 import { useEventListStyles } from './event-list.styles';
 import Grid from '@material-ui/core/Grid';
@@ -6,106 +6,87 @@ import Switch from '@material-ui/core/Switch';
 import Paper from '@material-ui/core/Paper';
 import Fade from '@material-ui/core/Fade';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { Button } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
 import SortIcon from '@material-ui/icons/Sort';
-
-const events = [
-    {
-        id: 0,
-        date: '12 March 2021, 7;00 pm',
-        title: 'Hyde Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://www.parkgrandhydepark.co.uk/blog/wp-content/uploads/2017/08/Diana-Princess-of-Wales-Memorial-Fountain-Hyde-Park-London.jpg',
-        distance: 2,
-    },
-    {
-        id: 1,
-        date: '16 February 2021, 7;00 am',
-        title: 'Princess Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://www.towerhamlets.gov.uk/images_and_video/Leisure-and-culture/Parks-and-open-spaces/Mile_End_Park.png',
-        distance: 4,
-    },
-    {
-        id: 2,
-        date: '29 March 2021, 6;00 pm',
-        title: 'Quenns Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://www.womensrunning.com/wp-content/uploads/sites/2/2016/09/nicest-people.jpg?resize=630%2C420',
-        distance: 10,
-    },
-    {
-        id: 3,
-        date: '29 March 2021, 6;00 pm',
-        title: 'Quenns Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://www.twincities.com/wp-content/uploads/2019/06/jmp-mile-003.jpg',
-        distance: 4,
-    },
-    {
-        id: 4,
-        date: '16 February 2021, 7;00 am',
-        title: 'Princess Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://www.towerhamlets.gov.uk/images_and_video/Leisure-and-culture/Parks-and-open-spaces/Mile_End_Park.png',
-        distance: 14,
-    },
-    {
-        id: 5,
-        date: '29 March 2021, 6;00 pm',
-        title: 'Quenns Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://news.sanfordhealth.org/wp-content/uploads/2018/03/group-run.jpg',
-        distance: 0.5,
-    },
-    {
-        id: 6,
-        date: '29 March 2021, 6;00 pm',
-        title: 'Quenns Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://i.pinimg.com/564x/42/cc/62/42cc624233f1d0a1e3607bcc6bb52fca.jpg',
-        distance: 8,
-    },
-    {
-        id: 7,
-        date: '29 March 2021, 6;00 pm',
-        title: 'Quenns Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://news.sanfordhealth.org/wp-content/uploads/2018/03/group-run.jpg',
-        distance: 4,
-    },
-    {
-        id: 8,
-        date: '29 March 2021, 6;00 pm',
-        title: 'Quenns Park',
-        description: 'We are group of 2 women and 2 men running in Hyde Park every day at 7pm. If you wanna join us you are more than welcome :)',
-        image: 'https://i.pinimg.com/564x/42/cc/62/42cc624233f1d0a1e3607bcc6bb52fca.jpg',
-        distance: 6,
-    },
-]
-
-interface IAlerts {
-    somethingWentWrong: boolean
-    missedInputs: boolean
-}
-
+import { GET_EVENTS } from '../../../grapQL/event/event.query';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+import Alert from '@material-ui/lab/Alert';
+import { format } from 'date-fns';
+import { mapWhenToOptions } from '../../../models/when.enum';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
+import { ASSIGN_TO_EVENT, UNASSIGN_TO_EVENT } from '../../../grapQL/event/event.mutation';
 
 const EventList = () => {
-
+    const classes = useEventListStyles();
     const [checked, setChecked]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
-    const [alert, setAlert]: [IAlerts, Dispatch<SetStateAction<IAlerts>>] = useState({
-        somethingWentWrong: false,
-        missedInputs: false,
-    })
+    const [isClicked, setIsClicked]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+
+    let { loading, error, data } = useQuery(GET_EVENTS, {
+        variables: {
+            filters: {
+                me: false,
+            }
+        },
+    });
+
+    const [assignToEvent] = useMutation(ASSIGN_TO_EVENT, {
+
+    });
+
+    const [unassignToEvent] = useMutation(UNASSIGN_TO_EVENT, {
+
+    });
+
+    if (error) {
+        return (
+            <Alert severity="error">Ooops! Try again later.</Alert>)
+    }
+
+    if (!data) {
+        return (
+            <>LOADING</>
+        )
+    };
+
+    if (loading) {
+        return (
+            <>LOADING</>
+        )
+    };
 
     const handleChange = (prev: React.ChangeEvent<HTMLInputElement>) => {
         setChecked((prev) => !prev);
     };
 
     const handleSort = () => {
+    }
+
+    const handleClickToJoin = (eventId, isAssigned) => {
+        setIsClicked(!isClicked);
+
+        if (!isAssigned) {
+            assignToEvent(
+                {
+                    variables: {
+                        eventId: eventId
+                    }
+                }
+            );
+        }
+        else {
+            {
+                unassignToEvent(
+                    {
+                        variables: {
+                            eventId: eventId
+                        }
+                    }
+                );
+            };
+        }
 
     }
-    const classes = useEventListStyles();
 
     return (
         <div className={classes.eventListPage}>
@@ -155,9 +136,31 @@ const EventList = () => {
             <Grid item xs={12}>
                 <Grid container justify="space-evenly" spacing={2}>
                     {
-                        events.map((event) => {
+                        data.events.map((event) => {
                             return (<Grid key={event.id} item>
-                                <UpcomingEvent title={event.title} distance={event.distance} image={event.image} description={event.description} date={event.date} />
+                                <UpcomingEvent
+                                    location={event.location}
+                                    distance={event.distance}
+                                    image={"https://i.pinimg.com/564x/42/cc/62/42cc624233f1d0a1e3607bcc6bb52fca.jpg"}
+                                    description={event.description}
+                                    date={format(new Date(event.date), 'dd-MM-yyyy')}
+                                    organizerName={event.organizerName}
+                                    organizerPhoneNumber={event.organizerPhoneNumber}
+                                    meetingPoint={event.meetingPoint}
+                                    time={event.time}
+                                    when={null}
+                                    counter={event.participateCounter}
+                                    action={event.isAssign ?
+                                        <IconButton onClick={() => handleClickToJoin(event.id, event.isAssign)} aria-label="settings">
+                                            < PeopleAltIcon color='primary' />
+                                        </IconButton>
+                                        :
+                                        <IconButton onClick={() => handleClickToJoin(event.id, event.isAssign)} aria-label="settings">
+                                            < PersonAddIcon color='secondary' />
+                                        </IconButton>}
+                                />
+                                {event.isAssign ?
+                                    isClicked : !isClicked}
                             </Grid>
                             )
                         })

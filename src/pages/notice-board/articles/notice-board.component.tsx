@@ -11,13 +11,11 @@ import { GET_POSTS } from '../../../grapQL/post/post.query';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { format } from 'date-fns';
 import { Alert } from '@material-ui/lab';
-import { useQuery } from '@apollo/client';
 
 
 const NoticeBoard = () => {
     const classes = useNoticeBoardStyles();
     const [searchPhrase, setSearchPhrase]: [string, Dispatch<SetStateAction<string>>] = useState('');
-    const [alert, setAlert]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
 
     const [searchPost, { loading, error, data }] = useLazyQuery(GET_POSTS, {
         variables: {
@@ -36,17 +34,16 @@ const NoticeBoard = () => {
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchPhrase(event.target.value);
     };
-
     if (error) {
         return (
             <Alert severity="error">Ooops! Try again later.</Alert>)
     }
 
-    if (!data) {
-        return (
-            <Alert severity="error">Ooops! Try again later.</Alert>
-        )
-    };
+    // if (!data) {
+    //     return (
+    //         <Alert severity="error">Ooops! Try again later.</Alert>
+    //     )
+    // };
 
     if (loading) {
         return (
@@ -83,11 +80,6 @@ const NoticeBoard = () => {
         <div className={classes.container}>
             <div className={classes.speedDial}>
                 <SearchPost onChange={handleSearch} value={searchPhrase} />
-                {
-                    alert ? (
-                        <Alert severity="error">Ooops! Something went wrong.</Alert>
-                    ) : null
-                }
             </div>
             <div className={classes.scrollArea}>
                 {
@@ -99,7 +91,7 @@ const NoticeBoard = () => {
                         </div>
                         :
                         <div className={classes.articles}>
-                            {data.posts.map(post => {
+                            {data?.posts?.map(post => {
                                 return (
                                     <Card key={post.id} className={classes.cardRoot}>
                                         <CardMedia

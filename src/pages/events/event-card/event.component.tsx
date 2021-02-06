@@ -10,55 +10,17 @@ import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import Alert from '@material-ui/lab/Alert';
 import PeopleIcon from '@material-ui/icons/People';
 
-interface ICardDetails {
-    title: string
-    date: string
-    image: string
-    description: string,
-    distance: number,
-}
 
-
-const UpcomingEvent = ({ title, date, image, description, distance }: ICardDetails) => {
+const UpcomingEvent = ({ location, date, image, description, when, distance, time, organizerName, action, organizerPhoneNumber, meetingPoint, counter }) => {
     const classes = useEventStyles();
     const [expanded, setExpanded]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
-    const [isFavourite, setIsFavourite]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
-    const [join, setJoin]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
-    const [remove, setRemove]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
-    const [counter, setCounter]: [number, Dispatch<SetStateAction<number>>] = useState(0);
-
 
     const handleShowDescription = () => {
         setExpanded(!expanded);
     };
 
-    const handleClickToJoin = () => {
-        setIsFavourite(!isFavourite);
-
-        if (isFavourite) {
-            setRemove(true);
-            setJoin(false)
-            offAlert();
-            setCounter(counter - 1)
-        } else {
-            setJoin(true);
-            setRemove(false);
-            offAlert();
-            setCounter(counter + 1)
-        }
-    }
-
-    const offAlert = () => {
-        setTimeout(() => {
-            setJoin(false);
-            setRemove(false);
-        }, 4000);
-    }
 
 
     return (
@@ -69,28 +31,12 @@ const UpcomingEvent = ({ title, date, image, description, distance }: ICardDetai
                         {distance} miles
           </Typography>
                 }
-                action={
-                    <IconButton onClick={handleClickToJoin} aria-label="settings">
-                        {isFavourite ?
-                            < PeopleAltIcon color='primary' />
-                            :
-                            < PersonAddIcon color='secondary' />
-                        }
-                    </IconButton>
-                }
-                title={title}
-                subheader={date}
+                action={action}
+                title={location}
+                subheader={<span>
+                    {when},{date},{time}
+                </span>}
             />
-            {
-                join ? (
-                    <div className={classes.alertContainer} ><Alert onChange={offAlert} severity="success">You joined the event!</Alert></div>
-                ) : null
-            }
-            {
-                remove ? (
-                    <div className={classes.alertContainer} ><Alert onChange={offAlert} severity="error">You left the event! </Alert></div>
-                ) : null
-            }
             <CardMedia
                 className={classes.media}
                 image={image}
@@ -110,9 +56,17 @@ const UpcomingEvent = ({ title, date, image, description, distance }: ICardDetai
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <Typography paragraph>description:</Typography>
+                    <Typography paragraph>Meeting Point</Typography>
+                    <Typography paragraph>
+                        {meetingPoint}
+                    </Typography>
+                    <Typography paragraph>Description</Typography>
                     <Typography paragraph>
                         {description}
+                    </Typography>
+                    <Typography paragraph>Organizer</Typography>
+                    <Typography paragraph>
+                        <span>{organizerName}<br />{organizerPhoneNumber}</span>
                     </Typography>
                 </CardContent>
             </Collapse>

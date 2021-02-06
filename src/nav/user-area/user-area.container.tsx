@@ -117,8 +117,8 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
                     <Alert severity="error">Username is already taken.</Alert>
                 ) : null
             }
-            <Avatar alt="cs-go-player" className={classes.large}
-                src="https://www.freelogodesign.org/file/app/client/thumb/677a71e1-9743-4516-b642-5efce841f31e_200x200.png?1612293369136" />
+            <Avatar alt="forest-img" className={classes.large}
+                src="" />
         </div >
     );
 };
