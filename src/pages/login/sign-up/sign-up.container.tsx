@@ -1,15 +1,19 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
+
+import SpinnerButton from '../../../shared/spinner-button.component';
+import { validatePassword } from '../../../shared/password-validation';
+import { validateEmail } from '../../../shared/email-validation';
+import { useSignUpStyles } from './sign-up.styles';
+
+import { withRouter } from "react-router-dom";
+
 import { FilledInput, FormControl, IconButton, InputAdornment, InputLabel, TextField } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { withRouter } from "react-router-dom";
-import { validateEmail } from '../../../shared/email-validation';
-import { validatePassword } from '../../../shared/password-validation';
 import Alert from '@material-ui/lab/Alert';
-import { useSignUpStyles } from './sign-up.styles';
+
+
 import {REGISTER_USER} from '../../../grapQL';
 import {useMutation} from '@apollo/react-hooks';
-import SpinnerButton from '../../../shared/spinner/spinner-button.component';
-import { waitForDomChange } from '@testing-library/react';
 
 
 interface DetailsForm {
@@ -29,6 +33,7 @@ interface ErrorAlerts {
     usernameTooShort: boolean;
     usernameTooLong: boolean;
     userRegistered: boolean;
+    internalBackendError: boolean;
 }
 
 
@@ -51,6 +56,7 @@ const SignUp = () => {
         usernameExists: false,
         emailExists: false,
         userRegistered: false,
+        internalBackendError: false
     });
 
 
@@ -63,6 +69,9 @@ const SignUp = () => {
             onError(e) {
                 if ((e.graphQLErrors[0].message as any).statusCode === 409) {
                     setNotification({...notifications, usernameExists: true});
+                }
+                if ((e.graphQLErrors[0].message as any).statusCode === 500) {
+                    setNotification({...notifications, internalBackendError: true});
                 }
                         },
             variables: {
@@ -94,7 +103,6 @@ const SignUp = () => {
         }
         if (values.username.length < 3) {
             newNotification = { ...newNotification,  usernameTooShort: true };
-            // return;
         }
         if (values.username.length > 18) {
             newNotification = { ...newNotification,  usernameTooLong: true };
@@ -122,8 +130,6 @@ const SignUp = () => {
     }
 
 
-
-
     const handleChange = (prop: keyof DetailsForm) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({ ...values, [prop]: event.target.value });
         setNotification({
@@ -134,10 +140,11 @@ const SignUp = () => {
         usernameTooShort:false,
         usernameExists: false,
         emailExists: false,
-        userRegistered: false})
+        userRegistered: false,
+    internalBackendError: false})
     };
 
-    const handleClickShowPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClickShowPassword = () => {
         setValues({ ...values, showPassword: !values.showPassword });
     };
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -147,11 +154,8 @@ const SignUp = () => {
 
     const submitOnEnter = (event: React.KeyboardEvent<any>) => {
         if (event.key === "Enter") {
-
             event.preventDefault();
-
             validateAndLogin();
-                
             addUser();
         }
     };
@@ -226,6 +230,7 @@ const SignUp = () => {
               <Alert severity="error">User with that email/username already exists</Alert>
                     ) : null
                     }
+
                 {
                     notifications.usernameTooLong ? (
                         <Alert severity="error">Username's too long (3-18 char.)</Alert>
@@ -286,6 +291,11 @@ const SignUp = () => {
               <Alert severity="success">Account has been created! You can login now.</Alert>
                     ) : null
                 }
+                 {
+                    notifications.internalBackendError ? (
+              <Alert severity="error">Oops. Something went wrong. Try again later.</Alert>
+                    ) : null
+                    }
             <SpinnerButton className={classes.loginButton} loading={loading} buttonLabel={'Register'} onClick={handleSubmit} />
         </div>
         )

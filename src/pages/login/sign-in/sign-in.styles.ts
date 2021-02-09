@@ -5,11 +5,15 @@ export const useSignInStyles = makeStyles((theme: Theme) =>
         textfield: {
             width: '100%',
             margin: theme.spacing(0.5),
-
+            fontFamily: 'Raleway',
+            '& .MuiInputBase-input': {
+                font: 'Raleway'
+            }
         },
         form: {
             display: 'flex',
             flexDirection: 'column',
+            fontFamily: 'Raleway'
         },
         loginButton: {
             marginTop: theme.spacing(2),
@@ -24,4 +28,5 @@ export const useSignInStyles = makeStyles((theme: Theme) =>
             marginTop: theme.spacing(2),
             marginBottom: theme.spacing(2),
         },
-    }));
+    }
+    ));

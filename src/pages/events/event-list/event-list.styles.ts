@@ -39,6 +39,21 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.down("lg")]: {
                 padding: theme.spacing(8, 28, 7, 0),
             },
-        }
+            [theme.breakpoints.down("xl")]: {
+                padding: theme.spacing(8, 28, 7, 0),
+            },
+        },
+        alert: {
+            marginTop: theme.spacing(5)
+        },
+        mutationAlert: {
+            marginBottom: theme.spacing(2)
+        },
+        progress: {
+            display: 'flex',
+            '& > * + *': {
+                marginLeft: theme.spacing(2),
+            },
+        },
     }),
 );

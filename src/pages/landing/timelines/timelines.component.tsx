@@ -1,18 +1,22 @@
 import React from 'react';
-import Timeline from '@material-ui/lab/Timeline';
-import TimelineItem from '@material-ui/lab/TimelineItem';
+
+import { useTimeLinesStyles } from './timelines.styles';
+
+import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
-import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
+import TimelineItem from '@material-ui/lab/TimelineItem';
 import TimelineDot from '@material-ui/lab/TimelineDot';
+import Timeline from '@material-ui/lab/Timeline';
+
 import LaptopMacIcon from '@material-ui/icons/LaptopMac';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import { useTimeLinesStyles } from './timelines.styles';
 import AppleIcon from '@material-ui/icons/Apple';
+
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+
 import { DirectionsRun, Search } from '@material-ui/icons';
-import AutoCompletePlace from '../../../autocomplete';
 
 const TimeLines = () => {
     const classes = useTimeLinesStyles();
@@ -86,7 +90,6 @@ const TimeLines = () => {
                     </Paper>
                 </TimelineContent>
             </TimelineItem>
-            {/* <AutoCompletePlace /> */}
         </Timeline>
     );
 };

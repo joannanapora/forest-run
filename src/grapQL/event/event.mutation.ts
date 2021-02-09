@@ -37,6 +37,21 @@ mutation createEvent(
 `
 
 
+export const DELETE_EVENT = gql`
+mutation deleteEvents(
+    $ids: [String!]!
+) {
+    deleteEvents(
+        deleteEventsInput: {
+            ids: $ids
+        }
+    ) {
+        id
+    }
+}
+`
+
+
 export const ASSIGN_TO_EVENT = gql`
 mutation assignToEvent(
     $eventId: String!

@@ -1,14 +1,14 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
+
+import ReactHtmlParser from 'react-html-parser';
+
+import { Card, CardContent, Typography, CardActions, CardMedia, CircularProgress } from '@material-ui/core';
+
 import { useNoticeBoardStyles } from './notice-board.styles';
 import SearchPost from '../search-post/search-post.component';
 import { withRouter } from 'react-router-dom';
 import { GET_POSTS } from '../../../grapQL/post/post.query';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import { format } from 'date-fns';
 import { Alert } from '@material-ui/lab';
 
@@ -17,7 +17,7 @@ const NoticeBoard = () => {
     const classes = useNoticeBoardStyles();
     const [searchPhrase, setSearchPhrase]: [string, Dispatch<SetStateAction<string>>] = useState('');
 
-    const [searchPost, { loading, error, data }] = useLazyQuery(GET_POSTS, {
+    const { loading, error, data, refetch } = useQuery(GET_POSTS, {
         variables: {
             filters: {
                 me: false,
@@ -27,53 +27,18 @@ const NoticeBoard = () => {
     });
 
     useEffect(() => {
-        searchPost();
     }, [searchPhrase]);
 
 
-    const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchPhrase(event.target.value);
+    const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        await setSearchPhrase(event.target.value);
+        refetch();
     };
+
     if (error) {
         return (
-            <Alert severity="error">Ooops! Try again later.</Alert>)
+            <div className={classes.alert}><Alert severity="error">Ooops! Try again later.</Alert></div>)
     }
-
-    // if (!data) {
-    //     return (
-    //         <Alert severity="error">Ooops! Try again later.</Alert>
-    //     )
-    // };
-
-    if (loading) {
-        return (
-            <div className={classes.container}>
-                <div className={classes.speedDial}>
-                    <SearchPost onChange={handleSearch} value={searchPhrase} />
-                </div>
-                <div className={classes.scrollArea}>
-                    <div className={classes.articles}>
-                        <Card className={classes.cardRoot}>
-                            <CardMedia
-                                className={classes.media}
-                                image="https://img.delicious.com.au/akWRpqCk/del/2016/04/silvia-collocas-vegan-lentil-and-sweet-potato-chickpea-stew-29566-3.jpg"
-                            />
-                            <CardContent>
-                                <Typography variant="h6">
-                                    ...Loading
-                                    </Typography>
-                                <Typography color="textSecondary" >
-                                    ...Loading
-                                    </Typography>
-                            </CardContent>
-                            <CardActions className={classes.keywordsList}>
-                            </CardActions>
-                        </Card>
-                    </div>
-                </div>
-            </div >
-        )
-    };
 
 
     return (
@@ -83,10 +48,19 @@ const NoticeBoard = () => {
             </div>
             <div className={classes.scrollArea}>
                 {
-                    data.posts.length < 1 ?
+                    loading ?
+                        <div className={classes.alert}><div className={classes.progress}>
+                            <CircularProgress />
+               Loading...
+              </div></div>
+                        :
+                        null
+                }
+                {
+                    data?.posts?.length < 1 ?
                         <div className={classes.noResults}>
                             <Typography className={classes.cardRoot}>
-                                NO RESULTS
+                                No results :(
                                     </Typography>
                         </div>
                         :
@@ -103,7 +77,7 @@ const NoticeBoard = () => {
                                                 {post.title}
                                             </Typography>
                                             <Typography color="textSecondary" >
-                                                {post.text}
+                                                {ReactHtmlParser(post.text)}
                                             </Typography>
                                         </CardContent>
                                         <CardActions className={classes.keywordsList}>

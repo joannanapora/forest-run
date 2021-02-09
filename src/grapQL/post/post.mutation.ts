@@ -21,3 +21,18 @@ mutation createPost(
     }
 }
 `
+
+
+export const DELETE_POST = gql`
+mutation deletePosts(
+    $ids: [String!]!
+) {
+    deletePosts(
+        deletePostsInput: {
+            ids: $ids
+        }
+    ) {
+        id
+    }
+}
+`

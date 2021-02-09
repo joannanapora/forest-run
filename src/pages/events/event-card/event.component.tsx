@@ -1,16 +1,13 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { useEventStyles } from './event.styles';
 import clsx from 'clsx';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+
+import { mapOptionsToWhen, When } from '../../../models/when.enum';
+import { useEventStyles } from './event.styles';
+
+import { CardContent, CardActions, CardHeader, Card, CardMedia, Collapse, IconButton, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PeopleIcon from '@material-ui/icons/People';
+
 
 
 const UpcomingEvent = ({ location, date, image, description, when, distance, time, organizerName, action, organizerPhoneNumber, meetingPoint, counter }) => {
@@ -20,7 +17,6 @@ const UpcomingEvent = ({ location, date, image, description, when, distance, tim
     const handleShowDescription = () => {
         setExpanded(!expanded);
     };
-
 
 
     return (
@@ -34,7 +30,9 @@ const UpcomingEvent = ({ location, date, image, description, when, distance, tim
                 action={action}
                 title={location}
                 subheader={<span>
-                    {when},{date},{time}
+                    {mapOptionsToWhen(when) !== When.ONE_TIME_EVENT ?
+                        <span>·{when}  ·  {time}</span> : <span>{date}  ·  {time}</span>}
+
                 </span>}
             />
             <CardMedia
@@ -73,5 +71,7 @@ const UpcomingEvent = ({ location, date, image, description, when, distance, tim
         </Card>
     );
 };
+
+
 
 export default UpcomingEvent;

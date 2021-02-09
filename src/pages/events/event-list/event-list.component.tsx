@@ -1,28 +1,46 @@
-import React, { Dispatch, SetStateAction, useState, useEffect, useCallback } from 'react';
-import UpcomingEvent from '../event-card/event.component';
-import { useEventListStyles } from './event-list.styles';
-import Grid from '@material-ui/core/Grid';
-import Switch from '@material-ui/core/Switch';
-import Paper from '@material-ui/core/Paper';
-import Fade from '@material-ui/core/Fade';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import { Button, IconButton } from '@material-ui/core';
-import SortIcon from '@material-ui/icons/Sort';
-import { GET_EVENTS } from '../../../grapQL/event/event.query';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import Alert from '@material-ui/lab/Alert';
-import { format } from 'date-fns';
+import UpcomingEvent from '../event-card/event.component';
+import { Grid, Switch, Paper, Fade, Button, IconButton, CircularProgress } from '@material-ui/core';
+
 import { mapWhenToOptions } from '../../../models/when.enum';
+import { useEventListStyles } from './event-list.styles';
+
+import { format } from 'date-fns';
+
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import { ASSIGN_TO_EVENT, UNASSIGN_TO_EVENT } from '../../../grapQL/event/event.mutation';
+import SortIcon from '@material-ui/icons/Sort';
+import Alert from '@material-ui/lab/Alert';
 
-const EventList = () => {
+import { selectCurrentUser } from '../../../store-redux/user/user.selectors';
+import { createStructuredSelector } from 'reselect';
+import { IUser } from '../../../store-redux';
+import { connect } from 'react-redux';
+
+import { GET_EVENTS, ASSIGN_TO_EVENT, UNASSIGN_TO_EVENT } from '../../../grapQL';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+
+interface IAlerts {
+    pleaseLogin: boolean;
+    joined: boolean;
+    left: boolean;
+    internalBackendError: boolean;
+}
+
+const EventList = ({ user }: { user: IUser }) => {
     const classes = useEventListStyles();
     const [checked, setChecked]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
     const [isClicked, setIsClicked]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [alert, setAlert]: [IAlerts, Dispatch<SetStateAction<IAlerts>>] = useState({
+        pleaseLogin: false,
+        joined: false,
+        left: false,
+        internalBackendError: false,
+    });
 
-    let { loading, error, data } = useQuery(GET_EVENTS, {
+    let { loading, error, data, refetch } = useQuery(GET_EVENTS, {
         variables: {
             filters: {
                 me: false,
@@ -31,28 +49,55 @@ const EventList = () => {
     });
 
     const [assignToEvent] = useMutation(ASSIGN_TO_EVENT, {
-
+        onCompleted: () => {
+            refetch();
+            setAlert({ ...alert, joined: true })
+        },
+        onError: (error) => {
+            if ((error.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
+                setAlert({ ...alert, pleaseLogin: true })
+            }
+            if ((error.graphQLErrors[0].message as any).statusCode === 500) {
+                setAlert({ ...alert, internalBackendError: true })
+            }
+        }
     });
 
     const [unassignToEvent] = useMutation(UNASSIGN_TO_EVENT, {
-
+        onCompleted: () => {
+            refetch();
+            setAlert({ ...alert, left: true })
+        },
+        onError: (error) => {
+            if ((error.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
+                setAlert({ ...alert, pleaseLogin: true })
+            }
+            if ((error.graphQLErrors[0].message as any).statusCode === 500) {
+                setAlert({ ...alert, internalBackendError: true })
+            }
+        }
     });
 
-    if (error) {
-        return (
-            <Alert severity="error">Ooops! Try again later.</Alert>)
-    }
 
     if (!data) {
         return (
-            <>LOADING</>
-        )
+            <div className={classes.alert}><div className={classes.progress}>
+                <CircularProgress />
+           Loading...
+          </div></div>)
     };
 
     if (loading) {
         return (
-            <>LOADING</>
-        )
+            <div className={classes.alert}><div className={classes.progress}>
+                <CircularProgress />
+           Loading...
+          </div></div>)
+    };
+
+    if (error) {
+        return (
+            <div className={classes.alert}><Alert severity="error">Ooops! Try again later.</Alert></div>)
     };
 
     const handleChange = (prev: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,8 +115,8 @@ const EventList = () => {
                 {
                     variables: {
                         eventId: eventId
-                    }
-                }
+                    },
+                },
             );
         }
         else {
@@ -80,7 +125,7 @@ const EventList = () => {
                     {
                         variables: {
                             eventId: eventId
-                        }
+                        },
                     }
                 );
             };
@@ -134,21 +179,36 @@ const EventList = () => {
                 </div>
             </div>
             <Grid item xs={12}>
+                {
+                    alert.pleaseLogin ?
+                        <div className={classes.mutationAlert}><Alert severity="warning">Please login to join the event.</Alert></div>
+                        : null
+                }
+                {
+                    alert.joined ?
+                        <div className={classes.mutationAlert}><Alert severity="success">You joined the event.</Alert></div>
+                        : null
+                }
+                {
+                    alert.left ?
+                        <div className={classes.mutationAlert}><Alert severity="error">You left the event.</Alert></div>
+                        : null
+                }
                 <Grid container justify="space-evenly" spacing={2}>
                     {
-                        data.events.map((event) => {
+                        data?.events?.map((event) => {
                             return (<Grid key={event.id} item>
                                 <UpcomingEvent
                                     location={event.location}
                                     distance={event.distance}
-                                    image={"https://i.pinimg.com/564x/42/cc/62/42cc624233f1d0a1e3607bcc6bb52fca.jpg"}
+                                    image={"https://cdn.dribbble.com/users/1016207/screenshots/6380353/58.jpg?compress=1&resize=400x300"}
                                     description={event.description}
-                                    date={format(new Date(event.date), 'dd-MM-yyyy')}
+                                    date={format(new Date(event.date), 'dd/MM/yyyy')}
                                     organizerName={event.organizerName}
                                     organizerPhoneNumber={event.organizerPhoneNumber}
                                     meetingPoint={event.meetingPoint}
-                                    time={event.time}
-                                    when={null}
+                                    time={new Date(Number(event.time)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    when={mapWhenToOptions(event.when)}
                                     counter={event.participateCounter}
                                     action={event.isAssign ?
                                         <IconButton onClick={() => handleClickToJoin(event.id, event.isAssign)} aria-label="settings">
@@ -171,4 +231,12 @@ const EventList = () => {
     );
 }
 
-export default EventList;
+const mapStateToProps = createStructuredSelector({
+    user: selectCurrentUser,
+});
+
+
+export default connect(
+    mapStateToProps,
+    null)
+    (EventList);

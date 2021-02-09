@@ -32,11 +32,11 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
         keywords: {
             display: 'flex',
             flexDirection: 'row',
-            fontSize: 20,
+            fontSize: 15,
             padding: theme.spacing(1),
         },
         media: {
-            height: 160,
+            height: 350,
         },
         articles: {
         },
@@ -47,12 +47,17 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(2, 4, 3, 5),
         },
         speedDial: {
-            padding: theme.spacing(6, 0, 2, 2),
             [theme.breakpoints.down("sm")]: {
                 padding: theme.spacing(6, 0, 0, 2),
             },
             [theme.breakpoints.up("md")]: {
                 padding: theme.spacing(6, 0, 0, 2),
+            },
+            [theme.breakpoints.up("lg")]: {
+                padding: theme.spacing(8, 0, 0, 2),
+            },
+            [theme.breakpoints.up("xl")]: {
+                padding: theme.spacing(8, 0, 0, 2),
             },
         },
         scrollArea: {
@@ -62,5 +67,14 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
         },
         noResults: {
             marginLeft: theme.spacing(7),
-        }
+        },
+        alert: {
+            marginTop: theme.spacing(6),
+        },
+        progress: {
+            display: 'flex',
+            '& > * + *': {
+                marginLeft: theme.spacing(2),
+            },
+        },
     }));

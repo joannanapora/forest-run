@@ -72,8 +72,8 @@ export const useMenuDrawerStyles = makeStyles((theme: Theme) => ({
 export const light: ThemeOptions = {
     typography: {
         fontWeightBold: 1000,
-        fontFamily: 'Amatic SC',
-        fontSize: 20,
+        fontFamily: 'Potta One',
+        fontSize: 15,
     },
     palette: {
         type: 'light',
@@ -89,8 +89,8 @@ export const light: ThemeOptions = {
 
 export const dark: ThemeOptions = {
     typography: {
-        fontFamily: 'Amatic SC',
-        fontSize: 20,
+        fontFamily: 'Potta One',
+        fontSize: 15,
     },
     palette: {
         type: 'dark',

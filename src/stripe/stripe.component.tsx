@@ -1,8 +1,6 @@
-import React from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 
 const Stripe = ({ donation, handleToken }) => {
-
 
     const publishableKey = 'pk_test_51I5qbsAzH5WZ6wWk5bFSySgNcJhsoMBalUfRP92hvr9lT2TnxrjnQn8TZqiMeyOUnL1ULpq0KYTiCXQcPAoZPxTZ00253Mx3bz';
     const donationStripe = donation * 100;

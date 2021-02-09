@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import Input from '@material-ui/core/Input';
+import React from 'react';
+
+import { usePersonalStyles } from './event-info.styles';
+
+import { InputAdornment, TextField } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { usePersonalStyles } from './event-details.styles';
-import { InputAdornment, TextField } from '@material-ui/core';
+import Input from '@material-ui/core/Input';
 import Alert from '@material-ui/lab/Alert';
+
 import DateFnsUtils from '@date-io/date-fns';
+
 import {
     DatePicker,
     TimePicker,
-    DateTimePicker,
     MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 
@@ -30,13 +33,11 @@ const DATES = [
 
 
 
-const PersonalSelect = ({ timeValue, dateValue, locationValue, distanceValue, changeTime, changeDate,
+const EventInfo = ({ timeValue, dateValue, locationValue, distanceValue, changeTime, changeDate,
     whenValue, changeWhen, changeDistance, changeLocation, whenRequiredAlert, locationRequiredAlert, distanceRequiredAlert, timeRequiredAlert, dateRequiredAlert }) => {
 
     const classes = usePersonalStyles();
 
-
-    useEffect(() => { }, [dateRequiredAlert, timeRequiredAlert, distanceRequiredAlert, locationRequiredAlert])
 
     return (
         <div className={classes.favselects}>
@@ -113,4 +114,4 @@ const PersonalSelect = ({ timeValue, dateValue, locationValue, distanceValue, ch
     );
 };
 
-export default PersonalSelect;
+export default EventInfo;

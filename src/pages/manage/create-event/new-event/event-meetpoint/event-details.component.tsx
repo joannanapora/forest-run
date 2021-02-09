@@ -1,9 +1,11 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { useMeetingPointDetails } from './event-meetpoint.styles';
+import { useMeetingPointDetails } from './event-details.styles';
 
 
-const MeetingPoint = ({ changeOrganizerName, changeOrganizerPhoneNumber, changeMeetingPoint, changeEventDescription, organizerNameValue, organizerPhoneNumberValue, meetingPointValue, eventDescriptionValue }) => {
+const EventDetails = ({ changeOrganizerName, changeOrganizerPhoneNumber, changeMeetingPoint, changeEventDescription, organizerNameValue,
+    organizerPhoneNumberValue, meetingPointValue, eventDescriptionValue }) => {
+
     const classes = useMeetingPointDetails();
 
     return (
@@ -41,4 +43,4 @@ const MeetingPoint = ({ changeOrganizerName, changeOrganizerPhoneNumber, changeM
 }
 
 
-export default MeetingPoint;
+export default EventDetails;

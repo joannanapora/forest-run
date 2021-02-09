@@ -22,7 +22,7 @@ export const useEventStyles = makeStyles((theme: Theme) =>
             transform: 'rotate(180deg)',
         },
         avatar: {
-            fontSize: 25,
+            fontSize: 17,
         },
         alertContainer: {
             marginTop: theme.spacing(1),

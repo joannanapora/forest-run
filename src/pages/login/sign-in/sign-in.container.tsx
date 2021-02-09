@@ -1,14 +1,17 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { FilledInput, FormControl, InputLabel, TextField } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert';
-import { validateEmail } from '../../../shared/email-validation';
+
 import { useSignInStyles } from './sign-in.styles';
-import { LOGIN_USER } from '../../../grapQL';
-import { useMutation } from '@apollo/react-hooks';
+import SpinnerButton from '../../../shared/spinner-button.component';
+
+import { setCurrentUser } from '../../../store-redux';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setCurrentUser } from '../../../store-redux';
-import SpinnerButton from '../../../shared/spinner/spinner-button.component';
+
+import { FilledInput, FormControl, InputLabel, TextField } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+
+import { LOGIN_USER } from '../../../grapQL';
+import { useMutation } from '@apollo/react-hooks';
 
 
 interface DetailsForm {
@@ -108,8 +111,8 @@ const SignIn = ({ dispatchSetCurrentUser, history }) => {
                 onKeyDown={submitOnEnter}
                 onChange={handleChange('email')}
                 className={classes.textfield}
-                name='email'
-                label="email"
+                name='Email'
+                label="Email"
                 variant="filled" />
             <FormControl className={classes.textfield} variant="filled">
                 <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>

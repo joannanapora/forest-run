@@ -1,7 +1,7 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 
-export const useCardEditStyles = makeStyles((theme: Theme) =>
+export const useCreateEventStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
@@ -37,15 +37,26 @@ export const useCardEditStyles = makeStyles((theme: Theme) =>
         },
         paper: {
             position: 'absolute',
-            width: 300,
-            backgroundColor: theme.palette.background.paper,
             border: '2px solid #000',
             boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3),
+            padding: theme.spacing(2, 4, 3, 2),
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center'
         },
+        buttonBack: {
+            display: 'flex',
+            justifyContent: 'start',
+            margin: theme.spacing(2, 0, 3, 0),
+            maxWidth: theme.spacing(11),
+        },
+        alert: {
+            marginTop: theme.spacing(6),
+            width: '90vw',
+        },
+        stepper: {
+            width: '90vw',
+        }
 
     }),
 );

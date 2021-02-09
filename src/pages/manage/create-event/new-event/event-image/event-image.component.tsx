@@ -1,8 +1,10 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Button, FormControl } from '@material-ui/core';
+import React from 'react';
+
 import { useUploadStyles } from './event-image.styles';
 
-const AvatarUploadStep = ({ imageValue, onImageUpload }) => {
+import { Button, FormControl } from '@material-ui/core';
+
+const ImageUploud = ({ imageValue, onImageUpload }) => {
     const classes = useUploadStyles();
 
     return (
@@ -29,4 +31,4 @@ const AvatarUploadStep = ({ imageValue, onImageUpload }) => {
 
 }
 
-export default AvatarUploadStep;
+export default ImageUploud;

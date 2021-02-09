@@ -16,9 +16,9 @@ const INITIAL_STATE: IStateNav = {
             url: "/upcoming-events",
         },
         {
-            name: "Create Event",
+            name: "Manage",
             id: 1,
-            url: "/create-event",
+            url: "/Manage",
         },
         {
             name: "Notice Board",

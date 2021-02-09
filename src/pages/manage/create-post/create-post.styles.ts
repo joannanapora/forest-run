@@ -32,9 +32,9 @@ export const useCreatePostStyles = makeStyles((theme: Theme) =>
         },
         buttonBack: {
             display: 'flex',
-            justifyContent: 'start',
+            justifyContent: 'center',
             margin: theme.spacing(0, 0, 5, 0),
-            maxWidth: theme.spacing(11),
+            maxWidth: theme.spacing(12),
         },
         quill: {
             height: '100%',
@@ -81,5 +81,26 @@ export const useCreatePostStyles = makeStyles((theme: Theme) =>
         },
         chip: {
             margin: theme.spacing(0.5),
+        },
+        alert: {
+            marginTop: theme.spacing(5)
+        },
+        upload: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+
+        },
+        successUpload: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        image: {
+            padding: theme.spacing(2),
+        },
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 150,
+            maxWidth: 300,
         },
     }));

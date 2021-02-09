@@ -1,7 +1,7 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
 
-export const useDeletePostStyles = makeStyles((theme: Theme) =>
+export const useDeleteEventStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
             display: 'flex',
@@ -62,5 +62,8 @@ export const useDeletePostStyles = makeStyles((theme: Theme) =>
                 marginRight: theme.spacing(1),
                 marginLeft: theme.spacing(1),
             }
+        },
+        alert: {
+            marginTop: theme.spacing(6),
         }
     }));

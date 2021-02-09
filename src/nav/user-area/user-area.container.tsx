@@ -1,12 +1,16 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+
 import { useUserAreaStyles } from './user-area.styles';
+
+import { Button, TextField, Typography, } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import { Button, TextField, } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import { connect } from 'react-redux';
+
 import { selectCurrentUser } from '../../store-redux/user/user.selectors';
-import { createStructuredSelector } from 'reselect';
 import { IUser, setCurrentUser } from '../../store-redux/index'
+import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+
 import { UPDATE_USERNAME } from '../../grapQL/user/user.mutation';
 import { useMutation } from '@apollo/react-hooks';
 
@@ -22,7 +26,7 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
 
     const classes = useUserAreaStyles();
     const [usernameButton, setUsernameClicked]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
-    const [usernameInput, setUsernameInput]: [string, Dispatch<SetStateAction<string>>] = useState(user?.username || "My Username");
+    const [usernameInput, setUsernameInput]: [string, Dispatch<SetStateAction<string>>] = useState(user?.username || 'My Profile');
     const [alert, setAlert]: [IAlert, Dispatch<SetStateAction<IAlert>>] = useState({
         usernameIncorrect: false,
         usernameIsTaken: false,
@@ -31,9 +35,6 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
     });
 
     useEffect(() => {
-        if (localStorage.getItem("token") === null) {
-            setUsernameInput("My Username")
-        }
     }, [usernameInput, usernameButton]);
 
     const changeUsername = () => {
@@ -47,23 +48,35 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
     }
 
     const handleUsernameChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setAlert({
+            usernameIncorrect: false,
+            usernameIsTaken: false,
+            usernameChanged: false,
+            internalBackendError: false
+        });
         setUsernameInput(event.target.value);
     };
 
-    const [updateUsername, { loading, error, data }] = useMutation(UPDATE_USERNAME, {
-        onCompleted: () => {
+    const [updateUsername] = useMutation(UPDATE_USERNAME, {
+        onCompleted: (result) => {
             setAlert({ ...alert, usernameChanged: true });
             setUsernameClicked(false);
             dispatchSetCurrentUser({
-                username: data.login.username
+                username: result.updateUsername.username
             });
         },
-        onError: (error) => setAlert({ ...alert, usernameChanged: true }),
+        onError: (error) => {
+            if ((error.graphQLErrors[0].message as any).statusCode === 409) {
+                setAlert({ ...alert, usernameIsTaken: true })
+            }
+            if ((error.graphQLErrors[0].message as any).statusCode === 500) {
+                setAlert({ ...alert, internalBackendError: true })
+            }
+        }
     });
 
 
-
-    const handleEnter = (event) => {
+    const handleEnter = (event: React.KeyboardEvent<any>) => {
         if (event.key === "Enter") {
             if (usernameInput.length < 3 || usernameInput.length > 19) {
                 setAlert({
@@ -81,6 +94,7 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
         };
     };
 
+
     return (
         <div className={classes.root}>
             {usernameButton ?
@@ -95,7 +109,11 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
                 </div>
                 :
                 <div className={classes.usernameButton}>
-                    <Button disabled={usernameInput === "My Username"} onClick={changeUsername}>{usernameInput}</Button>
+                    {user.username ?
+                        <Button onClick={changeUsername}>{usernameInput}</Button>
+                        :
+                        <Typography>My Profile</Typography>
+                    }
                 </div>}
             {
                 alert.usernameChanged ? (
