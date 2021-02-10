@@ -9,7 +9,7 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
         },
         rootfilters: {
             display: 'flex',
-            padding: theme.spacing(0, 0, 2, 2),
+            padding: theme.spacing(2, 0, 2, 2),
         },
         container: {
             display: 'flex',
@@ -44,16 +44,9 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
             },
         },
         alert: {
-            marginTop: theme.spacing(5)
+            marginTop: theme.spacing(8)
         },
         mutationAlert: {
             marginBottom: theme.spacing(2)
         },
-        progress: {
-            display: 'flex',
-            '& > * + *': {
-                marginLeft: theme.spacing(2),
-            },
-        },
-    }),
-);
+    }));

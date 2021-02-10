@@ -18,7 +18,7 @@ import { mapOptionsToWhen } from '../../../models/when.enum';
 import { Paper, StepContent, StepLabel } from '@material-ui/core';
 
 import { useMutation } from '@apollo/react-hooks';
-import { CREATE_EVENT } from '../../../grapQL';
+import { CREATE_EVENT, GET_EVENTS } from '../../../grapQL';
 
 
 function getSteps() {
@@ -78,26 +78,26 @@ const CreateEvent = ({ history }) => {
         distance: '',
         image: null,
     })
-    
-    
+
+
     const [modalStyle] = useState(getModalStyle);
     const [dateValue, changeDate] = useState(new Date());
     const [timeValue, changeTime] = useState(new Date());
-    
+
     const [createEvent] = useMutation(CREATE_EVENT, {
         onCompleted: () => {
             setAlert({ ...alert, eventCreated: true });
         },
-        onError(e) {
-            if ((e.graphQLErrors[0].message as any).statusCode === 500) {
+        onError: (error) => {
+            if ((error.graphQLErrors[0].message as any).statusCode === 500) {
                 setAlert({ ...alert, internalBackendError: true });
             }
-            if ((e.graphQLErrors[0].message as any).statusCode === 400) {
-                if ((e.graphQLErrors[0].message as any).message === "date-in-past") {
+            if ((error.graphQLErrors[0].message as any).statusCode === 400) {
+                if ((error.graphQLErrors[0].message as any).message === "date-in-past") {
                     setAlert({ ...alert, dateInPast: true });
                 }
             }
-            if ((e.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
+            if ((error.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
                 setAlert({ ...alert, pleaseLogin: true })
             }
         }
@@ -268,8 +268,17 @@ const CreateEvent = ({ history }) => {
                     organizerPhoneNumber: allDetails.organizerPhoneNumber,
                     meetingPoint: allDetails.meetingPoint,
                     description: allDetails.eventDescription
-                }
-            }
+                },
+                refetchQueries: [{
+                    query: GET_EVENTS,
+                    variables: {
+                        filters: {
+                            me: false,
+                        }
+                    }
+                }],
+            },
+
         );
     }
 
@@ -355,26 +364,26 @@ const CreateEvent = ({ history }) => {
             </Button>
                         {
                             alert.eventCreated ? (
-                                <Alert severity="success">New event has been created.</Alert>
+                                <div className={classes.alert}><Alert severity="success">New event has been created.</Alert></div>
                             ) : null
                         }
                         {
                             alert.internalBackendError ? (
-                                <Alert severity="error">Ooops! Something went wrong, try again later.</Alert>
+                                <div className={classes.alert}><Alert severity="error">Ooops! Something went wrong, try again later.</Alert></div>
                             ) : null
                         }
                         {
                             alert.dateInPast ? (
-                                <Alert severity="error">You've entered date in the past.</Alert>
+                                <div className={classes.alert}><Alert severity="error">You've entered date in the past.</Alert></div>
                             ) : null
                         }
-                          {
-                            alert.dateInPast ? (
-                                <Alert severity="error">Please login to create event.</Alert>
+                        {
+                            alert.pleaseLogin ? (
+                                <div className={classes.alert}><Alert severity="error">Please login to create event.</Alert></div>
                             ) : null
                         }
-                    </div>
-                </Paper>
+                    </div >
+                </Paper >
             )}
             <Modal
                 open={openModal}
@@ -384,7 +393,7 @@ const CreateEvent = ({ history }) => {
             >
                 {bodyConfirmPost}
             </Modal>
-        </div>
+        </div >
     )
 };
 

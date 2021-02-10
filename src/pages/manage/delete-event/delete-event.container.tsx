@@ -19,12 +19,12 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { format } from 'date-fns';
 
 interface IAllAlerts {
-    postDeleted: boolean;
+    eventDeleted: boolean;
     internalBackendError: boolean;
     pleaseLogIn: boolean;
 }
 
-const DeletePost = ({ history }) => {
+const DeleteEvent = ({ history }) => {
     const [articleState, setArticleStateState] = useState(null);
     const [modalStyle] = useState(getModalStyle);
     const [openModal, setOpenModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
@@ -33,7 +33,7 @@ const DeletePost = ({ history }) => {
         {
             internalBackendError: false,
             pleaseLogIn: false,
-            postDeleted: false,
+            eventDeleted: false,
         }
     );
 
@@ -43,25 +43,25 @@ const DeletePost = ({ history }) => {
         onCompleted: (result) => {
             let articlesStateObj = {};
 
-            result.posts.forEach(post => {
-                articlesStateObj[post.id] = false;
+            result.events.forEach(event => {
+                articlesStateObj[event.id] = false;
             });
 
             setArticleStateState(articlesStateObj);
         },
-        onError(e) {
-            if ((e.graphQLErrors[0].message as any).statusCode === 500) {
+        onError: (error) => {
+            if ((error.graphQLErrors[0].message as any).statusCode === 500) {
                 setAlert({ ...alert, internalBackendError: true });
             }
-            if ((e.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
+            if ((error.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
                 setAlert({ ...alert, pleaseLogIn: true })
             }
         }
     });
 
 
-    const [deletePost] = useMutation(DELETE_EVENT, {
-        onError(e) {
+    const [deleteEvent] = useMutation(DELETE_EVENT, {
+        onError: (e) => {
             if ((e.graphQLErrors[0].message as any).statusCode === 500) {
                 setAlert({ ...alert, internalBackendError: true });
             }
@@ -72,7 +72,7 @@ const DeletePost = ({ history }) => {
         onCompleted: () => {
             setOpenModal(false);
             refetch();
-            setAlert({ ...alert, postDeleted: true });
+            setAlert({ ...alert, eventDeleted: true });
         }
     });
 
@@ -113,16 +113,24 @@ const DeletePost = ({ history }) => {
     const handleYes = () => {
         let listOfObjectsToDelete = [];
 
-        for (const postId in articleState) {
-            if (articleState[postId] === true) {
-                listOfObjectsToDelete.push(postId);
+        for (const eventId in articleState) {
+            if (articleState[eventId] === true) {
+                listOfObjectsToDelete.push(eventId);
             }
         }
-        deletePost(
+        deleteEvent(
             {
                 variables: {
                     ids: listOfObjectsToDelete
                 },
+                refetchQueries: [{
+                    query: GET_EVENTS,
+                    variables: {
+                        filters: {
+                            me: false,
+                        }
+                    }
+                }],
             }
         );
     };
@@ -197,21 +205,21 @@ const DeletePost = ({ history }) => {
                 {alert.pleaseLogIn ? (
                     <Alert severity="warning">Please log in to delete event.</Alert>
                 ) : null}
-                {alert.postDeleted ? (
+                {alert.eventDeleted ? (
                     <Alert severity="success">Event/s has been deleted.</Alert>
                 ) : null}
 
                 <FormGroup>
                     {
                         articleState ?
-                            data?.posts?.map((post) => {
+                            data?.events?.map((event) => {
                                 return (
-                                    <FormControlLabel key={post.id}
+                                    <FormControlLabel key={event.id}
                                         control={
                                             <Checkbox
-                                                checked={articleState[post.id]}
-                                                onChange={(e) => handleChange(e, post.id)}
-                                                name={post.id}
+                                                checked={articleState[event.id]}
+                                                onChange={(e) => handleChange(e, event.id)}
+                                                name={event.id}
                                                 color="primary"
                                             />
                                         }
@@ -219,10 +227,10 @@ const DeletePost = ({ history }) => {
                                         label={
                                             <div className={classes.articlesFormLabel}>
                                                 <div className={classes.date}>
-                                                    {format(new Date(post.dateCreated), 'dd/MM/yyyy')}
+                                                    {format(new Date(event.date), 'dd/MM/yyyy')}
                                                 </div>
                                                 <div>
-                                                    {post.title}
+                                                    {event.location}
                                                 </div>
                                             </div>
                                         }
@@ -255,4 +263,4 @@ const DeletePost = ({ history }) => {
     )
 };
 
-export default withRouter(DeletePost);
+export default withRouter(DeleteEvent);

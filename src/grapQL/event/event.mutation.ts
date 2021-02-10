@@ -25,6 +25,7 @@ mutation createEvent(
     organizerPhoneNumber:  $organizerPhoneNumber
         }
     ) {
+        id
         time
         location
         distance

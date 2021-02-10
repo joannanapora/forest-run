@@ -46,7 +46,7 @@ const SignIn = ({ dispatchSetCurrentUser, history }) => {
                 username: result.data.login.username
             });
         },
-        onError(e) {
+        onError: (e) => {
             if ((e.graphQLErrors[0].message as any).statusCode === 500) {
                 setErrors({ ...errors, internalBackendError: true });
             }

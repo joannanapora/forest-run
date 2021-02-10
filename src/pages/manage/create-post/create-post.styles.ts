@@ -83,7 +83,7 @@ export const useCreatePostStyles = makeStyles((theme: Theme) =>
             margin: theme.spacing(0.5),
         },
         alert: {
-            marginTop: theme.spacing(5)
+            marginTop: theme.spacing(8)
         },
         upload: {
             display: 'flex',

@@ -7,7 +7,6 @@ import { FormControl, Input, InputAdornment, InputLabel, CardContent, Typography
 import { Alert } from '@material-ui/lab';
 
 
-
 const Donate = () => {
     const classes = useDonateStyles();
 
@@ -54,7 +53,7 @@ const Donate = () => {
                     <InputLabel htmlFor="standard-adornment-amount">Amount</InputLabel>
                     <Input
                         type='number'
-                        id="standard-adornment-amount"
+                        id="amount"
                         value={amount}
                         onChange={handleAmountChange}
                         startAdornment={<InputAdornment position="start">£</InputAdornment>}

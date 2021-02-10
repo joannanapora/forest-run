@@ -26,9 +26,11 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
         },
         actionsContainer: {
             marginBottom: theme.spacing(2),
+            width: '90vw',
         },
         resetContainer: {
-            padding: theme.spacing(3),
+            paddingLeft: theme.spacing(3),
+            width: '90vw',
         },
         confirmButtons: {
             display: 'flex',
@@ -42,17 +44,19 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(2, 4, 3, 2),
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            background: '#fff',
         },
         buttonBack: {
             display: 'flex',
             justifyContent: 'start',
-            margin: theme.spacing(2, 0, 3, 0),
-            maxWidth: theme.spacing(11),
+            margin: theme.spacing(4, 0, 3, 0),
+            maxWidth: theme.spacing(13),
         },
         alert: {
-            marginTop: theme.spacing(6),
-            width: '90vw',
+            marginTop: theme.spacing(4),
+            width: '25vw',
+            marginBottom: theme.spacing(4)
         },
         stepper: {
             width: '90vw',

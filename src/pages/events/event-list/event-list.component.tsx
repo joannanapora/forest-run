@@ -81,18 +81,12 @@ const EventList = ({ user }: { user: IUser }) => {
 
     if (!data) {
         return (
-            <div className={classes.alert}><div className={classes.progress}>
-                <CircularProgress />
-           Loading...
-          </div></div>)
+            <div className={classes.alert}><Alert severity="warning">Loading...</Alert></div>)
     };
 
     if (loading) {
         return (
-            <div className={classes.alert}><div className={classes.progress}>
-                <CircularProgress />
-           Loading...
-          </div></div>)
+            <div className={classes.alert}><Alert severity="warning">Loading...</Alert></div>)
     };
 
     if (error) {

@@ -62,25 +62,18 @@ function CreateNewPost({ history }) {
 
     const [createPost, { loading }] = useMutation(
         CREATE_POST, {
-        onCompleted: () => { redirectToArticles() },
-        onError(e) {
+        onCompleted: () => {
+            console.log('done')
+            redirectToArticles();
+        },
+        onError: (e) => {
             if ((e.graphQLErrors[0].message as any).statusCode === 500) {
                 setAlert({ ...alert, internalBackendError: true });
             }
-            if ((e.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
+            if ((e.graphQLErrors[0].message) === "Token error: jwt expired") {
                 setAlert({ ...alert, pleaseLogIn: true })
             }
         },
-        refetchQueries: [
-            {
-                query: GET_POSTS,
-                variables: {
-                    filters: {
-                        me: false
-                    }
-                }
-            }
-        ]
     });
 
     useEffect(() => {
@@ -180,7 +173,16 @@ function CreateNewPost({ history }) {
                     keywords: postValues.keywords.map((keyword) => {
                         return keyword.label;
                     })
-                }
+                },
+                refetchQueries: [{
+                    query: GET_POSTS,
+                    variables: {
+                        filters: {
+                            me: false,
+                            phrase: ""
+                        }
+                    }
+                }],
             }
         );
     };

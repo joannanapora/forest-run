@@ -24,10 +24,8 @@ const NoticeBoard = () => {
                 phrase: searchPhrase
             }
         },
+        onCompleted: (a) => { console.log('updating', a) }
     });
-
-    useEffect(() => {
-    }, [searchPhrase]);
 
 
     const handleSearch = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,21 +38,19 @@ const NoticeBoard = () => {
             <div className={classes.alert}><Alert severity="error">Ooops! Try again later.</Alert></div>)
     }
 
-
+    console.log('przed returnem')
     return (
         <div className={classes.container}>
             <div className={classes.speedDial}>
                 <SearchPost onChange={handleSearch} value={searchPhrase} />
             </div>
             <div className={classes.scrollArea}>
-                {
-                    loading ?
-                        <div className={classes.alert}><div className={classes.progress}>
-                            <CircularProgress />
-               Loading...
-              </div></div>
-                        :
-                        null
+                {loading ?
+                    <div className={classes.noResults}>
+                        <Typography className={classes.cardRoot}>
+                            Loading...
+                      </Typography>
+                    </div> : null
                 }
                 {
                     data?.posts?.length < 1 ?

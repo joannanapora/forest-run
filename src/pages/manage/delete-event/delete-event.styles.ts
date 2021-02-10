@@ -64,6 +64,6 @@ export const useDeleteEventStyles = makeStyles((theme: Theme) =>
             }
         },
         alert: {
-            marginTop: theme.spacing(6),
+            marginTop: theme.spacing(8),
         }
     }));

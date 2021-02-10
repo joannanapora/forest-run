@@ -66,7 +66,7 @@ const SignUp = () => {
                 setNotification({...notifications, userRegistered: true});
                 clearAllInputs();
             },
-            onError(e) {
+            onError:(e)=> {
                 if ((e.graphQLErrors[0].message as any).statusCode === 409) {
                     setNotification({...notifications, usernameExists: true});
                 }
@@ -249,7 +249,7 @@ const SignUp = () => {
                     value={values.password}
                     onChange={handleChange('password')}
                     endAdornment={
-                        <InputAdornment position="end">
+                        <InputAdornment position="end"  variant= 'standard'>
                             <IconButton
                                 aria-label="toggle password visibility"
                                 onClick={handleClickShowPassword}

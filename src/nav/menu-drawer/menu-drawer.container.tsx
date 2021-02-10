@@ -13,6 +13,7 @@ import { useMenuDrawerStyles, light, dark } from "./menu-drawer.styles";
 import Donate from "../../pages/donate/donate.component";
 import Manage from '../../pages/manage/manage.component';
 import Username from "../user-area/user-area.container";
+import DeleteEvent from '../../pages/manage/delete-event/delete-event.container';
 
 import { Switch, Route, withRouter, Link } from "react-router-dom";
 import { connect } from 'react-redux';
@@ -154,7 +155,7 @@ const MenuDrawer = ({ user, tabs, dispatchUser }: { user: IUser, tabs: ITabs, di
             <Route path='/manage/add-post' component={CreateNewPost} />
             <Route path='/manage/delete-post' component={DeletePost} />
             <Route path='/manage/create-event' component={CreateEvent} />
-            <Route path='/manage/cancel-event' component={CreateEvent} />
+            <Route path='/manage/cancel-event' component={DeleteEvent} />
             <Route path='/upcoming-events' component={EventList} />
             <Route path='/sign-up' component={SignInUp} />
             <Route path='/messages' component={UpcomingEvent} />

@@ -15,6 +15,7 @@ mutation createPost(
             keywords: $keywords
         }
     ) {
+        id
         title
         keywords
         text

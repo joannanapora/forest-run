@@ -49,7 +49,7 @@ const DeletePost = ({ history }) => {
 
             setArticleStateState(articlesStateObj);
         },
-        onError(e) {
+        onError: (e) => {
             if ((e.graphQLErrors[0].message as any).statusCode === 500) {
                 setAlert({ ...alert, internalBackendError: true });
             }
@@ -61,7 +61,7 @@ const DeletePost = ({ history }) => {
 
 
     const [deletePost] = useMutation(DELETE_POST, {
-        onError(e) {
+        onError: (e) => {
             if ((e.graphQLErrors[0].message as any).statusCode === 500) {
                 setAlert({ ...alert, internalBackendError: true });
             }
@@ -104,6 +104,15 @@ const DeletePost = ({ history }) => {
                 variables: {
                     ids: listOfObjectsToDelete
                 },
+                refetchQueries: [{
+                    query: GET_POSTS,
+                    variables: {
+                        filters: {
+                            me: false,
+                            phrase: ""
+                        }
+                    }
+                }],
             }
         );
     };
