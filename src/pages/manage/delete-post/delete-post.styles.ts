@@ -65,5 +65,10 @@ export const useDeletePostStyles = makeStyles((theme: Theme) =>
         },
         alert: {
             marginTop: theme.spacing(8),
-        }
+        },
+        noPosts: {
+            marginBottom: theme.spacing(2),
+            width: '100%',
+            textAlign: 'center'
+        },
     }));

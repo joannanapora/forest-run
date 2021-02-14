@@ -178,7 +178,7 @@ const SignUp = () => {
                     value={values.password}
                     onChange={handleChange('password')}
                     endAdornment={
-                        <InputAdornment position="end">
+                        <InputAdornment position="end" variant= 'standard'>
                             <IconButton
                                 aria-label="toggle password visibility"
                                 onClick={handleClickShowPassword}
@@ -276,9 +276,6 @@ const SignUp = () => {
                     type={'password'}
                     value={values.confirmPassword}
                     onChange={handleChange('confirmPassword')}
-                    endAdornment={
-                        <InputAdornment position="end" />
-                    }
                 />
             </FormControl>
             {

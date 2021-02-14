@@ -7,18 +7,24 @@ mutation createPost(
     $title: String!
     $keywords: [String!]!
     $text: String!
+    $imageId: String
 ) {
     createPost(
         createPostInput: {
             title: $title
             text: $text
             keywords: $keywords
+            imageId: $imageId
         }
     ) {
         id
         title
         keywords
         text
+        image {
+            id,
+            url
+        }
     }
 }
 `

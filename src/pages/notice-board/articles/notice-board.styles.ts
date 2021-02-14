@@ -77,4 +77,9 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
                 marginLeft: theme.spacing(2),
             },
         },
+        noPosts: {
+            marginBottom: theme.spacing(2),
+            width: '100%',
+            textAlign: 'center'
+        },
     }));

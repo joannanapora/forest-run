@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost';
 
 export const CREATE_EVENT = gql`
 mutation createEvent(
-    $date: String!
+    $date: String
     $time: String!
     $location: String!
     $distance: Int!
@@ -11,6 +11,7 @@ mutation createEvent(
     $description: String!
     $organizerName: String!
     $organizerPhoneNumber: String!
+    $imageId: String!
 ) {
     createEvent(
         createEventInput: {
@@ -23,6 +24,7 @@ mutation createEvent(
     description : $description
     organizerName: $organizerName
     organizerPhoneNumber:  $organizerPhoneNumber
+    imageId: $imageId
         }
     ) {
         id
@@ -32,7 +34,10 @@ mutation createEvent(
         meetingPoint
         organizerName
         organizerPhoneNumber
-        
+        image {
+            id
+            url
+        }
     }
 }
 `

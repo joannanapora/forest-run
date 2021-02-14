@@ -29,7 +29,7 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
             width: '90vw',
         },
         resetContainer: {
-            paddingLeft: theme.spacing(3),
+            paddingLeft: theme.spacing(2),
             width: '90vw',
         },
         confirmButtons: {
@@ -41,7 +41,7 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             border: '2px solid #000',
             boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3, 2),
+            padding: theme.spacing(2, 4, 3, 0),
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -50,7 +50,7 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
         buttonBack: {
             display: 'flex',
             justifyContent: 'start',
-            margin: theme.spacing(4, 0, 3, 0),
+            margin: theme.spacing(5, 0, 1, 0),
             maxWidth: theme.spacing(13),
         },
         alert: {

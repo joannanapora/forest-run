@@ -8,15 +8,20 @@ export const GET_EVENTS = gql`
       time,
       location,
       distance,
+      description,
       meetingPoint,
       when,
       participateCounter,
       organizerName,
+      organizerPhoneNumber,
       isAssign,
       user {
         username
-      }
+      },
+      image {
+        id
+        url
+    }
     }
   }
 `
-

@@ -18,8 +18,8 @@ import { mapOptionsToWhen } from '../../../models/when.enum';
 import { Paper, StepContent, StepLabel } from '@material-ui/core';
 
 import { useMutation } from '@apollo/react-hooks';
+import { postImage } from '../../../axios/image.api';
 import { CREATE_EVENT, GET_EVENTS } from '../../../grapQL';
-
 
 function getSteps() {
     return ['Set up event details', 'Meeting place and Event description', 'Upload Event Image'];
@@ -54,6 +54,7 @@ const CreateEvent = ({ history }) => {
     const classes = useCreateEventStyles();
     const [activeStep, setActiveStep]: [number, Dispatch<SetStateAction<number>>] = useState(0);
     const [openModal, setOpenModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [imgid, setImageId]: [string, Dispatch<SetStateAction<string>>] = useState("");
     const [alert, setAlert]: [Notifications, Dispatch<SetStateAction<Notifications>>] = useState({
         internalBackendError: false,
         dateInPast: false,
@@ -118,7 +119,11 @@ const CreateEvent = ({ history }) => {
             pleaseLogin: false,
         });
         if (prop === 'image') {
-            setAllDetails({ ...allDetails, image: event.target.files[0] });
+            postImage(event.target.files[0])
+                .then((result) => {
+                    setAllDetails({ ...allDetails, image: event.target.files[0] });
+                    setImageId(result.data.id);
+                })
         } else {
             setAllDetails({ ...allDetails, [prop]: event.target.value });
         }
@@ -260,20 +265,24 @@ const CreateEvent = ({ history }) => {
             {
                 variables: {
                     when: mapOptionsToWhen(allDetails.when),
-                    date: dateValue.toISOString(),
+                    ...mapOptionsToWhen(allDetails.when) === 0 && { date: dateValue.toISOString() },
                     time: timeValue.toISOString(),
                     location: allDetails.location,
                     distance: Number(allDetails.distance),
                     organizerName: allDetails.organizerName,
                     organizerPhoneNumber: allDetails.organizerPhoneNumber,
                     meetingPoint: allDetails.meetingPoint,
-                    description: allDetails.eventDescription
+                    description: allDetails.eventDescription,
+                    imageId: imgid
                 },
                 refetchQueries: [{
                     query: GET_EVENTS,
                     variables: {
                         filters: {
                             me: false,
+                            participateCounter: undefined,
+                            distance: undefined,
+                            joined: false,
                         }
                     }
                 }],

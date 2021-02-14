@@ -7,6 +7,7 @@ import { useEventStyles } from './event.styles';
 import { CardContent, CardActions, CardHeader, Card, CardMedia, Collapse, IconButton, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PeopleIcon from '@material-ui/icons/People';
+import PhoneIcon from '@material-ui/icons/Phone';
 
 
 
@@ -54,21 +55,25 @@ const UpcomingEvent = ({ location, date, image, description, when, distance, tim
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <Typography paragraph>Meeting Point</Typography>
+                    <Typography color="primary" className={classes.typographyEventCard} >Meeting Point</Typography>
                     <Typography paragraph>
                         {meetingPoint}
                     </Typography>
-                    <Typography paragraph>Description</Typography>
+                    <Typography color="primary" className={classes.typographyEventCard} >Description</Typography>
                     <Typography paragraph>
                         {description}
                     </Typography>
-                    <Typography paragraph>Organizer</Typography>
+                    <Typography color="primary" className={classes.typographyEventCard} >Organizer</Typography>
                     <Typography paragraph>
-                        <span>{organizerName}<br />{organizerPhoneNumber}</span>
+                        {organizerName}
+                    </Typography>
+                    <Typography color="primary" className={classes.typographyEventCard} >Contact</Typography>
+                    <Typography paragraph>
+                        {organizerPhoneNumber}
                     </Typography>
                 </CardContent>
             </Collapse>
-        </Card>
+        </Card >
     );
 };
 

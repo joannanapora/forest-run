@@ -30,6 +30,9 @@ export const useEventStyles = makeStyles((theme: Theme) =>
         },
         counter: {
             marginLeft: theme.spacing(2),
+        },
+        typographyEventCard: {
+            fontSize: 12,
         }
     }),
 );

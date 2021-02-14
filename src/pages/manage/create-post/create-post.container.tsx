@@ -19,6 +19,7 @@ import { useMutation } from '@apollo/react-hooks';
 
 import SpinnerButton from '../../../shared/spinner-button.component';
 import { withRouter } from 'react-router-dom';
+import { postImage } from '../../../axios/image.api';
 
 
 interface ChipData {
@@ -44,6 +45,7 @@ interface IAllAlerts {
 
 function CreateNewPost({ history }) {
     const [chip, setChip]: [string, Dispatch<SetStateAction<string>>] = useState('');
+    const [imgid, setImageId]: [string, Dispatch<SetStateAction<string>>] = useState("");
 
     const [alert, setAlert]: [IAllAlerts, Dispatch<SetStateAction<IAllAlerts>>] = useState({
         emptyText: false,
@@ -94,8 +96,12 @@ function CreateNewPost({ history }) {
     };
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPostValues({ ...postValues, image: event.target.files[0] })
-    }
+        postImage(event.target.files[0])
+            .then((result) => {
+                setPostValues({ ...postValues, image: event.target.files[0] });
+                setImageId(result.data.id);
+            })
+    };
 
     const handleTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
         setAlert({
@@ -169,6 +175,7 @@ function CreateNewPost({ history }) {
             {
                 variables: {
                     title: postValues.title,
+                    imageId: imgid,
                     text: postValues.text,
                     keywords: postValues.keywords.map((keyword) => {
                         return keyword.label;

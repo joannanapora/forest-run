@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 
 import { useDeletePostStyles } from './delete-post.styles';
 
@@ -39,7 +39,12 @@ const DeletePost = ({ history }) => {
 
 
     const { loading, error, data, refetch } = useQuery(GET_POSTS, {
-        variables: { filters: { me: true } },
+        variables: {
+            filters: {
+                me: true,
+                phrase: "",
+            }
+        },
         onCompleted: (result) => {
             let articlesStateObj = {};
 
@@ -205,6 +210,12 @@ const DeletePost = ({ history }) => {
                     <Alert severity="success">Post/s has been deleted.</Alert>
                 ) : null}
                 <FormGroup>
+                    {
+                        data?.posts.length < 1 ?
+                            <div className={classes.noPosts}>There are no posts.</div>
+                            :
+                            null
+                    }
                     {
                         articleState ?
                             data?.posts?.map((post) => {

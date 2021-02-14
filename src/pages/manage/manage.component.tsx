@@ -20,21 +20,25 @@ const cards = [
         url: 'https://www.flaticon.com/premium-icon/icons/svg/3222/3222020.svg',
         title: 'Add Post',
         width: '25%',
+        id: 0,
     },
     {
         url: 'https://www.flaticon.com/premium-icon/icons/svg/3221/3221897.svg',
         title: 'Delete Post',
         width: '25%',
+        id: 1,
     },
     {
         url: 'https://www.flaticon.com/premium-icon/icons/svg/3475/3475884.svg',
         title: 'Create Event',
         width: '25%',
+        id: 2,
     },
     {
         url: 'https://www.flaticon.com/premium-icon/icons/svg/4144/4144559.svg',
         title: 'Cancel Event',
         width: '25%',
+        id: 3,
     },
 ];
 
@@ -69,7 +73,7 @@ const Manage = ({ history, user }: { history, user: IUser }) => {
                         <ButtonBase
                             onClick={() => handleRedirectTo(image.title)}
                             focusRipple
-                            key={image.title}
+                            key={image.id}
                             className={classes.image}
                             focusVisibleClassName={classes.focusVisible}
                             style={{
@@ -104,7 +108,7 @@ const Manage = ({ history, user }: { history, user: IUser }) => {
                             <ButtonBase
                                 onClick={() => handleRedirectTo(image.title)}
                                 focusRipple
-                                key={image.title}
+                                key={image.id}
                                 className={classes.image}
                                 focusVisibleClassName={classes.focusVisible}
                                 style={{

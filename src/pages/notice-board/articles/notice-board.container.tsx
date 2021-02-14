@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import ReactHtmlParser from 'react-html-parser';
 
-import { Card, CardContent, Typography, CardActions, CardMedia, CircularProgress } from '@material-ui/core';
+import { Card, CardContent, Typography, CardActions, CardMedia } from '@material-ui/core';
 
 import { useNoticeBoardStyles } from './notice-board.styles';
 import SearchPost from '../search-post/search-post.component';
@@ -14,7 +14,9 @@ import { Alert } from '@material-ui/lab';
 
 
 const NoticeBoard = () => {
+
     const classes = useNoticeBoardStyles();
+
     const [searchPhrase, setSearchPhrase]: [string, Dispatch<SetStateAction<string>>] = useState('');
 
     const { loading, error, data, refetch } = useQuery(GET_POSTS, {
@@ -54,11 +56,7 @@ const NoticeBoard = () => {
                 }
                 {
                     data?.posts?.length < 1 ?
-                        <div className={classes.noResults}>
-                            <Typography className={classes.cardRoot}>
-                                No results :(
-                                    </Typography>
-                        </div>
+                        <div className={classes.noPosts}>There are no posts.</div>
                         :
                         <div className={classes.articles}>
                             {data?.posts?.map(post => {
@@ -66,7 +64,7 @@ const NoticeBoard = () => {
                                     <Card key={post.id} className={classes.cardRoot}>
                                         <CardMedia
                                             className={classes.media}
-                                            image="https://img.delicious.com.au/akWRpqCk/del/2016/04/silvia-collocas-vegan-lentil-and-sweet-potato-chickpea-stew-29566-3.jpg"
+                                            image={post.image ? post.image.url : "https://img.delicious.com.au/akWRpqCk/del/2016/04/silvia-collocas-vegan-lentil-and-sweet-potato-chickpea-stew-29566-3.jpg"}
                                         />
                                         <CardContent>
                                             <Typography variant="h6">

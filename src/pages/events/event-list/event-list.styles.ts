@@ -19,6 +19,9 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
             overflow: 'auto',
         },
         paper: {
+            display: 'flex',
+            justifyContent: 'space-evenly',
+            minWidth: '350px'
         },
         svg: {
         },

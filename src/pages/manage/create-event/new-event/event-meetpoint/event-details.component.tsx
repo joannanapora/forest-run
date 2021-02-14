@@ -13,13 +13,13 @@ const EventDetails = ({ changeOrganizerName, changeOrganizerPhoneNumber, changeM
             <TextField
                 value={organizerNameValue}
                 id="standard-textarea"
-                label="organizer's name"
+                label="Organizer's Name"
                 onChange={changeOrganizerName}
             />
             <TextField
                 value={organizerPhoneNumberValue}
                 id="standard-textarea"
-                label="organizer's phone nr"
+                label="Organizer's Phone Nr"
                 onChange={changeOrganizerPhoneNumber}
             />
             <TextField

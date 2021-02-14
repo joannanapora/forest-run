@@ -1,8 +1,8 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import UpcomingEvent from '../event-card/event.component';
-import { Grid, Switch, Paper, Fade, Button, IconButton, CircularProgress } from '@material-ui/core';
+import { Grid, Switch, Paper, Fade, Button, IconButton, CircularProgress, Typography } from '@material-ui/core';
 
 import { mapWhenToOptions } from '../../../models/when.enum';
 import { useEventListStyles } from './event-list.styles';
@@ -29,10 +29,27 @@ interface IAlerts {
     internalBackendError: boolean;
 }
 
+interface IFilters {
+    distance: string;
+    joined: boolean;
+    popular: string;
+}
+
 const EventList = ({ user }: { user: IUser }) => {
     const classes = useEventListStyles();
     const [checked, setChecked]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
     const [isClicked, setIsClicked]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [filter, setFilter]: [IFilters, Dispatch<SetStateAction<IFilters>>] = useState({
+        distance: "",
+        popular: "",
+        joined: false,
+    });
+
+    useEffect(() => {
+        refetch()
+    }, [])
+
+
     const [alert, setAlert]: [IAlerts, Dispatch<SetStateAction<IAlerts>>] = useState({
         pleaseLogin: false,
         joined: false,
@@ -44,14 +61,21 @@ const EventList = ({ user }: { user: IUser }) => {
         variables: {
             filters: {
                 me: false,
+                participateCounter: filter.popular,
+                distance: filter.distance,
+                joined: filter.joined,
             }
         },
-    });
+    },
+    );
+
+    console.log(GET_EVENTS)
 
     const [assignToEvent] = useMutation(ASSIGN_TO_EVENT, {
         onCompleted: () => {
             refetch();
-            setAlert({ ...alert, joined: true })
+            setAlert({ ...alert, joined: true, left: false })
+
         },
         onError: (error) => {
             if ((error.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
@@ -66,7 +90,7 @@ const EventList = ({ user }: { user: IUser }) => {
     const [unassignToEvent] = useMutation(UNASSIGN_TO_EVENT, {
         onCompleted: () => {
             refetch();
-            setAlert({ ...alert, left: true })
+            setAlert({ ...alert, left: true, joined: false })
         },
         onError: (error) => {
             if ((error.graphQLErrors[0].message) === "Cannot read property 'sub' of undefined") {
@@ -98,8 +122,29 @@ const EventList = ({ user }: { user: IUser }) => {
         setChecked((prev) => !prev);
     };
 
-    const handleSort = () => {
-    }
+    const handleDistance = () => {
+
+        setFilter({
+            distance: filter.distance !== "ASC" ? "ASC" : "DESC",
+            popular: undefined,
+            joined: null
+        })
+    };
+
+    const handlePopular = () => {
+        setFilter({
+            popular: filter.popular !== "ASC" ? "ASC" : "DESC",
+            distance: undefined,
+            joined: null,
+        })
+    };
+
+    const handleJoined = () => {
+        setFilter({
+            ...filter, joined: !filter.joined,
+        })
+    };
+
 
     const handleClickToJoin = (eventId, isAssigned) => {
         setIsClicked(!isClicked);
@@ -144,17 +189,7 @@ const EventList = ({ user }: { user: IUser }) => {
                                 size="small"
                                 className={classes.button}
                                 startIcon={<SortIcon />}
-                                onClick={handleSort}
-                            >
-                                Date
-      </Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                className={classes.button}
-                                startIcon={<SortIcon />}
-                                onClick={handleSort}
+                                onClick={handleDistance}
                             >
                                 Distance
       </Button>
@@ -164,9 +199,19 @@ const EventList = ({ user }: { user: IUser }) => {
                                 size="small"
                                 className={classes.button}
                                 startIcon={<SortIcon />}
-                                onClick={handleSort}
+                                onClick={handlePopular}
                             >
                                 Popular
+      </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                className={classes.button}
+                                startIcon={<SortIcon />}
+                                onClick={handleJoined}
+                            >
+                                Joined
       </Button>
                         </Paper>
                     </Fade>
@@ -190,12 +235,18 @@ const EventList = ({ user }: { user: IUser }) => {
                 }
                 <Grid container justify="space-evenly" spacing={2}>
                     {
+                        data?.events.length < 1 ?
+                            <div className={classes.mutationAlert}><Typography>There are no upcoming events.</Typography></div>
+                            :
+                            null
+                    }
+                    {
                         data?.events?.map((event) => {
                             return (<Grid key={event.id} item>
                                 <UpcomingEvent
                                     location={event.location}
                                     distance={event.distance}
-                                    image={"https://cdn.dribbble.com/users/1016207/screenshots/6380353/58.jpg?compress=1&resize=400x300"}
+                                    image={!event.image ? "https://cdn.dribbble.com/users/1016207/screenshots/6380353/58.jpg?compress=1&resize=400x300" : event.image.url}
                                     description={event.description}
                                     date={format(new Date(event.date), 'dd/MM/yyyy')}
                                     organizerName={event.organizerName}

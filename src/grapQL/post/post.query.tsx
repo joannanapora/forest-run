@@ -10,6 +10,10 @@ export const GET_POSTS = gql`
         keywords,
         user {
           username
+        },
+        image {
+          id,
+          url
         }
     }
   }
