@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useDonateStyles } from './donate.styles';
 import Stripe from '../../stripe/stripe.component';
 
-import { FormControl, Input, InputAdornment, InputLabel, CardContent, Typography, Card } from '@material-ui/core';
+import { FormControl, Input, InputAdornment, InputLabel, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 
 

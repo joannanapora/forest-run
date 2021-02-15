@@ -1,9 +1,9 @@
 {
-  "short_name": "React App",
+  "short_name": "Run Forest",
   "name": "Create React App Sample",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "https://cdn2.iconfinder.com/data/icons/pittogrammi/142/46-512.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },

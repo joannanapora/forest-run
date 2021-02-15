@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { useDeletePostStyles } from './delete-post.styles';
 

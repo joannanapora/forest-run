@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { IUser } from './user.reducer';
 
 const selectUser = state => state.user;
 

@@ -7,8 +7,6 @@ import { useEventStyles } from './event.styles';
 import { CardContent, CardActions, CardHeader, Card, CardMedia, Collapse, IconButton, Typography } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PeopleIcon from '@material-ui/icons/People';
-import PhoneIcon from '@material-ui/icons/Phone';
-
 
 
 const UpcomingEvent = ({ location, date, image, description, when, distance, time, organizerName, action, organizerPhoneNumber, meetingPoint, counter }) => {

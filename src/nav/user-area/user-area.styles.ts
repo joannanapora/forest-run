@@ -16,14 +16,12 @@ export const useUserAreaStyles = makeStyles((theme: Theme) =>
         textField: {
             width: '25ch',
         },
-        alertContainer: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2),
+        alert: {
+            marginBottom: theme.spacing(1),
         },
         usernameButton: {
             margin: theme.spacing(2, 0, 2, 0),
         }
-
     }
     ),
 );

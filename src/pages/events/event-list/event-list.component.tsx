@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import UpcomingEvent from '../event-card/event.component';
-import { Grid, Switch, Paper, Fade, Button, IconButton, CircularProgress, Typography } from '@material-ui/core';
+import { Grid, Switch, Paper, Fade, Button, IconButton, Typography } from '@material-ui/core';
 
 import { mapWhenToOptions } from '../../../models/when.enum';
 import { useEventListStyles } from './event-list.styles';
@@ -48,7 +48,7 @@ const EventList = ({ user }: { user: IUser }) => {
 
     useEffect(() => {
         refetch()
-    }, [])
+    })
 
 
     const [alert, setAlert]: [IAlerts, Dispatch<SetStateAction<IAlerts>>] = useState({
@@ -147,15 +147,13 @@ const EventList = ({ user }: { user: IUser }) => {
             );
         }
         else {
-            {
-                unassignToEvent(
-                    {
-                        variables: {
-                            eventId: eventId
-                        },
-                    }
-                );
-            };
+            unassignToEvent(
+                {
+                    variables: {
+                        eventId: eventId
+                    },
+                }
+            );
         }
 
     }

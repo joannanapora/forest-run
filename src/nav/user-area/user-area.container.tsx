@@ -84,6 +84,12 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
                     usernameIncorrect: true,
                 })
             };
+            if (usernameInput === user.username) {
+                return
+            };
+            if (usernameInput.indexOf(' ') >= 0) {
+                return
+            };
             updateUsername(
                 {
                     variables: {
@@ -117,22 +123,22 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
                 </div>}
             {
                 alert.usernameChanged ? (
-                    <Alert severity="success">Username changed!</Alert>
+                    <div className={classes.alert}><Alert severity="success">Username changed!</Alert></div>
                 ) : null
             }
             {
                 alert.usernameIncorrect ? (
-                    <Alert severity="error">Insert 3-18 characters!</Alert>
+                    <div className={classes.alert}><Alert severity="error">Insert 3-18 characters!</Alert></div>
                 ) : null
             }
             {
                 alert.internalBackendError ? (
-                    <Alert severity="error">Something went wrong! Try later.</Alert>
+                    <div className={classes.alert}><Alert severity="error">Something went wrong! Try later.</Alert></div>
                 ) : null
             }
             {
                 alert.usernameIsTaken ? (
-                    <Alert severity="error">Username is already taken.</Alert>
+                    <div className={classes.alert}><Alert severity="error">Username is already taken.</Alert></div>
                 ) : null
             }
             <Avatar alt="forest-img" className={classes.large}
