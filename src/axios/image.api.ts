@@ -9,8 +9,6 @@ export const postImage = (
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
     };
 
-    console.log(config)
-
     const formData = new FormData();
     formData.append("file", image);
 

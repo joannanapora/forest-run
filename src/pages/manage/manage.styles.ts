@@ -7,13 +7,13 @@ export const useManageStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexWrap: 'wrap',
             width: '100%',
-            minHeight: '80vh',
-            padding: theme.spacing(10, 35, 0, 5),
+            minHeight: '85vh',
+            padding: theme.spacing(14, 35, 0, 5),
             overflow: 'auto'
         },
         image: {
             position: 'relative',
-            height: '80vh',
+            height: '70vh',
             [theme.breakpoints.down('xs')]: {
                 width: '100% !important', // Overrides inline-style
                 height: '20vh',
@@ -76,7 +76,10 @@ export const useManageStyles = makeStyles((theme: Theme) =>
             transition: theme.transitions.create('opacity'),
         },
         alert: {
-            marginBottom: theme.spacing(1)
+            marginBottom: theme.spacing(1),
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'center'
         }
     }),
 );

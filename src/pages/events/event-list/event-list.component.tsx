@@ -21,6 +21,7 @@ import { connect } from 'react-redux';
 
 import { GET_EVENTS, ASSIGN_TO_EVENT, UNASSIGN_TO_EVENT } from '../../../grapQL';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+import CircularIndeterminate from '../../../shared/spinner.component';
 
 interface IAlerts {
     pleaseLogin: boolean;
@@ -69,8 +70,6 @@ const EventList = ({ user }: { user: IUser }) => {
     },
     );
 
-    console.log(GET_EVENTS)
-
     const [assignToEvent] = useMutation(ASSIGN_TO_EVENT, {
         onCompleted: () => {
             refetch();
@@ -101,17 +100,6 @@ const EventList = ({ user }: { user: IUser }) => {
             }
         }
     });
-
-
-    if (!data) {
-        return (
-            <div className={classes.alert}><Alert severity="warning">Loading...</Alert></div>)
-    };
-
-    if (loading) {
-        return (
-            <div className={classes.alert}><Alert severity="warning">Loading...</Alert></div>)
-    };
 
     if (error) {
         return (
@@ -191,7 +179,7 @@ const EventList = ({ user }: { user: IUser }) => {
                                 startIcon={<SortIcon />}
                                 onClick={handleDistance}
                             >
-                                Distance
+                                Miles
       </Button>
                             <Button
                                 variant="contained"
@@ -217,61 +205,72 @@ const EventList = ({ user }: { user: IUser }) => {
                     </Fade>
                 </div>
             </div>
-            <Grid item xs={12}>
-                {
-                    alert.pleaseLogin ?
-                        <div className={classes.mutationAlert}><Alert severity="warning">Please login to join the event.</Alert></div>
-                        : null
-                }
-                {
-                    alert.joined ?
-                        <div className={classes.mutationAlert}><Alert severity="success">You joined the event.</Alert></div>
-                        : null
-                }
-                {
-                    alert.left ?
-                        <div className={classes.mutationAlert}><Alert severity="error">You left the event.</Alert></div>
-                        : null
-                }
-                <Grid container justify="space-evenly" spacing={2}>
-                    {
-                        data?.events.length < 1 ?
-                            <div className={classes.mutationAlert}><Typography>There are no upcoming events.</Typography></div>
-                            :
-                            null
-                    }
-                    {
-                        data?.events?.map((event) => {
-                            return (<Grid key={event.id} item>
-                                <UpcomingEvent
-                                    location={event.location}
-                                    distance={event.distance}
-                                    image={!event.image ? "https://cdn.dribbble.com/users/1016207/screenshots/6380353/58.jpg?compress=1&resize=400x300" : event.image.url}
-                                    description={event.description}
-                                    date={format(new Date(event.date), 'dd/MM/yyyy')}
-                                    organizerName={event.organizerName}
-                                    organizerPhoneNumber={event.organizerPhoneNumber}
-                                    meetingPoint={event.meetingPoint}
-                                    time={new Date(Number(event.time)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    when={mapWhenToOptions(event.when)}
-                                    counter={event.participateCounter}
-                                    action={event.isAssign ?
-                                        <IconButton onClick={() => handleClickToJoin(event.id, event.isAssign)} aria-label="settings">
-                                            < PeopleAltIcon color='primary' />
-                                        </IconButton>
-                                        :
-                                        <IconButton onClick={() => handleClickToJoin(event.id, event.isAssign)} aria-label="settings">
-                                            < PersonAddIcon color='secondary' />
-                                        </IconButton>}
-                                />
-                                {event.isAssign ?
-                                    isClicked : !isClicked}
-                            </Grid>
-                            )
-                        })
-                    }
-                </Grid>
-            </Grid>
+            {
+                !data || loading ?
+                    <CircularIndeterminate />
+                    :
+                    <Grid item xs={12}>
+                        {
+                            alert.pleaseLogin ?
+                                <div className={classes.mutationAlert}><Alert severity="warning">Please login to join the event.</Alert></div>
+                                : null
+                        }
+                        {
+                            alert.joined ?
+                                <div className={classes.mutationAlert}><Alert severity="success">You have joined the event.</Alert></div>
+                                : null
+                        }
+                        {
+                            alert.left ?
+                                <div className={classes.mutationAlert}><Alert severity="error">You have left the event.</Alert></div>
+                                : null
+                        }
+                        <Grid container justify="space-evenly" spacing={2}>
+                            {
+                                data?.events.length < 1 && filter.joined ?
+                                    <div className={classes.mutationAlert}><Typography>There are no events you have joined.</Typography></div>
+                                    :
+                                    null
+                            }
+                            {
+                                data?.events.length < 1 ?
+                                    <div className={classes.mutationAlert}><Typography>There are no upcoming events.</Typography></div>
+                                    :
+                                    null
+                            }
+                            {
+                                data?.events?.map((event) => {
+                                    return (<Grid key={event.id} item>
+                                        <UpcomingEvent
+                                            location={event.location}
+                                            distance={event.distance}
+                                            image={!event.image ? "https://cdn.dribbble.com/users/1016207/screenshots/6380353/58.jpg?compress=1&resize=400x300" : event.image.url}
+                                            description={event.description}
+                                            date={format(new Date(event.date), 'dd/MM/yyyy')}
+                                            organizerName={event.organizerName}
+                                            organizerPhoneNumber={event.organizerPhoneNumber}
+                                            meetingPoint={event.meetingPoint}
+                                            time={new Date(Number(event.time)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            when={mapWhenToOptions(event.when)}
+                                            counter={event.participateCounter}
+                                            action={event.isAssign ?
+                                                <IconButton onClick={() => handleClickToJoin(event.id, event.isAssign)} aria-label="settings">
+                                                    < PeopleAltIcon color='primary' />
+                                                </IconButton>
+                                                :
+                                                <IconButton onClick={() => handleClickToJoin(event.id, event.isAssign)} aria-label="settings">
+                                                    < PersonAddIcon color='secondary' />
+                                                </IconButton>}
+                                        />
+                                        {event.isAssign ?
+                                            isClicked : !isClicked}
+                                    </Grid>
+                                    )
+                                })
+                            }
+                        </Grid>
+                    </Grid>
+            }
         </div>
     );
 }

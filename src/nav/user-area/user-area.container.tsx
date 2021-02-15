@@ -109,7 +109,7 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
                 </div>
                 :
                 <div className={classes.usernameButton}>
-                    {user.username ?
+                    {user?.username ?
                         <Button onClick={changeUsername}>{usernameInput}</Button>
                         :
                         <Typography>My Profile</Typography>

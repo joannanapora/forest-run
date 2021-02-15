@@ -7,8 +7,8 @@ const Stripe = ({ donation, handleToken }) => {
 
     return (
         <StripeCheckout
-            image="https://www.flaticon.com/svg/static/icons/svg/676/676163.svg"
-            name="Oh My Dog"
+            image="https://cdn2.iconfinder.com/data/icons/pittogrammi/142/46-512.png"
+            name="Run Forest, Run"
             description={`You are donating £${donation}`}
             label='Donate'
             panelLabel="Donate"

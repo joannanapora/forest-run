@@ -4,7 +4,8 @@ import { useManageStyles } from './manage.styles';
 
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import Tooltip from '@material-ui/core/Tooltip';
+import Alert from '@material-ui/lab/Alert';
+
 
 import { selectCurrentUser } from '../../store-redux/user/user.selectors';
 import { IUser } from '../../store-redux/user/user.reducer';
@@ -48,7 +49,7 @@ const Manage = ({ history, user }: { history, user: IUser }) => {
     const classes = useManageStyles();
 
     const handleRedirectTo = (title) => {
-        if (!user.username) {
+        if (!user?.username) {
             return
         }
         if (title === 'Add Post') {
@@ -66,77 +67,44 @@ const Manage = ({ history, user }: { history, user: IUser }) => {
     }
 
     return (
-        user.username ?
-            <div className={classes.root}>
-                {
-                    cards.map((image) => (
-                        <ButtonBase
-                            onClick={() => handleRedirectTo(image.title)}
-                            focusRipple
-                            key={image.id}
-                            className={classes.image}
-                            focusVisibleClassName={classes.focusVisible}
-                            style={{
-                                width: image.width,
-                            }}
+        <div className={classes.root}>
+            {
+                !user?.username ?
+                    <div className={classes.alert}><Alert severity="warning">Please login to manage your account.</Alert></div>
+                    : null
+            }
+            {cards.map((image) => (
+                <ButtonBase
+                    onClick={() => handleRedirectTo(image.title)}
+                    focusRipple
+                    key={image.id}
+                    className={classes.image}
+                    focusVisibleClassName={classes.focusVisible}
+                    style={{
+                        width: image.width,
+                    }}
+                >
+                    <span
+                        className={classes.imageSrc}
+                        style={{
+                            backgroundImage: `url(${image.url})`,
+                        }}
+                    />
+                    <span className={classes.imageBackdrop} />
+                    <span className={classes.imageButton}>
+                        <Typography
+                            component="span"
+                            variant="h4"
+                            color="inherit"
+                            className={classes.imageTitle}
                         >
-                            <span
-                                className={classes.imageSrc}
-                                style={{
-                                    backgroundImage: `url(${image.url})`,
-                                }}
-                            />
-                            <span className={classes.imageBackdrop} />
-                            <span className={classes.imageButton}>
-                                <Typography
-                                    component="span"
-                                    variant="h4"
-                                    color="inherit"
-                                    className={classes.imageTitle}
-                                >
-                                    {image.title}
-                                </Typography>
-                            </span>
-                        </ButtonBase>
-                    ))}
-            </div>
-            :
-            <div className={classes.root}>
-                {
-                    cards.map((image) => (
-                        <Tooltip title='please log in' >
-                            <ButtonBase
-                                onClick={() => handleRedirectTo(image.title)}
-                                focusRipple
-                                key={image.id}
-                                className={classes.image}
-                                focusVisibleClassName={classes.focusVisible}
-                                style={{
-                                    width: image.width,
-                                }}
-                            >
-                                <span
-                                    className={classes.imageSrc}
-                                    style={{
-                                        backgroundImage: `url(${image.url})`,
-                                    }}
-                                />
-                                <span className={classes.imageBackdrop} />
-                                <span className={classes.imageButton}>
-                                    <Typography
-                                        component="span"
-                                        variant="h4"
-                                        color="inherit"
-                                        className={classes.imageTitle}
-                                    >
-                                        {image.title}
-                                    </Typography>
-                                </span>
-                            </ButtonBase>
-                        </Tooltip>
-                    ))
-                }
-            </div>
+                            {image.title}
+                        </Typography>
+                    </span>
+                </ButtonBase>
+            ))
+            }
+        </div>
     )
 };
 

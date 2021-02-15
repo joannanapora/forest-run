@@ -11,6 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { withRouter } from 'react-router-dom';
 import Modal from '@material-ui/core/Modal';
 import Alert from '@material-ui/lab/Alert';
+import CircularIndeterminate from '../../../shared/spinner.component';
 
 import { DELETE_POST, GET_POSTS } from '../../../grapQL';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -85,16 +86,6 @@ const DeletePost = ({ history }) => {
         return (
             <div className={classes.alert}><Alert severity="error">Ooops! Try again later.</Alert></div>)
     }
-
-    if (loading) {
-        return (
-            <div className={classes.alert}><Alert severity="warning">Loading...</Alert></div>)
-    };
-
-    if (!data) {
-        return (
-            <div className={classes.alert}><Alert severity="warning">Loading...</Alert></div>)
-    };
 
     const handleYes = () => {
         let listOfObjectsToDelete = [];
@@ -199,54 +190,58 @@ const DeletePost = ({ history }) => {
             >
                 Back
       </Button>
-            <div className={classes.checkboxes}>
-                {alert.internalBackendError ? (
-                    <Alert severity="error">Ooops! Something went wrong, try again later.</Alert>
-                ) : null}
-                {alert.pleaseLogIn ? (
-                    <Alert severity="warning">Please log in to delete event.</Alert>
-                ) : null}
-                {alert.postDeleted ? (
-                    <Alert severity="success">Post/s has been deleted.</Alert>
-                ) : null}
-                <FormGroup>
-                    {
-                        data?.posts.length < 1 ?
-                            <div className={classes.noPosts}>There are no posts.</div>
-                            :
-                            null
-                    }
-                    {
-                        articleState ?
-                            data?.posts?.map((post) => {
-                                return (
-                                    <FormControlLabel key={post.id}
-                                        control={
-                                            <Checkbox
-                                                checked={articleState[post.id]}
-                                                onChange={(e) => handleChange(e, post.id)}
-                                                name={post.id}
-                                                color="primary"
+            {
+                !data || loading ?
+                    <CircularIndeterminate />
+                    :
+                    <div className={classes.checkboxes}>
+                        {alert.internalBackendError ? (
+                            <Alert severity="error">Ooops! Something went wrong, try again later.</Alert>
+                        ) : null}
+                        {alert.pleaseLogIn ? (
+                            <Alert severity="warning">Please log in to delete event.</Alert>
+                        ) : null}
+                        {alert.postDeleted ? (
+                            <Alert severity="success">Post/s has been deleted.</Alert>
+                        ) : null}
+                        <FormGroup>
+                            {
+                                data?.posts.length < 1 ?
+                                    <div className={classes.noPosts}>There are no posts.</div>
+                                    :
+                                    null
+                            }
+                            {
+                                articleState ?
+                                    data?.posts?.map((post) => {
+                                        return (
+                                            <FormControlLabel key={post.id}
+                                                control={
+                                                    <Checkbox
+                                                        checked={articleState[post.id]}
+                                                        onChange={(e) => handleChange(e, post.id)}
+                                                        name={post.id}
+                                                        color="primary"
+                                                    />
+                                                }
+
+                                                label={
+                                                    <div className={classes.articlesFormLabel}>
+                                                        <div className={classes.date}>
+                                                            {format(new Date(post.dateCreated), 'dd/MM/yyyy')}
+                                                        </div>
+                                                        <div>
+                                                            {post.title}
+                                                        </div>
+                                                    </div>
+                                                }
+
                                             />
-                                        }
-
-                                        label={
-                                            <div className={classes.articlesFormLabel}>
-                                                <div className={classes.date}>
-                                                    {format(new Date(post.dateCreated), 'dd/MM/yyyy')}
-                                                </div>
-                                                <div>
-                                                    {post.title}
-                                                </div>
-                                            </div>
-                                        }
-
-                                    />
-                                )
-                            }) : null
-                    }
-                </FormGroup>
-            </div>
+                                        )
+                                    }) : null
+                            }
+                        </FormGroup>
+                    </div>}
             <Button
                 onClick={handleDeleteButton}
                 variant="contained"

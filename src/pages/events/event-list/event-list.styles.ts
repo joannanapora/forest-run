@@ -21,7 +21,7 @@ export const useEventListStyles = makeStyles((theme: Theme) =>
         paper: {
             display: 'flex',
             justifyContent: 'space-evenly',
-            minWidth: '350px'
+            minWidth: '280px'
         },
         svg: {
         },

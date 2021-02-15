@@ -17,6 +17,7 @@ import { GET_EVENTS, DELETE_EVENT } from '../../../grapQL';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import { format } from 'date-fns';
+import CircularIndeterminate from '../../../shared/spinner.component';
 
 interface IAllAlerts {
     eventDeleted: boolean;
@@ -81,17 +82,6 @@ const DeleteEvent = ({ history }) => {
         return (
             <div className={classes.alert}><Alert severity="error">Ooops! Try again later.</Alert></div>)
     }
-
-    if (loading) {
-        return (
-            <div className={classes.alert}><Alert severity="warning">Loading...</Alert></div>)
-    };
-
-    if (!data) {
-        return (
-            <div className={classes.alert}><Alert severity="warning">Loading...</Alert></div>)
-    };
-
 
     function rand() {
         return Math.round(Math.random() * 20) - 10;
@@ -198,49 +188,53 @@ const DeleteEvent = ({ history }) => {
             >
                 Back
       </Button>
-            <div className={classes.checkboxes}>
-                {alert.internalBackendError ? (
-                    <Alert severity="error">Ooops! Something went wrong, try again later.</Alert>
-                ) : null}
-                {alert.pleaseLogIn ? (
-                    <Alert severity="warning">Please log in to delete event.</Alert>
-                ) : null}
-                {alert.eventDeleted ? (
-                    <Alert severity="success">Event/s has been deleted.</Alert>
-                ) : null}
+            {
+                !data || loading ?
+                    <CircularIndeterminate />
+                    :
+                    <div className={classes.checkboxes}>
+                        {alert.internalBackendError ? (
+                            <Alert severity="error">Ooops! Something went wrong, try again later.</Alert>
+                        ) : null}
+                        {alert.pleaseLogIn ? (
+                            <Alert severity="warning">Please log in to delete event.</Alert>
+                        ) : null}
+                        {alert.eventDeleted ? (
+                            <Alert severity="success">Event/s has been deleted.</Alert>
+                        ) : null}
 
-                <FormGroup>
-                    {
-                        articleState ?
-                            data?.events?.map((event) => {
-                                return (
-                                    <FormControlLabel key={event.id}
-                                        control={
-                                            <Checkbox
-                                                checked={articleState[event.id]}
-                                                onChange={(e) => handleChange(e, event.id)}
-                                                name={event.id}
-                                                color="primary"
+                        <FormGroup>
+                            {
+                                articleState ?
+                                    data?.events?.map((event) => {
+                                        return (
+                                            <FormControlLabel key={event.id}
+                                                control={
+                                                    <Checkbox
+                                                        checked={articleState[event.id]}
+                                                        onChange={(e) => handleChange(e, event.id)}
+                                                        name={event.id}
+                                                        color="primary"
+                                                    />
+                                                }
+
+                                                label={
+                                                    <div className={classes.articlesFormLabel}>
+                                                        <div className={classes.date}>
+                                                            {format(new Date(event.date), 'dd/MM/yyyy')}
+                                                        </div>
+                                                        <div>
+                                                            {event.location}
+                                                        </div>
+                                                    </div>
+                                                }
+
                                             />
-                                        }
-
-                                        label={
-                                            <div className={classes.articlesFormLabel}>
-                                                <div className={classes.date}>
-                                                    {format(new Date(event.date), 'dd/MM/yyyy')}
-                                                </div>
-                                                <div>
-                                                    {event.location}
-                                                </div>
-                                            </div>
-                                        }
-
-                                    />
-                                )
-                            }) : null
-                    }
-                </FormGroup>
-            </div>
+                                        )
+                                    }) : null
+                            }
+                        </FormGroup>
+                    </div>}
             <Button
                 onClick={handleDeleteButton}
                 variant="contained"

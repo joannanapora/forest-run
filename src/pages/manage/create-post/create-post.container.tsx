@@ -46,6 +46,7 @@ interface IAllAlerts {
 function CreateNewPost({ history }) {
     const [chip, setChip]: [string, Dispatch<SetStateAction<string>>] = useState('');
     const [imgid, setImageId]: [string, Dispatch<SetStateAction<string>>] = useState("");
+    const [imageLoading, setImageLoading]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
 
     const [alert, setAlert]: [IAllAlerts, Dispatch<SetStateAction<IAllAlerts>>] = useState({
         emptyText: false,
@@ -65,7 +66,6 @@ function CreateNewPost({ history }) {
     const [createPost, { loading }] = useMutation(
         CREATE_POST, {
         onCompleted: () => {
-            console.log('done')
             redirectToArticles();
         },
         onError: (e) => {
@@ -96,10 +96,12 @@ function CreateNewPost({ history }) {
     };
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setImageLoading(true)
         postImage(event.target.files[0])
             .then((result) => {
                 setPostValues({ ...postValues, image: event.target.files[0] });
                 setImageId(result.data.id);
+                setImageLoading(false);
             })
     };
 
@@ -239,9 +241,9 @@ function CreateNewPost({ history }) {
                     onChange={handleChipChange} />
             </div>
             <div className={classes.upload}>
-                {postValues.image ?
+                {postValues.image || imageLoading ?
                     <FormControl className={classes.formControl}>
-                        <img className={classes.image} alt='Success!' />
+                        <img className={classes.image} alt={imageLoading ? "Uploading..." : "Success!"} />
                     </FormControl>
                     :
                     <FormControl className={classes.formControl}>

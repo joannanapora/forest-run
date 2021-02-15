@@ -32,7 +32,7 @@ const UpcomingEvent = ({ location, date, image, description, when, distance, tim
                 title={location}
                 subheader={<span>
                     {mapOptionsToWhen(when) !== When.ONE_TIME_EVENT ?
-                        <span>·{when}  ·  {time}</span> : <span>{date}  ·  {time}</span>}
+                        <span>{when}  ·  {time}</span> : <span>{date}  ·  {time}</span>}
 
                 </span>}
             />

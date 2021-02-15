@@ -4,14 +4,14 @@ import { useUploadStyles } from './event-image.styles';
 
 import { Button, FormControl } from '@material-ui/core';
 
-const ImageUploud = ({ imageValue, onImageUpload }) => {
+const ImageUploud = ({ imageValue, imageLoading, onImageUpload }) => {
     const classes = useUploadStyles();
 
     return (
         <div className={classes.upload}>
-            { imageValue ?
+            {imageValue || imageLoading ?
                 <FormControl className={classes.formControl}>
-                    <img className={classes.image} alt='Success!' src={imageValue} />
+                    <img className={classes.image} alt={imageLoading ? "Uploading..." : "Success!"} />
                 </FormControl>
                 :
                 <FormControl className={classes.formControl}>

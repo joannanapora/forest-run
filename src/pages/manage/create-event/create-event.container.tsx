@@ -54,6 +54,7 @@ const CreateEvent = ({ history }) => {
     const classes = useCreateEventStyles();
     const [activeStep, setActiveStep]: [number, Dispatch<SetStateAction<number>>] = useState(0);
     const [openModal, setOpenModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
+    const [imageLoading, setImageLoading]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
     const [imgid, setImageId]: [string, Dispatch<SetStateAction<string>>] = useState("");
     const [alert, setAlert]: [Notifications, Dispatch<SetStateAction<Notifications>>] = useState({
         internalBackendError: false,
@@ -119,10 +120,12 @@ const CreateEvent = ({ history }) => {
             pleaseLogin: false,
         });
         if (prop === 'image') {
+            setImageLoading(true)
             postImage(event.target.files[0])
                 .then((result) => {
                     setAllDetails({ ...allDetails, image: event.target.files[0] });
                     setImageId(result.data.id);
+                    setImageLoading(false)
                 })
         } else {
             setAllDetails({ ...allDetails, [prop]: event.target.value });
@@ -197,6 +200,7 @@ const CreateEvent = ({ history }) => {
                     <UploudEventImage
                         onImageUpload={handleDetailChange('image')}
                         imageValue={allDetails.image}
+                        imageLoading={imageLoading}
                     />
 
                 );

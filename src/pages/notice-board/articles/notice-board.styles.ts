@@ -12,13 +12,13 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
             [theme.breakpoints.down("sm")]: {
-                padding: theme.spacing(4, 30, 3, 0),
+                padding: theme.spacing(2, 30, 3, 0),
             },
             [theme.breakpoints.up("md")]: {
-                padding: theme.spacing(4, 30, 3, 0),
+                padding: theme.spacing(2, 30, 3, 0),
             },
             [theme.breakpoints.up("lg")]: {
-                padding: theme.spacing(4, 30, 3, 0),
+                padding: theme.spacing(2, 30, 3, 0),
             },
         },
         keywordsList: {
