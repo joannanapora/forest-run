@@ -12,7 +12,7 @@ export const useSignInUpStyles = makeStyles((theme: Theme) =>
                 padding: theme.spacing(6, 30, 5, 11),
             },
             [theme.breakpoints.down("sm")]: {
-                padding: theme.spacing(5, 33, 5, 5),
+                padding: theme.spacing(10, 35, 5, 5),
                 minHeight: theme.spacing(10)
             },
             [theme.breakpoints.up("md")]: {
@@ -32,7 +32,7 @@ export const useSignInUpStyles = makeStyles((theme: Theme) =>
         paper: {
             textAlign: 'center',
             color: theme.palette.text.secondary,
-            padding: theme.spacing(7, 6, 1, 6),
+            padding: theme.spacing(5, 6, 1, 6),
             alignItems: 'center',
             width: '100%',
             overflow: 'auto',

@@ -111,6 +111,7 @@ const SignIn = ({ dispatchSetCurrentUser, history }) => {
                 onKeyDown={submitOnEnter}
                 onChange={handleChange('email')}
                 className={classes.textfield}
+                type='email'
                 name='Email'
                 label="Email"
                 variant="filled" />

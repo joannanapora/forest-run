@@ -70,7 +70,7 @@ const Manage = ({ history, user }: { history, user: IUser }) => {
         <div className={classes.root}>
             {
                 !user?.username ?
-                    <div className={classes.alert}><Alert severity="warning">Please login to manage your account.</Alert></div>
+                    <div className={classes.alert}><Alert severity="warning">Please login.</Alert></div>
                     : null
             }
             {cards.map((image) => (

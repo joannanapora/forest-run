@@ -44,14 +44,14 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             backgroundColor: theme.palette.background.paper,
             border: '2px solid #000',
             boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3, 5),
+            padding: theme.spacing(1, 4, 3, 5),
         },
         speedDial: {
             [theme.breakpoints.down("sm")]: {
-                padding: theme.spacing(6, 0, 0, 2),
+                padding: theme.spacing(8, 0, 0, 2),
             },
             [theme.breakpoints.up("md")]: {
-                padding: theme.spacing(6, 0, 0, 2),
+                padding: theme.spacing(8, 0, 0, 2),
             },
             [theme.breakpoints.up("lg")]: {
                 padding: theme.spacing(8, 0, 0, 2),
@@ -61,7 +61,6 @@ export const useNoticeBoardStyles = makeStyles((theme: Theme) =>
             },
         },
         scrollArea: {
-            paddingTop: theme.spacing(1),
             height: '100%',
             overflow: 'auto'
         },

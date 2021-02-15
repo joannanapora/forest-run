@@ -277,7 +277,7 @@ const CreateEvent = ({ history }) => {
                     organizerPhoneNumber: allDetails.organizerPhoneNumber,
                     meetingPoint: allDetails.meetingPoint,
                     description: allDetails.eventDescription,
-                    imageId: imgid
+                    ...!!imgid && { imageId: imgid }
                 },
                 refetchQueries: [{
                     query: GET_EVENTS,

@@ -9,14 +9,17 @@ export const useManageStyles = makeStyles((theme: Theme) =>
             width: '100%',
             minHeight: '85vh',
             padding: theme.spacing(14, 35, 0, 5),
-            overflow: 'auto'
+            overflow: 'auto',
+            [theme.breakpoints.down('sm')]: {
+                padding: theme.spacing(10, 35, 0, 5),
+            },
         },
         image: {
             position: 'relative',
             height: '70vh',
-            [theme.breakpoints.down('xs')]: {
-                width: '100% !important', // Overrides inline-style
-                height: '20vh',
+            [theme.breakpoints.down('sm')]: {
+                width: '100% !important',
+                height: '18vh',
             },
             '&:hover, &$focusVisible': {
                 zIndex: 1,
@@ -79,7 +82,8 @@ export const useManageStyles = makeStyles((theme: Theme) =>
             marginBottom: theme.spacing(1),
             display: 'flex',
             width: '100%',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            fontSize: '10'
         }
     }),
 );

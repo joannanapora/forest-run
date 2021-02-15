@@ -11,7 +11,7 @@ mutation createEvent(
     $description: String!
     $organizerName: String!
     $organizerPhoneNumber: String!
-    $imageId: String!
+    $imageId: String
 ) {
     createEvent(
         createEventInput: {
