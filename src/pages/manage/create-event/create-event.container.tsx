@@ -127,7 +127,11 @@ const CreateEvent = ({ history }) => {
                     setImageId(result.data.id);
                     setImageLoading(false)
                 })
-        } else {
+        }
+        if (prop === 'distance' && event.target.value.length > 3) {
+            setAllDetails({ ...allDetails, distance: event.target.value.slice(0, -1) });
+        }
+        else {
             setAllDetails({ ...allDetails, [prop]: event.target.value });
         }
     };

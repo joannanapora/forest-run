@@ -41,7 +41,7 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             border: '2px solid #000',
             boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3, 0),
+            padding: theme.spacing(2, 4, 3, 4),
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',

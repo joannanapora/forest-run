@@ -21,6 +21,7 @@ import { connect } from 'react-redux';
 
 import { GET_EVENTS, ASSIGN_TO_EVENT, UNASSIGN_TO_EVENT } from '../../../grapQL';
 import { useQuery, useMutation } from '@apollo/react-hooks';
+
 import CircularIndeterminate from '../../../shared/spinner.component';
 
 interface IAlerts {
@@ -48,7 +49,7 @@ const EventList = ({ user }: { user: IUser }) => {
 
     useEffect(() => {
         refetch()
-    })
+    }, [])
 
 
     const [alert, setAlert]: [IAlerts, Dispatch<SetStateAction<IAlerts>>] = useState({

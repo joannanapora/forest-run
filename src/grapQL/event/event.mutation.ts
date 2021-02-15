@@ -5,7 +5,7 @@ mutation createEvent(
     $date: String
     $time: String!
     $location: String!
-    $distance: Int!
+    $distance: Float!
     $when: Int!
     $meetingPoint: String!
     $description: String!
