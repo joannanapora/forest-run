@@ -81,9 +81,10 @@ const CreateEvent = ({ history }) => {
         image: null,
     })
 
-
+    const calenderDate = new Date();
+    const newDate = calenderDate.setDate(calenderDate.getDate() + 1)
     const [modalStyle] = useState(getModalStyle);
-    const [dateValue, changeDate] = useState(new Date());
+    const [dateValue, changeDate] = useState(new Date(newDate));
     const [timeValue, changeTime] = useState(new Date());
 
     const [createEvent] = useMutation(CREATE_EVENT, {
@@ -139,6 +140,7 @@ const CreateEvent = ({ history }) => {
 
 
     const handleValidation = (): boolean => {
+        const newDate = new Date();
         if (allDetails.when === '') {
             setAlert({ ...alert, missedInputs: { ...alert.missedInputs, emptyWhen: true } });
             return false;
@@ -159,8 +161,9 @@ const CreateEvent = ({ history }) => {
             setAlert({ ...alert, missedInputs: { ...alert.missedInputs, emptyDate: true } });
             return false;
         }
+        if (dateValue)
 
-        return true;
+            return true;
     };
 
 

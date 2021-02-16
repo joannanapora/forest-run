@@ -1,4 +1,4 @@
-import React, { Dispatch, useState, SetStateAction } from 'react';
+import React, { Dispatch, useState, SetStateAction, useEffect } from 'react';
 
 import { useDeleteEventStyles } from './delete-event.styles';
 
@@ -37,6 +37,10 @@ const DeleteEvent = ({ history }) => {
             eventDeleted: false,
         }
     );
+
+    useEffect(() => {
+        refetch()
+    }, []);
 
 
     const { loading, error, data, refetch } = useQuery(GET_EVENTS, {
@@ -242,6 +246,7 @@ const DeleteEvent = ({ history }) => {
                 size="small"
                 className={classes.button}
                 startIcon={<DeleteIcon />}
+                disabled={data?.events.length < 1}
             >
                 DELETE
       </Button>

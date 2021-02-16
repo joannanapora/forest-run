@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 
 import { useDeletePostStyles } from './delete-post.styles';
 
@@ -37,6 +37,10 @@ const DeletePost = ({ history }) => {
             postDeleted: false,
         }
     );
+
+    useEffect(() => {
+        refetch()
+    }, []);
 
 
     const { loading, error, data, refetch } = useQuery(GET_POSTS, {
@@ -249,6 +253,7 @@ const DeletePost = ({ history }) => {
                 size="small"
                 className={classes.button}
                 startIcon={<DeleteIcon />}
+                disabled={data?.posts.length < 1}
             >
                 DELETE
       </Button>

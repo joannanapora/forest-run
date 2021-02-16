@@ -37,6 +37,7 @@ const EventInfo = ({ timeValue, dateValue, locationValue, distanceValue, changeT
     whenValue, changeWhen, changeDistance, changeLocation, whenRequiredAlert, locationRequiredAlert, distanceRequiredAlert, timeRequiredAlert, dateRequiredAlert }) => {
 
     const classes = usePersonalStyles();
+    let calenderDate = new Date();
 
 
     return (
@@ -64,7 +65,7 @@ const EventInfo = ({ timeValue, dateValue, locationValue, distanceValue, changeT
             {
                 whenValue === 'one time event' ?
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <DatePicker className={classes.textField} value={dateValue} onChange={changeDate} />
+                        <DatePicker minDate={calenderDate.setDate(calenderDate.getDate() + 1)} className={classes.textField} value={dateValue} onChange={changeDate} />
                     </MuiPickersUtilsProvider>
                     :
                     null

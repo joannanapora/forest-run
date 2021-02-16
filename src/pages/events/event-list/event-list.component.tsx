@@ -23,6 +23,9 @@ import { GET_EVENTS, ASSIGN_TO_EVENT, UNASSIGN_TO_EVENT } from '../../../grapQL'
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
 import CircularIndeterminate from '../../../shared/spinner.component';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
 
 interface IAlerts {
     pleaseLogin: boolean;
@@ -49,7 +52,7 @@ const EventList = ({ user }: { user: IUser }) => {
 
     useEffect(() => {
         refetch()
-    }, [])
+    }, [filter])
 
 
     const [alert, setAlert]: [IAlerts, Dispatch<SetStateAction<IAlerts>>] = useState({
@@ -109,28 +112,52 @@ const EventList = ({ user }: { user: IUser }) => {
 
     const handleChange = (prev: React.ChangeEvent<HTMLInputElement>) => {
         setChecked((prev) => !prev);
+        setAlert({
+            ...alert,
+            pleaseLogin: false,
+            joined: false,
+            left: false,
+        })
     };
 
     const handleDistance = () => {
 
         setFilter({
-            distance: filter.distance !== "ASC" ? "ASC" : "DESC",
+            distance: filter.distance !== "DESC" ? "DESC" : "ASC",
             popular: undefined,
             joined: null
+        });
+        setAlert({
+            ...alert,
+            pleaseLogin: false,
+            joined: false,
+            left: false,
         })
     };
 
     const handlePopular = () => {
         setFilter({
-            popular: filter.popular !== "ASC" ? "ASC" : "DESC",
+            popular: filter.popular !== "DESC" ? "DESC" : "ASC",
             distance: undefined,
             joined: null,
+        });
+        setAlert({
+            ...alert,
+            pleaseLogin: false,
+            joined: false,
+            left: false,
         })
     };
 
     const handleJoined = () => {
         setFilter({
             ...filter, joined: !filter.joined,
+        });
+        setAlert({
+            ...alert,
+            pleaseLogin: false,
+            joined: false,
+            left: false,
         })
     };
 
@@ -172,7 +199,7 @@ const EventList = ({ user }: { user: IUser }) => {
                         <Paper elevation={4} className={classes.paper}>
                             <Button
                                 variant="contained"
-                                color="primary"
+                                color={filter.distance ? "primary" : "secondary"}
                                 size="small"
                                 className={classes.button}
                                 startIcon={<SortIcon />}
@@ -182,7 +209,7 @@ const EventList = ({ user }: { user: IUser }) => {
       </Button>
                             <Button
                                 variant="contained"
-                                color="primary"
+                                color={filter.popular ? "primary" : "secondary"}
                                 size="small"
                                 className={classes.button}
                                 startIcon={<SortIcon />}
@@ -192,14 +219,14 @@ const EventList = ({ user }: { user: IUser }) => {
       </Button>
                             <Button
                                 variant="contained"
-                                color="primary"
+                                color={filter.joined ? "primary" : "secondary"}
                                 size="small"
                                 className={classes.button}
-                                startIcon={<SortIcon />}
+                                startIcon={filter.joined ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
                                 onClick={handleJoined}
                             >
                                 Joined
-      </Button>
+                            </Button>
                         </Paper>
                     </Fade>
                 </div>
@@ -227,12 +254,12 @@ const EventList = ({ user }: { user: IUser }) => {
                         <Grid container justify="space-evenly" spacing={2}>
                             {
                                 data?.events.length < 1 && filter.joined ?
-                                    <div className={classes.mutationAlert}><Typography>There are no events you have joined.</Typography></div>
+                                    <div className={classes.mutationAlert}><Typography>There are no events here.</Typography></div>
                                     :
                                     null
                             }
                             {
-                                data?.events.length < 1 ?
+                                data?.events.length < 1 && !filter.joined ?
                                     <div className={classes.mutationAlert}><Typography>There are no upcoming events.</Typography></div>
                                     :
                                     null
