@@ -10,6 +10,8 @@ export const useSignUpStyles = makeStyles((theme: Theme) =>
         form: {
             display: 'flex',
             flexDirection: 'column',
+            alignItems: 'center'
+
         },
         loginButton: {
             marginTop: theme.spacing(2)

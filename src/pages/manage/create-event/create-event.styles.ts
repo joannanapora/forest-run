@@ -55,8 +55,9 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
         },
         alert: {
             marginTop: theme.spacing(4),
-            width: '25vw',
-            marginBottom: theme.spacing(4)
+            minWidth: '20vw',
+            maxWidth: '70vw',
+            paddingBottom: theme.spacing(4)
         },
         stepper: {
             width: '90vw',

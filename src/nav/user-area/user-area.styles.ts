@@ -10,8 +10,8 @@ export const useUserAreaStyles = makeStyles((theme: Theme) =>
             flexDirection: "column",
         },
         large: {
-            width: theme.spacing(18),
-            height: theme.spacing(18),
+            width: theme.spacing(14),
+            height: theme.spacing(14),
         },
         textField: {
             width: '25ch',

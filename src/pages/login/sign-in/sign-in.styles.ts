@@ -13,7 +13,8 @@ export const useSignInStyles = makeStyles((theme: Theme) =>
         form: {
             display: 'flex',
             flexDirection: 'column',
-            fontFamily: 'Raleway'
+            fontFamily: 'Raleway',
+            alignItems: 'center'
         },
         loginButton: {
             marginTop: theme.spacing(2),

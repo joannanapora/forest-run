@@ -4,12 +4,17 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 export const useCreatePostStyles = makeStyles((theme: Theme) =>
     createStyles({
         container: {
-            padding: theme.spacing(5, 35, 0, 3),
+            [theme.breakpoints.down("sm")]: {
+                padding: theme.spacing(8, 31, 0, 1),
+            },
+            [theme.breakpoints.down("md")]: {
+                padding: theme.spacing(8, 31, 0, 1),
+            },
+            padding: theme.spacing(13, 35, 0, 5),
             minWidth: 300,
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
-            marginTop: theme.spacing(5),
         },
         button: {
             margin: theme.spacing(3),
@@ -33,8 +38,11 @@ export const useCreatePostStyles = makeStyles((theme: Theme) =>
         buttonBack: {
             display: 'flex',
             justifyContent: 'center',
-            margin: theme.spacing(0, 0, 5, 0),
             maxWidth: theme.spacing(12),
+            marginBottom: theme.spacing(3),
+            [theme.breakpoints.down("md")]: {
+                marginBottom: theme.spacing(1),
+            },
         },
         quill: {
             height: '100%',
@@ -42,20 +50,23 @@ export const useCreatePostStyles = makeStyles((theme: Theme) =>
             overflow: 'auto'
         },
         postDetails: {
-            display: 'flex',
-            width: '100%',
             [theme.breakpoints.down("sm")]: {
+                display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'center'
+                margin: theme.spacing(0, 0, 2, 3)
             },
+            [theme.breakpoints.down("md")]: {
+                display: 'flex',
+                flexDirection: 'column'
+            },
+            display: 'flex',
             justifyContent: 'space-evenly',
+            margin: theme.spacing(2, 0, 5, 4)
         },
         postTextFields: {
-            display: 'flex',
-            paddingBottom: theme.spacing(2),
-            width: '100%',
+            paddingBottom: theme.spacing(1),
             [theme.breakpoints.down("sm")]: {
-                width: '100%',
+                display: 'flex',
                 height: '100%',
                 overflow: 'auto',
             }, [theme.breakpoints.down("md")]: {
@@ -87,19 +98,31 @@ export const useCreatePostStyles = makeStyles((theme: Theme) =>
         },
         upload: {
             display: 'flex',
+            width: '100%',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            justifySelf: 'center',
+            [theme.breakpoints.down("sm")]: {
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                width: '100%'
+            },
+            [theme.breakpoints.down("md")]: {
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                width: '100%'
+            },
+            marginTop: theme.spacing(1)
 
-        },
-        successUpload: {
-            display: 'flex',
-            alignItems: 'center',
         },
         image: {
             padding: theme.spacing(2),
         },
         formControl: {
-            margin: theme.spacing(1),
+            margin: theme.spacing(2),
             minWidth: 150,
             maxWidth: 300,
         },

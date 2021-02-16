@@ -8,12 +8,10 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',
-            width: '100%'
         },
         wrapper: {
             margin: theme.spacing(2),
             position: 'relative',
-            width: '100%',
             display: 'flex',
             justifyContent: 'center'
         },

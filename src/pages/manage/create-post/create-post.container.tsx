@@ -177,7 +177,7 @@ function CreateNewPost({ history }) {
             {
                 variables: {
                     title: postValues.title,
-                    imageId: imgid,
+                    ...!!imgid && { imageId: imgid },
                     text: postValues.text,
                     keywords: postValues.keywords.map((keyword) => {
                         return keyword.label;
@@ -240,25 +240,6 @@ function CreateNewPost({ history }) {
                     onKeyDown={onChipKeydown}
                     onChange={handleChipChange} />
             </div>
-            <div className={classes.upload}>
-                {postValues.image || imageLoading ?
-                    <FormControl className={classes.formControl}>
-                        <img className={classes.image} alt={imageLoading ? "Uploading..." : "Success!"} />
-                    </FormControl>
-                    :
-                    <FormControl className={classes.formControl}>
-                        <Button
-                            variant="contained"
-                            component="label"
-                        >Upload File
-                    <input
-                                hidden
-                                type="file"
-                                onChange={handleImageChange}
-                            />
-                        </Button>
-                    </FormControl>}
-            </div>
             <Paper component="ul" className={classes.chipRoot}>
                 {postValues.keywords.map((data) => {
                     let icon;
@@ -278,7 +259,26 @@ function CreateNewPost({ history }) {
                     );
                 })}
             </Paper>
-            <SpinnerButton loading={loading} startIcon={<PublishIcon />} buttonLabel={'Publish'} onClick={handlePublishButton} />
+            <div className={classes.upload}>
+                {postValues.image || imageLoading ?
+                    <FormControl className={classes.formControl}>
+                        <img className={classes.image} alt={imageLoading ? "Uploading..." : "Success!"} />
+                    </FormControl>
+                    :
+                    <FormControl className={classes.formControl}>
+                        <Button
+                            variant="contained"
+                            component="label"
+                        >Upload File
+                    <input
+                                hidden
+                                type="file"
+                                onChange={handleImageChange}
+                            />
+                        </Button>
+                    </FormControl>}
+                <SpinnerButton loading={loading} startIcon={<PublishIcon />} buttonLabel={'Publish'} onClick={handlePublishButton} />
+            </div>
         </div>
     );
 }

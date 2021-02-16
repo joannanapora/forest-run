@@ -128,7 +128,7 @@ const CreateEvent = ({ history }) => {
                     setImageLoading(false)
                 })
         }
-        if (prop === 'distance' && event.target.value.length > 3) {
+        if (prop === 'distance' && event.target.value.length > 5) {
             setAllDetails({ ...allDetails, distance: event.target.value.slice(0, -1) });
         }
         else {
@@ -246,12 +246,9 @@ const CreateEvent = ({ history }) => {
         }
     };
 
-
     const handleModalClose = () => {
         setOpenModal(false);
     };
-
-
 
     const handleNext = () => {
         const isValidate = handleValidation();
@@ -369,7 +366,7 @@ const CreateEvent = ({ history }) => {
             </Stepper>
             {activeStep === steps.length && (
                 <Paper square elevation={0} className={classes.resetContainer}>
-                    <Typography>All steps completed - you&apos;re finished</Typography>
+                    <Typography>All Steps Completed</Typography>
                     <div className={classes.actionsContainer}>
                         <Button onClick={handleReset} className={classes.button}>
                             Reset

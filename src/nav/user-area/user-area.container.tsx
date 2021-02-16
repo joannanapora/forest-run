@@ -85,6 +85,7 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
                 })
             };
             if (usernameInput === user.username) {
+                setUsernameClicked(false)
                 return
             };
             if (usernameInput.indexOf(' ') >= 0) {
@@ -141,8 +142,8 @@ const Username = ({ user, dispatchSetCurrentUser }: { user: IUser, dispatchSetCu
                     <div className={classes.alert}><Alert severity="error">Username is already taken.</Alert></div>
                 ) : null
             }
-            <Avatar alt="forest-img" className={classes.large}
-                src="" />
+            <Avatar alt="forest-app" className={classes.large}
+                src="https://cdn2.iconfinder.com/data/icons/pittogrammi/142/46-512.png" />
         </div >
     );
 };
