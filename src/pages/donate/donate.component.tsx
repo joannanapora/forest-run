@@ -10,13 +10,16 @@ import { Alert } from '@material-ui/lab';
 const Donate = () => {
     const classes = useDonateStyles();
 
-    const [amount, setAmount]: [string, Dispatch<SetStateAction<string>>] = useState('');
+    const [amount, setAmount]: [number, Dispatch<SetStateAction<string>>] = useState(null);
     const [donated, showDonated]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
 
 
     const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.value === '0' || event.target.value === '-') {
+        if (event.target.value === '0') {
             setAmount('1');
+        }
+        if (Number(event.target.value) < 0) {
+            setAmount((Number(event.target.value) * -1).toString());
         }
         else {
             setAmount(event.target.value);

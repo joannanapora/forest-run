@@ -132,6 +132,12 @@ const CreateEvent = ({ history }) => {
         if (prop === 'distance' && event.target.value.length > 5) {
             setAllDetails({ ...allDetails, distance: event.target.value.slice(0, -1) });
         }
+        if (prop === 'distance' && event.target.value === '0') {
+            setAllDetails({ ...allDetails, distance: '1' });
+        }
+        if (prop === 'distance' && Number(event.target.value) < 0) {
+            setAllDetails({ ...allDetails, distance: (Number(event.target.value) * -1).toString() });
+        }
         else {
             setAllDetails({ ...allDetails, [prop]: event.target.value });
         }

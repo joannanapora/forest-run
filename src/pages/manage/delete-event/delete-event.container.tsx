@@ -26,10 +26,11 @@ interface IAllAlerts {
 }
 
 const DeleteEvent = ({ history }) => {
+    const classes = useDeleteEventStyles();
+
     const [articleState, setArticleStateState] = useState(null);
     const [modalStyle] = useState(getModalStyle);
     const [openModal, setOpenModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
-    const classes = useDeleteEventStyles();
     const [alert, setAlert]: [IAllAlerts, Dispatch<SetStateAction<IAllAlerts>>] = useState(
         {
             internalBackendError: false,
@@ -103,13 +104,13 @@ const DeleteEvent = ({ history }) => {
     };
 
 
+    let listOfObjectsToDelete = [];
 
     const handleYes = () => {
-        let listOfObjectsToDelete = [];
 
         for (const eventId in articleState) {
             if (articleState[eventId] === true) {
-                listOfObjectsToDelete.push(eventId);
+                listOfObjectsToDelete.push(eventId)
             }
         }
         deleteEvent(
@@ -180,6 +181,15 @@ const DeleteEvent = ({ history }) => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
         setArticleStateState({ ...articleState, [id]: event.target.checked });
     };
+
+    let checkIfDisableButton = true;
+
+    for (const eventId in articleState) {
+        if (articleState[eventId] === true) {
+            checkIfDisableButton = false
+        }
+    }
+
     return (
         <div className={classes.container} >
             <Button
@@ -246,7 +256,7 @@ const DeleteEvent = ({ history }) => {
                 size="small"
                 className={classes.button}
                 startIcon={<DeleteIcon />}
-                disabled={data?.events.length < 1}
+                disabled={data?.events?.length < 1 || checkIfDisableButton}
             >
                 DELETE
       </Button>

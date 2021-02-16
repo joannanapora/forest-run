@@ -26,9 +26,9 @@ interface IAllAlerts {
 
 
 const DeletePost = ({ history }) => {
+    const classes = useDeletePostStyles();
     const [articleState, setArticleStateState] = useState(null);
     const [modalStyle] = useState(getModalStyle);
-    const classes = useDeletePostStyles();
     const [openModal, setOpenModal]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(false);
     const [alert, setAlert]: [IAllAlerts, Dispatch<SetStateAction<IAllAlerts>>] = useState(
         {
@@ -182,6 +182,15 @@ const DeletePost = ({ history }) => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
         setArticleStateState({ ...articleState, [id]: event.target.checked });
     };
+
+    let checkIfDisableButton = true;
+
+    for (const postId in articleState) {
+        if (articleState[postId] === true) {
+            checkIfDisableButton = false
+        }
+    }
+
     return (
         <div className={classes.container} >
             <Button
@@ -253,7 +262,7 @@ const DeletePost = ({ history }) => {
                 size="small"
                 className={classes.button}
                 startIcon={<DeleteIcon />}
-                disabled={data?.posts.length < 1}
+                disabled={data?.posts.length < 1 || checkIfDisableButton}
             >
                 DELETE
       </Button>
