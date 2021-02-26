@@ -270,7 +270,7 @@ const EventList = ({ user }: { user: IUser }) => {
                                         <UpcomingEvent
                                             location={event.location}
                                             distance={event.distance}
-                                            image={!event.image ? "https://cdn.dribbble.com/users/1016207/screenshots/6380353/58.jpg?compress=1&resize=400x300" : event.image.url}
+                                            image="https://cdn.dribbble.com/users/1016207/screenshots/6380353/58.jpg?compress=1&resize=400x300"
                                             description={event.description}
                                             date={format(new Date(event.date), 'dd/MM/yyyy')}
                                             organizerName={event.organizerName}

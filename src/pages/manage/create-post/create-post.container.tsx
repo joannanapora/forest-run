@@ -260,23 +260,6 @@ function CreateNewPost({ history }) {
                 })}
             </Paper>
             <div className={classes.upload}>
-                {postValues.image || imageLoading ?
-                    <FormControl className={classes.formControl}>
-                        <img className={classes.image} alt={imageLoading ? "Uploading..." : "Success!"} />
-                    </FormControl>
-                    :
-                    <FormControl className={classes.formControl}>
-                        <Button
-                            variant="contained"
-                            component="label"
-                        >Upload File
-                    <input
-                                hidden
-                                type="file"
-                                onChange={handleImageChange}
-                            />
-                        </Button>
-                    </FormControl>}
                 <SpinnerButton loading={loading} startIcon={<PublishIcon />} buttonLabel={'Publish'} onClick={handlePublishButton} />
             </div>
         </div>

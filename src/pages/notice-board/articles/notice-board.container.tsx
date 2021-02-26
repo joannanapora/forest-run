@@ -54,7 +54,7 @@ const NoticeBoard = () => {
                                 <Card key={post.id} className={classes.cardRoot}>
                                     <CardMedia
                                         className={classes.media}
-                                        image={post.image ? post.image.url : "https://blog.mapmyrun.com/wp-content/uploads/2020/03/7-Expert-Backed-Ways-to-Finally-Become-a-Morning-Runner.jpg"}
+                                        image="https://blog.mapmyrun.com/wp-content/uploads/2020/03/7-Expert-Backed-Ways-to-Finally-Become-a-Morning-Runner.jpg"
                                     />
                                     <CardContent>
                                         <Typography variant="h6">

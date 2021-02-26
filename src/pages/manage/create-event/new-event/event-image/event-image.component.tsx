@@ -2,14 +2,15 @@ import React from 'react';
 
 import { useUploadStyles } from './event-image.styles';
 
-import { Button, FormControl } from '@material-ui/core';
+import { Button, FormControl, Typography } from '@material-ui/core';
 
 const ImageUploud = ({ imageValue, imageLoading, onImageUpload }) => {
     const classes = useUploadStyles();
 
     return (
         <div className={classes.upload}>
-            {imageValue || imageLoading ?
+            <Typography>Sorry! Image uploading is unavalible now.</Typography>
+            {/* <{imageValue || imageLoading ?
                 <FormControl className={classes.formControl}>
                     <img className={classes.image} alt={imageLoading ? "Uploading..." : "Success!"} />
                 </FormControl>
@@ -25,7 +26,7 @@ const ImageUploud = ({ imageValue, imageLoading, onImageUpload }) => {
                             onChange={onImageUpload}
                         />
                     </Button>
-                </FormControl>}
+                </FormControl>}> */}
         </div>
     );
 
