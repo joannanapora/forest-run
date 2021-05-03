@@ -11,47 +11,69 @@ import TimeLines from "../../pages/landing/timelines/timelines.component";
 import UpcomingEvent from "../../pages/events/event-card/event.component";
 import { useMenuDrawerStyles, light, dark } from "./menu-drawer.styles";
 import Donate from "../../pages/donate/donate.component";
-import Manage from '../../pages/manage/manage.component';
+import Manage from "../../pages/manage/manage/manage.component";
 import Username from "../user-area/user-area.container";
-import DeleteEvent from '../../pages/manage/delete-event/delete-event.container';
+import DeleteEvent from "../../pages/manage/delete-event/delete-event.container";
 
 import { Switch, Route, withRouter, Link } from "react-router-dom";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 import { selectCurrentUser } from "../../store-redux/user/user.selectors";
 import { selectNavTabs } from "../../store-redux/nav/nav.selectors";
-import { IUser, ITabs } from '../../store-redux/index';
+import { IUser, ITabs } from "../../store-redux/index";
 import { setCurrentUser } from "../../store-redux";
 import { createStructuredSelector } from "reselect";
 
-import { Drawer, AppBar, Toolbar, List, CssBaseline, Typography, IconButton, ListItem, ListItemIcon, ThemeProvider, } from '@material-ui/core';
+import {
+  Drawer,
+  AppBar,
+  Toolbar,
+  List,
+  CssBaseline,
+  Typography,
+  IconButton,
+  ListItem,
+  ListItemIcon,
+  ThemeProvider,
+} from "@material-ui/core";
 
 import Brightness3Icon from "@material-ui/icons/Brightness3";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import { DirectionsRun, Nature } from "@material-ui/icons";
-import MenuIcon from '@material-ui/icons/Menu';
+import MenuIcon from "@material-ui/icons/Menu";
 
 import { createMuiTheme } from "@material-ui/core/styles";
 
-
-const MenuDrawer = ({ user, tabs, dispatchUser }: { user: IUser, tabs: ITabs, dispatchUser }) => {
+const MenuDrawer = ({
+  user,
+  tabs,
+  dispatchUser,
+}: {
+  user: IUser;
+  tabs: ITabs;
+  dispatchUser;
+}) => {
   const classes = useMenuDrawerStyles();
 
-
   const open = false;
-  const [drawer, setDrawer]: [{ right: boolean }, Dispatch<SetStateAction<{ right: boolean }>>] = useState({
+  const [drawer, setDrawer]: [
+    { right: boolean },
+    Dispatch<SetStateAction<{ right: boolean }>>
+  ] = useState({
     right: false,
   });
 
-  const [theme, setTheme]: [boolean, Dispatch<SetStateAction<boolean>>] = useState(true);
+  const [theme, setTheme]: [
+    boolean,
+    Dispatch<SetStateAction<boolean>>
+  ] = useState(true);
   const icon = !theme ? <Brightness7Icon /> : <Brightness3Icon />;
   const appliedTheme = createMuiTheme(theme ? light : dark);
-
 
   const handleLogout = (name: string) => {
     if (name === "Sign Out") {
       dispatchUser({});
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
     }
   };
 
@@ -96,7 +118,8 @@ const MenuDrawer = ({ user, tabs, dispatchUser }: { user: IUser, tabs: ITabs, di
             style={{ textDecoration: "none" }}
             key={element.id}
             to={element.url}
-            onClick={() => handleLogout(element.name)}>
+            onClick={() => handleLogout(element.name)}
+          >
             <ListItem className={classes.menuList} button>
               <ListItemIcon>{element.name}</ListItemIcon>
             </ListItem>
@@ -113,34 +136,37 @@ const MenuDrawer = ({ user, tabs, dispatchUser }: { user: IUser, tabs: ITabs, di
         <AppBar
           className={clsx(classes.appBar, {
             [classes.appBarShift]: open,
-          })}>
+          })}
+        >
           <Toolbar>
-            <Typography variant='h5' noWrap className={classes.title}>
+            <Typography variant="h5" noWrap className={classes.title}>
               {
-                <i className='material-icons md-48'>
+                <i className="material-icons md-48">
                   <Nature />
                 </i>
               }
               {
-                <i className='material-icons md-48'>
+                <i className="material-icons md-48">
                   <DirectionsRun />
                 </i>
               }
               Run Forest, Run
             </Typography>
             <IconButton
-              edge='end'
-              color='inherit'
-              aria-label='mode'
-              onClick={() => setTheme(!theme)}>
+              edge="end"
+              color="inherit"
+              aria-label="mode"
+              onClick={() => setTheme(!theme)}
+            >
               {icon}
             </IconButton>
             <IconButton
-              color='inherit'
-              aria-label='open drawer'
-              edge='end'
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
               onClick={toggleDrawer("right", true)}
-              className={clsx(open && classes.hide)}>
+              className={clsx(open && classes.hide)}
+            >
               <MenuIcon />
             </IconButton>
           </Toolbar>
@@ -148,19 +174,20 @@ const MenuDrawer = ({ user, tabs, dispatchUser }: { user: IUser, tabs: ITabs, di
         <main
           className={clsx(classes.content, {
             [classes.contentShift]: open,
-          })}>
+          })}
+        >
           <Switch>
-            <Route exact path='/' component={TimeLines} />
-            <Route exact path='/manage' component={Manage} />
-            <Route path='/manage/add-post' component={CreateNewPost} />
-            <Route path='/manage/delete-post' component={DeletePost} />
-            <Route path='/manage/create-event' component={CreateEvent} />
-            <Route path='/manage/cancel-event' component={DeleteEvent} />
-            <Route path='/upcoming-events' component={EventList} />
-            <Route path='/sign-up' component={SignInUp} />
-            <Route path='/messages' component={UpcomingEvent} />
-            <Route path='/notice-board' component={NoticeBoard} />
-            <Route path='/donate' component={Donate} />
+            <Route exact path="/" component={TimeLines} />
+            <Route exact path="/manage" component={Manage} />
+            <Route path="/manage/add-post" component={CreateNewPost} />
+            <Route path="/manage/delete-post" component={DeletePost} />
+            <Route path="/manage/create-event" component={CreateEvent} />
+            <Route path="/manage/cancel-event" component={DeleteEvent} />
+            <Route path="/upcoming-events" component={EventList} />
+            <Route path="/sign-up" component={SignInUp} />
+            <Route path="/messages" component={UpcomingEvent} />
+            <Route path="/notice-board" component={NoticeBoard} />
+            <Route path="/donate" component={Donate} />
           </Switch>
         </main>
         <React.Fragment key={"right"}>
@@ -168,7 +195,8 @@ const MenuDrawer = ({ user, tabs, dispatchUser }: { user: IUser, tabs: ITabs, di
             className={classes.drawer}
             anchor={"right"}
             open={drawer["right"]}
-            onClose={toggleDrawer("right", false)}>
+            onClose={toggleDrawer("right", false)}
+          >
             {list("right")}
           </Drawer>
         </React.Fragment>
