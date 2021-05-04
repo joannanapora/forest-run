@@ -1,13 +1,12 @@
-import { makeStyles } from '@material-ui/core/styles';
-
+import { makeStyles } from "@material-ui/core/styles";
 
 export const useTimeLinesStyles = makeStyles((theme) => ({
   root: {
-    height: '100%',
-    padding: theme.spacing(8, 30, 0, 0)
-
+    height: "100%",
+    paddingTop: "8rem",
+    paddingRight: "16rem",
   },
   paper: {
-    padding: theme.spacing(1)
+    padding: theme.spacing(1),
   },
 }));
