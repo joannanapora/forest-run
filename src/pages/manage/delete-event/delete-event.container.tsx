@@ -10,6 +10,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Checkbox from "@material-ui/core/Checkbox";
 import Modal from "@material-ui/core/Modal";
 import Alert from "@material-ui/lab/Alert";
+import CircularIndeterminate from "../../../shared/spinner.component";
 
 import { withRouter } from "react-router-dom";
 
@@ -17,7 +18,6 @@ import { GET_EVENTS, DELETE_EVENT } from "../../../grapQL";
 import { useMutation, useQuery } from "@apollo/react-hooks";
 
 import { format } from "date-fns";
-import CircularIndeterminate from "../../../shared/spinner.component";
 
 interface IAllAlerts {
   eventDeleted: boolean;
@@ -27,8 +27,7 @@ interface IAllAlerts {
 
 const DeleteEvent = ({ history }) => {
   const classes = useDeleteEventStyles();
-
-  const [articleState, setArticleStateState] = useState(null);
+  const [EventState, setEventStateState] = useState(null);
   const [modalStyle] = useState(getModalStyle);
   const [openModal, setOpenModal]: [
     boolean,
@@ -48,23 +47,26 @@ const DeleteEvent = ({ history }) => {
   });
 
   const { loading, error, data, refetch } = useQuery(GET_EVENTS, {
-    variables: { filters: { me: true } },
+    variables: {
+      filters: {
+        me: true,
+      },
+    },
     onCompleted: (result) => {
-      let articlesStateObj = {};
+      let eventStateObj = {};
 
       result.events.forEach((event) => {
-        articlesStateObj[event.id] = false;
+        eventStateObj[event.id] = false;
       });
 
-      setArticleStateState(articlesStateObj);
+      setEventStateState(eventStateObj);
     },
-    onError: (error) => {
-      if ((error.graphQLErrors[0].message as any).statusCode === 500) {
+    onError: (e) => {
+      if ((e.graphQLErrors[0].message as any).statusCode === 500) {
         setAlert({ ...alert, internalBackendError: true });
       }
       if (
-        error.graphQLErrors[0].message ===
-        "Cannot read property 'sub' of undefined"
+        e.graphQLErrors[0].message === "Cannot read property 'sub' of undefined"
       ) {
         setAlert({ ...alert, pleaseLogIn: true });
       }
@@ -92,7 +94,7 @@ const DeleteEvent = ({ history }) => {
   if (error) {
     return (
       <div className={classes.alert}>
-        <Alert severity="error">Ooops! Try again later.</Alert>
+        <Alert severity="warning">Please login.</Alert>
       </div>
     );
   }
@@ -115,8 +117,8 @@ const DeleteEvent = ({ history }) => {
   let listOfObjectsToDelete = [];
 
   const handleYes = () => {
-    for (const eventId in articleState) {
-      if (articleState[eventId] === true) {
+    for (const eventId in EventState) {
+      if (EventState[eventId] === true) {
         listOfObjectsToDelete.push(eventId);
       }
     }
@@ -184,13 +186,13 @@ const DeleteEvent = ({ history }) => {
     event: React.ChangeEvent<HTMLInputElement>,
     id: string
   ) => {
-    setArticleStateState({ ...articleState, [id]: event.target.checked });
+    setEventStateState({ ...EventState, [id]: event.target.checked });
   };
 
   let checkIfDisableButton = true;
 
-  for (const eventId in articleState) {
-    if (articleState[eventId] === true) {
+  for (const eventId in EventState) {
+    if (EventState[eventId] === true) {
       checkIfDisableButton = false;
     }
   }
@@ -216,22 +218,18 @@ const DeleteEvent = ({ history }) => {
               Ooops! Something went wrong, try again later.
             </Alert>
           ) : null}
-          {alert.pleaseLogIn ? (
-            <Alert severity="warning">Please log in to delete event.</Alert>
-          ) : null}
           {alert.eventDeleted ? (
             <Alert severity="success">Event/s has been deleted.</Alert>
           ) : null}
-
           <FormGroup>
-            {articleState
+            {EventState
               ? data?.events?.map((event) => {
                   return (
                     <FormControlLabel
                       key={event.id}
                       control={
                         <Checkbox
-                          checked={articleState[event.id]}
+                          checked={EventState[event.id]}
                           onChange={(e) => handleChange(e, event.id)}
                           name={event.id}
                           color="primary"

@@ -25,11 +25,11 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
     },
     actionsContainer: {
       marginBottom: theme.spacing(2),
-      width: "90vw",
+      width: "50vw",
     },
     resetContainer: {
       paddingLeft: theme.spacing(2),
-      width: "90vw",
+      width: "50vw",
     },
     confirmButtons: {
       display: "flex",
@@ -54,12 +54,11 @@ export const useCreateEventStyles = makeStyles((theme: Theme) =>
     },
     alert: {
       marginTop: theme.spacing(4),
-      minWidth: "20vw",
-      maxWidth: "70vw",
+      width: "45vw",
       paddingBottom: theme.spacing(4),
     },
     stepper: {
-      width: "90vw",
+      width: "50vw",
     },
   })
 );

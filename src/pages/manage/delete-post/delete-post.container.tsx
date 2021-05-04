@@ -8,17 +8,14 @@ import { Button, Typography } from "@material-ui/core";
 import FormGroup from "@material-ui/core/FormGroup";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Checkbox from "@material-ui/core/Checkbox";
-import { withRouter } from "react-router-dom";
 import Modal from "@material-ui/core/Modal";
 import Alert from "@material-ui/lab/Alert";
 import CircularIndeterminate from "../../../shared/spinner.component";
 
+import { withRouter } from "react-router-dom";
 import { DELETE_POST, GET_POSTS } from "../../../grapQL";
+
 import { useMutation, useQuery } from "@apollo/react-hooks";
-import { connect } from "react-redux";
-import { selectCurrentUser } from "../../../store-redux/user/user.selectors";
-import { IUser } from "../../../store-redux/user/user.reducer";
-import { createStructuredSelector } from "reselect";
 
 import { format } from "date-fns";
 
@@ -28,7 +25,7 @@ interface IAllAlerts {
   pleaseLogIn: boolean;
 }
 
-const DeletePost = ({ history, user }: { history; user: IUser }) => {
+const DeletePost = ({ history }: { history }) => {
   const classes = useDeletePostStyles();
   const [articleState, setArticleStateState] = useState(null);
   const [modalStyle] = useState(getModalStyle);
@@ -96,10 +93,13 @@ const DeletePost = ({ history, user }: { history; user: IUser }) => {
   });
 
   if (error) {
-    <div className={classes.alert}>
-      <Alert severity="warning">Please login.</Alert>
-    </div>;
+    return (
+      <div className={classes.alert}>
+        <Alert severity="warning">Please login.</Alert>
+      </div>
+    );
   }
+
   const handleYes = () => {
     let listOfObjectsToDelete = [];
 
@@ -222,16 +222,10 @@ const DeletePost = ({ history, user }: { history; user: IUser }) => {
               Ooops! Something went wrong, try again later.
             </Alert>
           ) : null}
-          {alert.pleaseLogIn ? (
-            <Alert severity="warning">Please log in to delete event.</Alert>
-          ) : null}
           {alert.postDeleted ? (
             <Alert severity="success">Post/s has been deleted.</Alert>
           ) : null}
           <FormGroup>
-            {data?.posts.length < 1 ? (
-              <div className={classes.noPosts}>There are no posts.</div>
-            ) : null}
             {articleState
               ? data?.posts?.map((post) => {
                   return (
@@ -283,8 +277,4 @@ const DeletePost = ({ history, user }: { history; user: IUser }) => {
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  user: selectCurrentUser,
-});
-
-export default withRouter(connect(mapStateToProps, null)(DeletePost));
+export default withRouter(DeletePost);
