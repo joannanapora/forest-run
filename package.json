@@ -37,7 +37,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^6.0.0",
     "reselect": "^4.0.0",
-    "serv": "^0.2.4",
+    "serve": "^11.3.2",
     "stripe": "^8.132.0",
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
