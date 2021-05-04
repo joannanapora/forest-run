@@ -7,7 +7,6 @@ import CreateNewPost from "../../pages/manage/create-post/create-post.container"
 import DeletePost from "../../pages/manage/delete-post/delete-post.container";
 import SignInUp from "../../pages/login/sign-in-sign-up/sign-in-up.component";
 import EventList from "../../pages/events/event-list/event-list.component";
-import TimeLines from "../../pages/landing/timelines/timelines.component";
 import UpcomingEvent from "../../pages/events/event-card/event.component";
 import { useMenuDrawerStyles, light, dark } from "./menu-drawer.styles";
 import Donate from "../../pages/donate/donate.component";
@@ -177,7 +176,7 @@ const MenuDrawer = ({
           })}
         >
           <Switch>
-            <Route exact path="/" component={TimeLines} />
+            <Route exact path="/" component={EventList} />
             <Route exact path="/manage" component={Manage} />
             <Route path="/manage/add-post" component={CreateNewPost} />
             <Route path="/manage/delete-post" component={DeletePost} />
